@@ -34,7 +34,10 @@ jobs:
 
       - name: Build Spring Boot app
         run: ./mvnw clean install 
+  tests:
+    runs-on: ubuntu-latest
 
+    steps:
       - name: Run Spring Boot tests
         run: ./mvnw test  
       
