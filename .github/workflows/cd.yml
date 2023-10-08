@@ -1,4 +1,4 @@
-name: CI
+name: CD
 
 on:
   push:
@@ -21,28 +21,7 @@ jobs:
         run: npm install --prefix frontend 
 
       - name: Build Angular app
-        run: npm run build --prefix frontend
-
-      - name: Set up Java
-        uses: actions/setup-java@v2
-        with:
-          distribution: 'zulu' 
-          java-version: '17'
-
-      - name: Grant execute permission to mvnw
-        run: chmod +x mvnw
-
-      - name: Build Spring Boot app
-        run: ./mvnw clean install 
-
-      - name: Run Spring Boot tests
-        run: ./mvnw test  
-  deploy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+        run: ng build --prefix frontend
 
       - name: Build And Deploy
         uses: Azure/static-web-apps-deploy@1a947af9992250f3bc2e68ad0754c0b0c11566c9
@@ -52,5 +31,5 @@ jobs:
           action: "upload"
           app_location: "frontend"
           api_location: "/"
-          output_location: "build"
+          output_location: "dist"
   
