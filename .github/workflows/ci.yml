@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - "*"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.18.0' 
+
+      - name: Install Angular dependencies
+        run: npm install --prefix frontend 
+
+      - name: Build Angular app
+        run: npm run build --prefix frontend
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+
+      - name: Build Spring Boot app
+        run: ./mvnw clean install 
+
+      - name: Run Spring Boot tests
+        run: ./mvnw test  
+      
