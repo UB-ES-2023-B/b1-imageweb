@@ -29,6 +29,9 @@ jobs:
           distribution: 'zulu' 
           java-version: '17'
 
+      - name: Grant execute permission to mvnw
+        run: chmod +x mvnw
+
       - name: Build Spring Boot app
         run: ./mvnw clean install 
 
