@@ -1,0 +1,8 @@
+{
+  "$schema": "http://localhost:4200/proxies",
+  "proxies": {
+    "/api": {
+      "backendUri": "b1imageweb-backend.azurewebsites.net"
+    }
+  }
+}
