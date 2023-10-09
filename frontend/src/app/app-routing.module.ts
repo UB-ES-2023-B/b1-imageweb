@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {MainPageComponent} from './components/main-page/main-page.component';
+import {LoginFormComponent} from "./components/login-page/login-page.component";
 const routes: Routes = [
    //Initial route
    {
@@ -11,6 +12,10 @@ const routes: Routes = [
   {
     path:'loadingPage',
     component:MainPageComponent
+  },
+  {
+    path: 'login',
+    component: LoginFormComponent
   },
   {
     path: '**',
