@@ -2,7 +2,7 @@
   "routes": [
     {
       "route": "/api/*", 
-      "rewrite": "b1imageweb-backend.azurewebsites.net/*" 
+      "redirect": "b1imageweb-backend.azurewebsites.net/*" 
     }
   ]
 }
