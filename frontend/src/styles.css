@@ -1,1 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
+:host {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+}
+footer{
+  position: absolute;
+  bottom: 0; /* Espacio para el footer */
+  width: 100%;
+
+}
+.mainColor {
+  background-color: #0E6251;
+}
