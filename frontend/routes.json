@@ -1,0 +1,8 @@
+{
+  "routes": [
+    {
+      "route": "/api/*", 
+      "rewrite": "b1imageweb-backend.azurewebsites.net/*" 
+    }
+  ]
+}
