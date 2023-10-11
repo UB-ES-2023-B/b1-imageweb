@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DataService} from "./data.service";
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,6 +10,7 @@ import {DataService} from "./data.service";
 export class AppComponent implements OnInit{
   title = 'frontend';
   name: string = 'Hola';
+
 
   constructor(private dataService: DataService) {
   }
@@ -19,4 +21,6 @@ export class AppComponent implements OnInit{
       this.name = response[0].userName;
     })
   }
+
+
 }
