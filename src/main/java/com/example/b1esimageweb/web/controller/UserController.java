@@ -1,18 +1,18 @@
-package com.example.b1esimageweb.controller;
+package com.example.b1esimageweb.web.controller;
 
 import com.example.b1esimageweb.model.User;
-import com.example.b1esimageweb.repository.UserService;
+import com.example.b1esimageweb.service.Service;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path="/user")
-public class RequestController {
+public class UserController {
 
-    private final UserService service;
+    private final Service service;
 
-    public RequestController(UserService service) {
+    public UserController(Service service) {
         this.service = service;
     }
     @PostMapping(path="/addNew")
@@ -44,9 +44,4 @@ public class RequestController {
         service.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
-
-
-
 }
