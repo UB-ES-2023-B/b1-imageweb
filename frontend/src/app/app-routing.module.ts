@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {MainPageComponent} from './components/main-page/main-page.component';
 import {LoginFormComponent} from "./components/login-page/login-page.component";
+import {RegisterFormComponent} from "./components/register-page/register-page.component";
+
 const routes: Routes = [
    //Initial route
    {
@@ -16,6 +18,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginFormComponent
+  },
+  {
+    path: 'authenticateRegister',
+    component: RegisterFormComponent
   },
   {
     path: '**',
