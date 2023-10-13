@@ -10,6 +10,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { MainPageComponent } from './components/main-page/main-page.component';
 import {LoginFormComponent} from "./components/login-page/login-page.component";
 import {RegisterFormComponent} from "./components/register-page/register-page.component";
+import { HomePageComponent } from './components/home-page/home-page.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import {RegisterFormComponent} from "./components/register-page/register-page.co
     FooterComponent,
     MainPageComponent,
     LoginFormComponent,
-    RegisterFormComponent
+    RegisterFormComponent,
+    HomePageComponent
   ],
   imports: [
     BrowserModule,
