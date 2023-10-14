@@ -1,11 +1,9 @@
 package com.example.b1esimageweb.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name="users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,6 +11,14 @@ public class User {
     private String userName;
     private String userEmail;
     private String userPassword;
+
+    public User(){}
+
+    public User(String userName, String userEmail, String userPassword) {
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userPassword = userPassword;
+    }
 
     public Integer getUserId() {
         return userId;
