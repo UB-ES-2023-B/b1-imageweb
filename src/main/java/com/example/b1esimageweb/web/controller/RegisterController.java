@@ -26,19 +26,19 @@ public class RegisterController {
     }
 
     @PostMapping
-    public ResponseEntity<String> registerUser(@ModelAttribute UserRegistrationDto userDto){
+    public ResponseEntity<String> registerUser(@RequestBody UserRegistrationDto userDto){
         if(service.userNameExists(userDto.getUsername())){
             return new ResponseEntity<>("Username already exists!", HttpStatus.BAD_REQUEST);
         }
         if(service.emailExists(userDto.getEmail())){
             return new ResponseEntity<>("Email already exists!", HttpStatus.BAD_REQUEST);
         }
-        User registerUser = new User(userDto.getUsername(), userDto.getPassword(), passwordEncoder.encode(userDto.getPassword()));
+        User registerUser = new User(userDto.getUsername(), userDto.getEmail(), passwordEncoder.encode(userDto.getPassword()));
         service.addNewUser(registerUser);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/login");
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        headers.add("Content-Type", "application/json");
+        return new ResponseEntity<>("Registration Successful",headers, HttpStatus.OK);
     }
 
 }
