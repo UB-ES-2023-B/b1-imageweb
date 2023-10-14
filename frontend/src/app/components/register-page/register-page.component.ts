@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GlobalDataService } from './../../services/global-data.service';
+import { GlobalDataService } from '../../services/global-data.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-form',
@@ -14,7 +15,8 @@ export class RegisterFormComponent implements OnInit {
   conPassword: string = '';
 
   constructor(private globalDataService: GlobalDataService,
-              private http: HttpClient) {  }
+              private http: HttpClient,
+              private router: Router) {  }
 
   ngOnInit(): void {
   }
@@ -33,6 +35,7 @@ export class RegisterFormComponent implements OnInit {
         (response) => {
           console.log('Registration successful:', response);
           // Optionally, you can handle success response here
+          this.router.navigate(['/home']);
         },
         (error) => {
           console.error('Error during registration:', error);
