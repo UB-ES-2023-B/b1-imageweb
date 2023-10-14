@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse  } from '@angular/common/http';
 import { GlobalDataService } from '../../services/global-data.service';
 import { Router } from '@angular/router';
 
@@ -31,18 +31,22 @@ export class RegisterFormComponent implements OnInit {
         email: this.email,
         password: this.password
       };
-      this.http.post('/api/register', formData).subscribe(
-        (response) => {
-          console.log('Registration successful:', response);
-          // Optionally, you can handle success response here
-          this.router.navigate(['/home']);
+      console.log('Submitted!', formData.email, formData.password);
+      this.http.post('/api/register', formData, { observe: 'response' ,  responseType: 'text' }).subscribe(
+        (response : HttpResponse<string>) => {
+          if (response.status === 200) {
+            console.log('Registration successful:', response.body);
+            // Optionally, you can handle success response here
+            this.router.navigate(['/home']);
+          }
+
         },
         (error) => {
           console.error('Error during registration:', error);
           // Optionally, you can handle error response here
         }
       );
-      console.log('Submitted!', this.username, this.email);
+
     }
     else{
       console.error('Passwords do not match');
