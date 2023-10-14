@@ -16,7 +16,7 @@ const routes: Routes = [
     component:MainPageComponent
   },
   {
-    path: 'login',
+    path: 'loginUser',
     component: LoginFormComponent
   },
   {
