@@ -22,6 +22,10 @@ public class UserService {
         return repository.findAll();
     }
 
+    /*public User getUserAccount(String userName, String userPassword){
+        return repository.findByUsernameAndPassword(userName, userPassword);
+    }*/
+
     public User getUserById(int id){
         return repository.findById(id).orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
     }
