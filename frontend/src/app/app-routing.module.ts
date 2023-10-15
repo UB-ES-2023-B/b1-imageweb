@@ -16,7 +16,7 @@ const routes: Routes = [
     component:MainPageComponent
   },
   {
-    path: 'loginUser',
+    path: 'login',
     component: LoginFormComponent
   },
   {
@@ -24,7 +24,7 @@ const routes: Routes = [
     component: HomePageComponent
   },
   {
-    path: 'authenticateRegister',
+    path: 'register',
     component: RegisterFormComponent
   },
   {
