@@ -11,6 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping(path="/register")
 public class RegisterController {
@@ -25,20 +28,24 @@ public class RegisterController {
         this.service = service;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@ModelAttribute UserRegistrationDto userDto){
+    @PostMapping
+    public ResponseEntity<Map<String,String>> registerUser(@RequestBody UserRegistrationDto userDto){
+        Map<String, String> response = new HashMap<>();
         if(service.userNameExists(userDto.getUsername())){
-            return new ResponseEntity<>("Username already exists!", HttpStatus.BAD_REQUEST);
+            response.put("message", "Username already exists!");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
         if(service.emailExists(userDto.getEmail())){
-            return new ResponseEntity<>("Email already exists!", HttpStatus.BAD_REQUEST);
+            response.put("message", "Email already exists!");
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-        User registerUser = new User(userDto.getUsername(), userDto.getPassword(), passwordEncoder.encode(userDto.getPassword()));
+        User registerUser = new User(userDto.getUsername(), userDto.getEmail(), passwordEncoder.encode(userDto.getPassword()));
         service.addNewUser(registerUser);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/login");
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        headers.add("Content-Type", "application/json");
+        response.put("message", "Registration Successful");
+        return new ResponseEntity<>(response,headers, HttpStatus.OK);
     }
 
 }

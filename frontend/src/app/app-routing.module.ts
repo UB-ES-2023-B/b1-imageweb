@@ -24,7 +24,7 @@ const routes: Routes = [
     component: HomePageComponent
   },
   {
-    path: 'authenticateRegister',
+    path: 'register',
     component: RegisterFormComponent
   },
   {
@@ -33,8 +33,10 @@ const routes: Routes = [
   }
 ];
 
+// @ts-ignore
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
+
 export class AppRoutingModule { }
