@@ -15,6 +15,7 @@ public class UserController {
     public UserController(Service service) {
         this.service = service;
     }
+    
     @PostMapping(path="/addNew")
     public ResponseEntity<User> addNewUser(@RequestBody User user) {
         User newUser = service.addNewUser(user);

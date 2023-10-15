@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
 
 import java.util.HashMap;
@@ -48,7 +47,7 @@ public class LoginController {
         }
 
         String token = jwtTokenProvider.createToken(loginUser);
-
+        System.out.println(token);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         response.put("token", token);

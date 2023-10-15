@@ -1,19 +1,21 @@
 package com.example.b1esimageweb.web.Security;
+
 import java.security.SecureRandom;
 
 public class SecretKeyGenerator {
-    public static void main(String[] args) {
-        String generatedKey = generateSecretKey(256); // Adjust the key length to your needs (e.g., 128, 256 bits)
-        System.out.println("Generated Secret Key: " + generatedKey);
-    }
+    
+    private static final String SECRET_KEY;
 
-    public static String generateSecretKey(int keyLength) {
-        byte[] secretKeyBytes = new byte[keyLength / 8];
+    static {
+        byte[] secretKeyBytes = new byte[128]; 
 
         SecureRandom secureRandom = new SecureRandom();
         secureRandom.nextBytes(secretKeyBytes);
 
-        return java.util.Base64.getEncoder().encodeToString(secretKeyBytes);
+        SECRET_KEY = java.util.Base64.getEncoder().encodeToString(secretKeyBytes);
+    }
+
+    public static String getSecretKey(){
+        return SECRET_KEY;
     }
 }
-

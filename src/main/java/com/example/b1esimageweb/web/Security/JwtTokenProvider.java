@@ -19,18 +19,12 @@ public class JwtTokenProvider {
 
     @Value("${jwt.expiration}")
     private long validityInMilliseconds;
-    
-    // Define a field to store the secret key
-    private final String secretKey;
-
-    // Initialize the secret key during construction
-    public JwtTokenProvider() {
-        secretKey = SecretKeyGenerator.generateSecretKey(256); // Adjust key length as needed
-    }
 
     public String createToken(User userDetails) {
         try {
-            JWSSigner signer = new MACSigner(secretKey);
+            String key = SecretKeyGenerator.getSecretKey();
+            System.out.println(key);
+            JWSSigner signer = new MACSigner(key);
 
             Date now = new Date();
             Date validity = new Date(now.getTime() + validityInMilliseconds);
@@ -48,16 +42,25 @@ public class JwtTokenProvider {
 
             return signedJWT.serialize();
         } catch (Exception e) {
-            // Handle exception
+            e.printStackTrace();
         }
         return null;
     }
 
     public boolean validateToken(String token) {
         try {
-            JWSVerifier verifier = new MACVerifier(secretKey);
+            JWSVerifier verifier = new MACVerifier(SecretKeyGenerator.getSecretKey());
             SignedJWT signedJWT = SignedJWT.parse(token);
-            return signedJWT.verify(verifier);
+            boolean isValid = signedJWT.verify(verifier);
+            if (isValid) {
+                // Log successful token validation
+                System.out.println("Token is valid.");
+            } else {
+                // Log failed token validation
+                System.out.println("Token is NOT valid.");
+            }
+            
+            return isValid;
         } catch (Exception e) {
             return false;
         }
@@ -69,7 +72,7 @@ public class JwtTokenProvider {
             JWTClaimsSet claims = signedJWT.getJWTClaimsSet();
             return claims.getSubject();
         } catch (Exception e) {
-            // Handle exception
+            e.printStackTrace();
         }
         return null;
     }
