@@ -16,7 +16,7 @@ const routes: Routes = [
     component:MainPageComponent
   },
   {
-    path: 'login',
+    path: 'loginUser',
     component: LoginFormComponent
   },
   {
@@ -33,8 +33,10 @@ const routes: Routes = [
   }
 ];
 
+// @ts-ignore
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
+
 export class AppRoutingModule { }

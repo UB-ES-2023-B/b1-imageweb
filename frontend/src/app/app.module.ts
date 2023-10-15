@@ -20,6 +20,7 @@ import { HomePageComponent } from './components/home-page/home-page.component';
     MainPageComponent,
     LoginFormComponent,
     RegisterFormComponent,
+    RegisterFormComponent,
     HomePageComponent
   ],
   imports: [
@@ -28,7 +29,7 @@ import { HomePageComponent } from './components/home-page/home-page.component';
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
+    providers: [],
+    bootstrap: [AppComponent]
+  })
+  export class AppModule { }

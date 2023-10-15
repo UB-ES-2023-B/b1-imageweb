@@ -25,7 +25,7 @@ public class RegisterController {
         this.service = service;
     }
 
-    @PostMapping("/register")
+    @PostMapping
     public ResponseEntity<String> registerUser(@ModelAttribute UserRegistrationDto userDto){
         if(service.userNameExists(userDto.getUsername())){
             return new ResponseEntity<>("Username already exists!", HttpStatus.BAD_REQUEST);
