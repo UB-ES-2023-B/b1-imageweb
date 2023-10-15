@@ -21,16 +21,6 @@ public class UserController {
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
-    /*@PostMapping(path="/getUserAccount")
-    public ResponseEntity<User> getUserAccount(@RequestParam String userName, @RequestParam String userPassword) {
-        User user = service.getUserAccount(userName, userPassword);
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }*/
-
     @GetMapping(path="/getAll")
     public ResponseEntity<Iterable<User>> getAllUsers(){
         Iterable<User> users = service.getAllUsers();
