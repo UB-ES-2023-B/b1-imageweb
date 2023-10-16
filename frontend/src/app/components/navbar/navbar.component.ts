@@ -23,4 +23,8 @@ export class NavbarComponent {
     this.usernameSubscription.unsubscribe();
   }
 
+  logout() {
+    this.globalDataService.clearSession();
+  }
+
 }
