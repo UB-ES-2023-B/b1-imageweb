@@ -23,7 +23,6 @@ public class JwtTokenProvider {
     public String createToken(User userDetails) {
         try {
             String key = SecretKeyGenerator.getSecretKey();
-            System.out.println(key);
             JWSSigner signer = new MACSigner(key);
 
             Date now = new Date();

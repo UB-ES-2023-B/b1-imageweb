@@ -47,7 +47,6 @@ public class LoginController {
         }
 
         String token = jwtTokenProvider.createToken(loginUser);
-        System.out.println(token);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         response.put("token", token);

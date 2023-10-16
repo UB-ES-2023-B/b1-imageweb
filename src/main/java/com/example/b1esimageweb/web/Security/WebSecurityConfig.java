@@ -27,7 +27,8 @@ public class WebSecurityConfig{
                         authorizeRequests
                                 .requestMatchers("/register").permitAll()
                                 .anyRequest().authenticated()
-                )
+                            
+                ).csrf().disable()
                 .httpBasic(); 
 
         return http.build();
