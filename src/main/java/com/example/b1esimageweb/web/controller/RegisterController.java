@@ -42,7 +42,7 @@ public class RegisterController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
         User registerUser = new User(userDto.getUsername(), userDto.getEmail(), passwordEncoder.encode(userDto.getPassword()));
-        //service.addNewUser(registerUser);
+        service.addNewUser(registerUser);
 
         String token = jwtTokenProvider.createToken(registerUser);
         HttpHeaders headers = new HttpHeaders();
