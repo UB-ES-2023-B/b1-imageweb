@@ -3,6 +3,7 @@ import { HttpClient, HttpResponse  } from '@angular/common/http';
 import { GlobalDataService } from '../../services/global-data.service';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { AuthenticationService } from '../../services/authentication.service';
 
 @Component({
   selector: 'app-register-form',
@@ -18,39 +19,30 @@ export class RegisterFormComponent implements OnInit {
 
   constructor(private globalDataService: GlobalDataService,
               private http: HttpClient,
-              private router: Router) {  }
+              private router: Router,
+              private authService: AuthenticationService) {  }
 
   ngOnInit(): void {
   }
 
   onSubmit(): void {
-    // Handle form submission logic here
     if(this.password == this.conPassword){
-      this.globalDataService.setUsername(this.username) //this.username;
-      this.globalDataService.email = this.email;
-      const formData = {
-        username: this.username,
-        email: this.email,
-        password: this.password
-      };
-      console.log('Submitted!', formData.email, formData.password);
-      this.http.post('/api/register', formData, { observe: 'response' ,  responseType: 'text' }).subscribe(
-        (response : HttpResponse<string>) => {
-          if (response.status === 200) {
-            console.log('Registration successful:', response.body);
-            // Optionally, you can handle success response here
-            this.router.navigate(['/home']);
+      console.log('Submitted!', this.email, this.password);
+      this.authService.register(this.username, this.email, this.password)
+        .subscribe(
+          (response) => {
+            if (response.status === 200) {
+              console.log('Response:', response);
+              this.globalDataService.setUsername(this.username);
+              this.globalDataService.email = this.email;
+              this.router.navigate(['/home']);
+            }
+          },
+          (error) => {
+            console.error('Error during registration:', error);
           }
-
-        },
-        (error) => {
-          console.error('Error during registration:', error);
-          // Optionally, you can handle error response here
-        }
-      );
-
-    }
-    else{
+        );
+    } else {
       console.error('Passwords do not match');
     }
   }
