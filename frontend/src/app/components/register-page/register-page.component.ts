@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HttpClient, HttpResponse  } from '@angular/common/http';
 import { GlobalDataService } from '../../services/global-data.service';
 import { Router } from '@angular/router';
@@ -15,18 +16,50 @@ export class RegisterFormComponent implements OnInit {
   password: string = '';
   email: string = '';
   conPassword: string = '';
+  showPasswordError: boolean = false;
+  showConPasswordError: boolean = false;
+  registrationForm: FormGroup;
+  showEmailError: boolean = false;
 
 
   constructor(private globalDataService: GlobalDataService,
               private http: HttpClient,
               private router: Router,
-              private authService: AuthenticationService) {  }
+              private authService: AuthenticationService,
+              private fb: FormBuilder) {
+              this.registrationForm = this.fb.group({
+                // Other form controls
+                email: ['', [Validators.required, Validators.pattern(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)]],
+              });
+  }
 
   ngOnInit(): void {
   }
 
+  onPasswordChange() {
+    this.showPasswordError = false;  // Reset error message on password change
+  }
+
+  onPasswordBlur() {
+    this.showPasswordError = this.password.length < 6;
+  }
+
+  onConPasswordChange() {
+    this.showConPasswordError = false;  // Reset error message on password change
+  }
+
+  onConPasswordBlur() {
+    if(this.password != this.conPassword){
+      this.showConPasswordError = true;
+    }
+  }
+
   onSubmit(): void {
-    if(this.password == this.conPassword){
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    this.showEmailError = !emailRegex.test(this.email);
+    console.log(this.showEmailError);
+    if(this.password == this.conPassword && this.password.length >= 6 && !this.showEmailError){
       console.log('Submitted!', this.email, this.password);
       this.authService.register(this.username, this.email, this.password)
         .subscribe(
@@ -42,7 +75,8 @@ export class RegisterFormComponent implements OnInit {
             console.error('Error during registration:', error);
           }
         );
-    } else {
+    }
+    else {
       console.error('Passwords do not match');
     }
   }

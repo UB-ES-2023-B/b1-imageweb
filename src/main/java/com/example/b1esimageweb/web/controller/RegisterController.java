@@ -40,7 +40,7 @@ public class RegisterController {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
         User registerUser = new User(userDto.getUsername(), userDto.getEmail(), passwordEncoder.encode(userDto.getPassword()));
-        service.addNewUser(registerUser);
+        //service.addNewUser(registerUser);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
