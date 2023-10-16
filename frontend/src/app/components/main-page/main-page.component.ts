@@ -1,4 +1,6 @@
 import { Component,OnInit,  HostListener } from '@angular/core';
+import {GlobalDataService} from '../../services/global-data.service'
+
 
 @Component({
   selector: 'app-main-page',
@@ -8,6 +10,9 @@ import { Component,OnInit,  HostListener } from '@angular/core';
 export class MainPageComponent implements OnInit {
   isMobile: boolean = false;
 
+  constructor(private globalDataService:GlobalDataService) { }
+
+
   @HostListener('window:resize', ['$event'])
   onResize(event: any): void {
     this.checkScreenSize();
@@ -15,6 +20,7 @@ export class MainPageComponent implements OnInit {
 
   ngOnInit() {
     this.checkScreenSize();
+    // this.globalDataService.username= '';
   }
 
   checkScreenSize(): void {
