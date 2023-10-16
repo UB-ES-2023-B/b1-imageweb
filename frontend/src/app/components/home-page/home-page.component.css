@@ -1,0 +1,9 @@
+.custom-style {
+  color: #16273c;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+.resize-imagen{
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}

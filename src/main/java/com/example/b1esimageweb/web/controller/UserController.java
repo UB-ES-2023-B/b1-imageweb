@@ -2,6 +2,8 @@ package com.example.b1esimageweb.web.controller;
 
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.Service;
+import com.example.b1esimageweb.web.dto.UserRegistrationDto;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,9 +17,11 @@ public class UserController {
     public UserController(Service service) {
         this.service = service;
     }
+    
     @PostMapping(path="/addNew")
-    public ResponseEntity<User> addNewUser(@RequestBody User user) {
-        User newUser = service.addNewUser(user);
+    public ResponseEntity<User> addNewUser(@RequestBody UserRegistrationDto user) {
+        User newUser = new User(user.getUsername(), user.getEmail(), user.getPassword());
+        service.addNewUser(newUser);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
     }
 
