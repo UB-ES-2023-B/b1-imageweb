@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpResponse  } from '@angular/common/http';
 import { GlobalDataService } from '../../services/global-data.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register-form',
@@ -14,6 +15,7 @@ export class RegisterFormComponent implements OnInit {
   email: string = '';
   conPassword: string = '';
 
+
   constructor(private globalDataService: GlobalDataService,
               private http: HttpClient,
               private router: Router) {  }
@@ -24,7 +26,7 @@ export class RegisterFormComponent implements OnInit {
   onSubmit(): void {
     // Handle form submission logic here
     if(this.password == this.conPassword){
-    this.globalDataService.username = this.username;
+      this.globalDataService.setUsername(this.username) //this.username;
       this.globalDataService.email = this.email;
       const formData = {
         username: this.username,
