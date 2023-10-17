@@ -25,6 +25,11 @@
     2px -2px 0 #000;
 }
 
+.btn-editar {
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
 .edit-profile-button {
   margin-top: 10px;
 }
@@ -39,4 +44,9 @@
   max-height: 200px;
 }
 
-/* Estilo botón editar perfil*/
+.titulo {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+  text-align:center;
+}

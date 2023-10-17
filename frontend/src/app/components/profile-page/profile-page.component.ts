@@ -16,8 +16,10 @@ export class ProfilePageComponent implements OnInit {
       name: 'Nombre del Usuario',
       email: 'correo@ejemplo.com',
       photos: [
-        { url: 'URL_DE_LA_FOTO', description: 'Descripción de la foto 1' },
-        { url: 'URL_DE_LA_FOTO', description: 'Descripción de la foto 2' },
+         { url: 'URL_DE_LA_FOTO', description: 'Descripción de la foto 1' },
+//         { url: 'URL_DE_LA_FOTO', description: 'Descripción de la foto 2' },
+//         { url: 'URL_DE_LA_FOTO', description: 'Descripción de la foto 3' },
+//         { url: 'URL_DE_LA_FOTO', description: 'Descripción de la foto 4' },
         // ... más fotos
       ]
     };
