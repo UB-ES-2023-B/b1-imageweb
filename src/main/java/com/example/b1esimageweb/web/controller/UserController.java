@@ -1,18 +1,26 @@
 package com.example.b1esimageweb.web.controller;
 
+import com.example.b1esimageweb.Exceptions.UserNotFoundException;
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.Service;
 import com.example.b1esimageweb.web.dto.UserRegistrationDto;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping(path="/user")
 public class UserController {
 
     private final Service service;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public UserController(Service service) {
         this.service = service;
@@ -38,9 +46,18 @@ public class UserController {
     }
 
     @PutMapping(path="/update")
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
-        User updateUser = service.updateUser(user);
-        return new ResponseEntity<>(updateUser, HttpStatus.OK);
+    public ResponseEntity<User> updateUser(@RequestBody UserRegistrationDto updated_user) {
+        System.out.println(updated_user.getUsername());
+        User userExisting = service.getUserByUserName(updated_user.getUsername());
+        if (userExisting != null){
+            userExisting.setUserName(updated_user.getUsername());
+            userExisting.setUserEmail(updated_user.getEmail());
+            userExisting.setUserPassword(passwordEncoder.encode(updated_user.getPassword()));
+            service.updateUser(userExisting);
+            return new ResponseEntity<>(userExisting, HttpStatus.OK);
+        }else{
+            throw new UserNotFoundException("User does not exists.");
+        }
     }
 
     @DeleteMapping(path="/delete/{id}")
