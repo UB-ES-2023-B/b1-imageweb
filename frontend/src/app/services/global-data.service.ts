@@ -14,7 +14,7 @@ export class GlobalDataService {
 
   setToken(newToken: string) {
     sessionStorage.setItem('token', newToken);
-    this.usernameSubject.next(newToken);
+    this.tokenSubject.next(newToken);
   }
 
   getToken(): string {

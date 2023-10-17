@@ -1,6 +1,7 @@
 import { Component  } from '@angular/core';
 import {GlobalDataService} from '../../services/global-data.service'
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router'; // Importa el módulo Router
 
 @Component({
   selector: 'app-navbar',
@@ -12,7 +13,7 @@ export class NavbarComponent {
   private usernameSubscription: Subscription = new Subscription();
 
 
-  constructor(private globalDataService:GlobalDataService) { }
+  constructor(private globalDataService:GlobalDataService, private router: Router) { }
 
   ngOnInit(): void {
     this.usernameSubscription = this.globalDataService.username$.subscribe(username => {
@@ -25,6 +26,8 @@ export class NavbarComponent {
 
   logout() {
     this.globalDataService.clearSession();
+    this.router.navigate(['/#']); // Redirige al usuario a la página de inicio
+
   }
 
 }
