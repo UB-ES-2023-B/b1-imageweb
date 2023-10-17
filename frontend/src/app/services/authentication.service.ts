@@ -15,7 +15,15 @@ export class AuthenticationService {
       email: email,
       password: password
     };
-    return this.http.post('/api/register', formData,{ observe: 'response' ,  responseType: 'text' });
+    return this.http.post('/api/register', formData,{ observe: 'response'});
+  }
+
+  login(username: string, password: string): Observable<any> {
+    const formData = {
+      username: username,
+      password: password
+    };
+    return this.http.post('/api/login', formData,{ observe: 'response'});
   }
 
 

@@ -16,10 +16,11 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit() {
+    /*
     this.dataService.getUser().subscribe((response) => {
       console.log(response)
       this.name = response[0].userName;
-    })
+    })*/
   }
 
 

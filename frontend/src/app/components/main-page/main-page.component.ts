@@ -9,7 +9,8 @@ import {GlobalDataService} from '../../services/global-data.service'
 })
 export class MainPageComponent implements OnInit {
   isMobile: boolean = false;
-
+  message: string='¡Descubre el mundo de la fotografía, guarda y revive tus mejores momentos!';
+  Mbutton: string='Comienza gratis';
   constructor(private globalDataService:GlobalDataService) { }
 
 

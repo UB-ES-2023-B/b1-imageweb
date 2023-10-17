@@ -2,6 +2,7 @@ package com.example.b1esimageweb.web.controller;
 
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.Service;
+import com.example.b1esimageweb.web.Security.JwtTokenProvider;
 import com.example.b1esimageweb.web.dto.UserRegistrationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +20,8 @@ public class RegisterController {
 
     private final Service service;
 
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -41,9 +44,11 @@ public class RegisterController {
         User registerUser = new User(userDto.getUsername(), userDto.getEmail(), passwordEncoder.encode(userDto.getPassword()));
         service.addNewUser(registerUser);
 
+        String token = jwtTokenProvider.createToken(registerUser);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         response.put("message", "Registration Successful");
+        response.put("token", token);
         return new ResponseEntity<>(response,headers, HttpStatus.OK);
     }
 

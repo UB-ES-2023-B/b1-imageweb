@@ -7,9 +7,19 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class GlobalDataService {
   private usernameSubject = new BehaviorSubject<string>(sessionStorage.getItem('username') || '');
+  private tokenSubject = new BehaviorSubject<string>(sessionStorage.getItem('token') || '');
   username$ = this.usernameSubject.asObservable()
+  token$ = this.tokenSubject.asObservable()
   public email: string='';
 
+  setToken(newToken: string) {
+    sessionStorage.setItem('token', newToken);
+    this.tokenSubject.next(newToken);
+  }
+
+  getToken(): string {
+    return this.tokenSubject.getValue();
+  }
   setUsername(newUsername: string) {
     sessionStorage.setItem('username', newUsername);
     this.usernameSubject.next(newUsername);
@@ -21,6 +31,7 @@ export class GlobalDataService {
 
   clearSession() {
     sessionStorage.removeItem('username');
+    sessionStorage.removeItem('token');
     this.usernameSubject.next('');
   }
 
