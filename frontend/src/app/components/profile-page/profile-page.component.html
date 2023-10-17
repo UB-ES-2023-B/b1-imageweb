@@ -1,0 +1,39 @@
+<!-- user-profile.component.html -->
+
+<div class="profile-cover" style="background-image: url('{{ user.coverPhoto }}')">
+  <div class="container text-center">
+    <img class="profile-picture" [src]="user.profilePicture" alt="Profile Picture">
+    <h2>{{ user.name }}</h2>
+    <p>{{ user.email }}</p>
+    <button class="btn btn-primary edit-profile-button" (click)="editProfile()">Editar Perfil</button>
+  </div>
+</div>
+
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-4">
+      <!-- Información del usuario -->
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Información del Usuario</h4>
+          <p><strong>Nombre:</strong> {{ user.name }}</p>
+          <p><strong>Correo Electrónico:</strong> {{ user.email }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <!-- Fotos del usuario -->
+      <h4>Fotos del Usuario</h4>
+      <div class="row">
+        <div class="col-md-4" *ngFor="let photo of user.photos">
+          <div class="card mb-4">
+            <img class="card-img-top" [src]="photo.url" alt="User Photo">
+            <div class="card-body">
+              <p class="card-text">{{ photo.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

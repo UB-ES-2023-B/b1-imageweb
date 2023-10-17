@@ -1,0 +1,29 @@
+/* user-profile.component.css */
+
+.profile-cover {
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+}
+
+.profile-picture {
+  width: 150px;
+  height: 150px;
+  border: 4px solid #fff;
+  border-radius: 50%;
+  margin-top: -75px;
+}
+
+.edit-profile-button {
+  margin-top: 10px;
+}
+
+/* Estilos para el apartado de Información del Usuario */
+.card-title {
+  font-weight: bold;
+}
+
+/* Estilos para la sección de Fotos del Usuario */
+.card-img-top {
+  max-height: 200px;
+}
