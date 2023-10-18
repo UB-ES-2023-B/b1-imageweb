@@ -46,6 +46,11 @@ public class UserController {
         User user = service.getUserById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
+    @GetMapping(path="/getByUserName/{userName}")
+    public ResponseEntity<User> getUserByUserName(@PathVariable("userName") String userName) {
+        User user = service.getUserByUserName(userName);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 
     @PutMapping(path="/update/{username}")
     public ResponseEntity<Map<String,User>> updateUser(@RequestBody UserRegistrationDto updated_user, @PathVariable("username") String username ) {

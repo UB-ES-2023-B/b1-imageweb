@@ -26,6 +26,12 @@
             <input type="password" id="conPassword" [(ngModel)]="conPassword" class="form-control" placeholder="Repite tu contraseña" (ngModelChange)="onConPasswordChange()"  (blur)="onConPasswordBlur()">
             <div *ngIf="showConPasswordError" class="text-danger">Las contraseñas no coinciden.</div>
           </div>
+          <div class="alert alert-danger" role="alert" *ngIf="usernameError">
+            El nombre de usuario no esta disponible.
+          </div>
+          <div class="alert alert-danger" role="alert" *ngIf="emailExisting">
+            Ya hay una cuenta registrada con esta dirección de correo, <a routerLink="/login">Inicia sesión</a>.
+          </div>
           <div class="form-group text-center">
             <p class="signin-text">¿Ya tienes una cuenta? <a routerLink="/login">Inicia sesión</a></p>
             <button class="btn btn-primary" (click)="onSubmit()">Register</button>

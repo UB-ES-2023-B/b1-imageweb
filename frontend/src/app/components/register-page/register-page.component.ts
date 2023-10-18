@@ -20,6 +20,8 @@ export class RegisterFormComponent implements OnInit {
   showConPasswordError: boolean = false;
   registrationForm: FormGroup;
   showEmailError: boolean = false;
+  usernameError: boolean = false;
+  emailExisting: boolean = false;
 
 
   constructor(private globalDataService: GlobalDataService,
@@ -56,6 +58,8 @@ export class RegisterFormComponent implements OnInit {
 
   onSubmit(): void {
 
+    this.usernameError= false;
+    this.emailExisting= false;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     this.showEmailError = !emailRegex.test(this.email);
     console.log(this.showEmailError);
@@ -73,7 +77,13 @@ export class RegisterFormComponent implements OnInit {
             }
           },
           (error) => {
+
             console.error('Error during registration:', error);
+            if (error.error.message.includes('Username')){
+              this.usernameError = true;
+            } else if (error.error.message.includes('Email')){
+              this.emailExisting = true;
+            }
           }
         );
     }
