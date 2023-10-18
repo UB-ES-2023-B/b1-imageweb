@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { GlobalDataService } from '../../services/global-data.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -8,21 +9,10 @@ import { Router } from '@angular/router';
 })
 export class ProfilePageComponent implements OnInit {
 
-  constructor(private router: Router) {}
+  user: any = {}
 
-   user: any = {
-      profilePicture: "../assets/images/funnyCat.jpg",
-      coverPhoto: "../assets/images/mountainSea.jpg",
-      name: 'Nombre del Usuario',
-      email: 'correo@ejemplo.com',
-      photos: [
-         { url: 'URL_DE_LA_FOTO', description: 'Descripción de la foto 1' },
-//         { url: 'URL_DE_LA_FOTO', description: 'Descripción de la foto 2' },
-//         { url: 'URL_DE_LA_FOTO', description: 'Descripción de la foto 3' },
-//         { url: 'URL_DE_LA_FOTO', description: 'Descripción de la foto 4' },
-        // ... más fotos
-      ]
-    };
+  constructor(private globalDataService: GlobalDataService,
+              private router: Router) {}
 
   editProfile() {
     // Redirige al usuario a la página de edición de perfil
@@ -30,7 +20,15 @@ export class ProfilePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Obtener datos reales del usuario y sus fotos desde la API
+    this.user = {
+      profilePicture: "../assets/images/perfil.jpg",
+      coverPhoto: "../assets/images/mountainSea.jpg",
+      name: this.globalDataService.getUsername(),
+      email: this.globalDataService.getEmail(),
+      followers: [],
+      following: [],
+      photos: []
+    };
   }
 
 }

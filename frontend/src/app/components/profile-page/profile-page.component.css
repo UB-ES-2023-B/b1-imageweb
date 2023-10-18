@@ -16,13 +16,9 @@
 }
 
 .user-titles {
-  margin-top: 50px;
-  color: #fff;
-  text-shadow:
-    2px 2px 0 #000,
-    -2px 2px 0 #000,
-    -2px -2px 0 #000,
-    2px -2px 0 #000;
+  margin-top: 60px;
+  margin-left: 25px;
+  color: #ffff;
 }
 
 .btn-editar {
@@ -49,4 +45,11 @@
   width: 50%;
   padding: 10px;
   text-align:center;
+}
+
+.no-foto {
+  margin: auto;
+  padding: 10px;
+  text-align:center;
+  transform: translate(100%, 25%);
 }
