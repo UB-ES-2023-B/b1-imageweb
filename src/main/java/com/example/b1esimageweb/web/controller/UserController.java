@@ -67,7 +67,6 @@ public class UserController {
             }
             userExisting.setUserName(updated_user.getUsername());
             userExisting.setUserEmail(updated_user.getEmail());
-            userExisting.setUserPassword(passwordEncoder.encode(updated_user.getPassword()));
             service.updateUser(userExisting);
             response.put("User details updated", userExisting);
             return new ResponseEntity<>(response, HttpStatus.OK);
