@@ -12,6 +12,7 @@ import { MainPageComponent } from './components/main-page/main-page.component';
 import {LoginFormComponent} from "./components/login-page/login-page.component";
 import {RegisterFormComponent} from "./components/register-page/register-page.component";
 import { HomePageComponent } from './components/home-page/home-page.component';
+import { ProfilePageComponent } from './components/profile-page/profile-page.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { HomePageComponent } from './components/home-page/home-page.component';
     LoginFormComponent,
     RegisterFormComponent,
     RegisterFormComponent,
-    HomePageComponent
+    HomePageComponent,
+    ProfilePageComponent
   ],
   imports: [
     BrowserModule,

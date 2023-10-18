@@ -4,6 +4,8 @@ import {MainPageComponent} from './components/main-page/main-page.component';
 import {LoginFormComponent} from "./components/login-page/login-page.component";
 import {RegisterFormComponent} from "./components/register-page/register-page.component";
 import { HomePageComponent } from './components/home-page/home-page.component';
+import { ProfilePageComponent } from './components/profile-page/profile-page.component';
+
 const routes: Routes = [
    //Initial route
    {
@@ -26,6 +28,10 @@ const routes: Routes = [
   {
     path: 'register',
     component: RegisterFormComponent
+  },
+  {
+    path: 'profile',
+    component: ProfilePageComponent
   },
   {
     path: '**',

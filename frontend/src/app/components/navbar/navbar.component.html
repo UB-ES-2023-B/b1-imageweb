@@ -2,7 +2,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark mainColor fixed-top">
   <div class="container-fluid">
-    <a *ngIf="username !== ''; else homeLink" class="navbar-brand" [routerLink]="['/home']">
+    <a *ngIf="username !== ''; else homeLink" class="navbar-brand" [routerLink]="['/profile']">
       <img src="../../../assets/images/logo2.png" width="40" height="40" alt="Logo"> ImageWeb
     </a>
     <ng-template #homeLink>
@@ -23,7 +23,7 @@
             <img src="../../../assets/images/perfil.jpg" width="40" height="40" alt="Perfil" class="rounded-circle">
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="">Mi Perfil</a></li>
+            <li><a class="dropdown-item" [routerLink]="['/profile']">Mi Perfil</a></li>
             <li class="dropdown-item" (click)="logout() " style="cursor: pointer;">Cerrar sesión</li>
           </ul>
         </div>
