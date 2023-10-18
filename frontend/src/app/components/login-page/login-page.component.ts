@@ -13,16 +13,18 @@ import { AuthenticationService } from '../../services/authentication.service';
 export class LoginFormComponent implements OnInit {
   username: string = '';
   password: string = '';
+  loginError: boolean = false;
 
   constructor(private globalDataService: GlobalDataService,
               private http: HttpClient,
               private router: Router,
-              private authService: AuthenticationService,) { }
+              private authService: AuthenticationService) { }
 
   ngOnInit(): void {
   }
 
   onSubmit(): void {
+    this.loginError= false;
       this.authService.login(this.username, this.password)
         .subscribe(
           (response) => {
@@ -35,6 +37,7 @@ export class LoginFormComponent implements OnInit {
           },
           (error) => {
             console.error('Error during login:', error);
+            this.loginError = true;
           }
         );
     }
