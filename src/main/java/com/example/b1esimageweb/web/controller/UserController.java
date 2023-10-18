@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -45,16 +47,25 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PutMapping(path="/update")
-    public ResponseEntity<User> updateUser(@RequestBody UserRegistrationDto updated_user) {
-        System.out.println(updated_user.getUsername());
-        User userExisting = service.getUserByUserName(updated_user.getUsername());
+    @PutMapping(path="/update/{username}")
+    public ResponseEntity<Map<String,User>> updateUser(@RequestBody UserRegistrationDto updated_user,@PathVariable("username") String username ) {
+        User userExisting = service.getUserByUserName(username);
+            Map<String, User> response = new HashMap<>();
         if (userExisting != null){
+            if(!updated_user.getUsername().equalsIgnoreCase(userExisting.getUserName())  && service.userNameExists(updated_user.getUsername())){
+                response.put("Username already exists!",userExisting);
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+            if(!updated_user.getEmail().equalsIgnoreCase(userExisting.getUserEmail()) && service.emailExists(updated_user.getEmail())) {
+                response.put("Email already exists!",userExisting);
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
             userExisting.setUserName(updated_user.getUsername());
             userExisting.setUserEmail(updated_user.getEmail());
             userExisting.setUserPassword(passwordEncoder.encode(updated_user.getPassword()));
             service.updateUser(userExisting);
-            return new ResponseEntity<>(userExisting, HttpStatus.OK);
+            response.put("User details updated", userExisting);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }else{
             throw new UserNotFoundException("User does not exists.");
         }
