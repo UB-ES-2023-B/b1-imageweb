@@ -1,20 +1,41 @@
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+</head>
+
+
 <div class="profile-cover" style="background-image: url('{{ user.coverPhoto }}')">
   <div class="container mt-4">
-    <div class="row">
-      <div class="col-md-2">
-        <img class="profile-picture" [src]="user.profilePicture" alt="Profile Picture">
+    <div class="row align-items-center">
+      <div class="col-md-2 col-sm-3">
+        <div class="profile-picture-container position-relative">
+          <img class="profile-picture" [src]="user.profilePicture" alt="Profile Picture">
+          <div class="edit-icon">
+            <i class="fas fa-edit"></i>
+          </div>
+        </div>
       </div>
-      <div class="user-titles col-md-6">
+      <div class="user-titles col-md-6 col-sm-6">
         <h1>{{ user.name }}</h1>
         <h4>{{ user.email }}</h4>
-        <h6>{{ user.followers.length }} seguidores · {{ user.following.length }} siguiendo</h6>
-      </div>
-      <div class="col-md-7">
-        <button class="btn-editar btn btn-primary edit-profile-button" (click)="editProfile()">Editar Perfil</button>
+        <div class="col-md-4 col-sm-3 text-right">
+          <div class="dropdown">
+            <button class="btn btn-transparent border rounded-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-ellipsis-h"></i>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right">
+              <li><a class="dropdown-item" href="#" (click)="editProfile()">Editar Perfil</a></li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+
+
+
 
 <!--&lt;!&ndash; Fotos del usuario &ndash;&gt;-->
 <!--<div class="container mt-4">-->

@@ -53,3 +53,48 @@
   text-align:center;
   transform: translate(100%, 25%);
 }
+
+/* Estilos para el botón de tres puntos y el menú desplegable */
+.dropdown .btn {
+  background-color: transparent;
+  color: #fff;
+  border: 1px solid #fff;
+  border-radius: 0;
+}
+
+.dropdown .btn:hover {
+  background-color: transparent;
+  border: 1px solid #000;
+}
+
+.dropdown .dropdown-menu {
+  border: 1px solid #000;
+}
+
+.dropdown .dropdown-item {
+  color: #000;
+}
+
+/* Estilos para el icono de tres puntos */
+.fa-ellipsis-h {
+  font-size: 1.5rem;
+}
+
+/* Styles for smaller screens (e.g., mobile) */
+@media (max-width: 768px) {
+  .profile-cover {
+    height: 200px; /* Adjust the height for mobile */
+    margin-top: 30px; /* Adjust the margin for mobile */
+  }
+
+  .profile-picture {
+    width: 100px; /* Adjust the size for mobile */
+    height: 100px; /* Adjust the size for mobile */
+    margin-top: 15px; /* Adjust the margin for mobile */
+  }
+
+  .user-titles {
+    margin-top: 30px; /* Adjust the margin for mobile */
+    margin-left: 10px; /* Adjust the margin for mobile */
+  }
+}
