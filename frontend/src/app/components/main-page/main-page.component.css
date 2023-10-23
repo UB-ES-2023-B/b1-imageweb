@@ -2,13 +2,13 @@
 #carousel-main {
   position: relative;
   width: 100%;
-  height: 100vh; /* Establece la altura del carrusel para ocupar toda la pantalla verticalmente */
+  height: 100vh;
   margin: 0;
   padding: 0;
 }
 h5 {
-  color: #ffffff; /* Color del texto */
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra del texto */
+  color: #ffffff;
+  text-shadow: 2px 2px 8px rgba(22, 39, 60, 1);
 }
 .carousel-inner {
   width: 100%;
