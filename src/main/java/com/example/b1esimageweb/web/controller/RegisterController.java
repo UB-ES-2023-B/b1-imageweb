@@ -1,7 +1,7 @@
 package com.example.b1esimageweb.web.controller;
 
 import com.example.b1esimageweb.model.User;
-import com.example.b1esimageweb.service.Service;
+import com.example.b1esimageweb.service.UserService;
 import com.example.b1esimageweb.web.Security.JwtTokenProvider;
 import com.example.b1esimageweb.web.dto.UserRegistrationDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.Map;
 @RequestMapping(path="/register")
 public class RegisterController {
 
-    private final Service service;
+    private final UserService service;
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
@@ -26,7 +26,7 @@ public class RegisterController {
     private PasswordEncoder passwordEncoder;
 
 
-    public RegisterController(Service service) {
+    public RegisterController(UserService service) {
         this.service = service;
     }
 
