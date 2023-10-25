@@ -12,14 +12,6 @@ export class UserService {
               private globalDataService: GlobalDataService) { }
 
   getUser(username: string): Observable<any> {
-    const token = this.globalDataService.getToken();
-
-    // Crea un objeto HttpHeaders con el encabezado de autorización
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-
-    // Realiza la solicitud HTTP con los encabezados
-    return this.http.get(`/api/user/getByUserName/${username}`, { headers, observe: 'response' });
+    return this.http.get(`/api/user/getByUserName/${username}`, {  observe: 'response' });
   }
 }
