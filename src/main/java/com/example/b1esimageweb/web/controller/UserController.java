@@ -2,7 +2,7 @@ package com.example.b1esimageweb.web.controller;
 
 import com.example.b1esimageweb.Exceptions.UserNotFoundException;
 import com.example.b1esimageweb.model.User;
-import com.example.b1esimageweb.service.Service;
+import com.example.b1esimageweb.service.UserService;
 import com.example.b1esimageweb.web.dto.UserRegistrationDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +19,12 @@ import java.util.Optional;
 @RequestMapping(path="/user")
 public class UserController {
 
-    private final Service service;
+    private final UserService service;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserController(Service service) {
+    public UserController(UserService service) {
         this.service = service;
     }
     
