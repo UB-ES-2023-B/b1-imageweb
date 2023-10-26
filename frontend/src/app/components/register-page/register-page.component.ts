@@ -18,10 +18,11 @@ export class RegisterFormComponent implements OnInit {
   conPassword: string = '';
   showPasswordError: boolean = false;
   showConPasswordError: boolean = false;
-  registrationForm: FormGroup;
+  showUserError: boolean = false;
   showEmailError: boolean = false;
   usernameError: boolean = false;
   emailExisting: boolean = false;
+  registrationForm: FormGroup;
 
 
   constructor(private globalDataService: GlobalDataService,
@@ -38,8 +39,28 @@ export class RegisterFormComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  onEmailChange() {
+    this.showEmailError = false;  // Reset error message on password change
+  }
+
+  onEmailBlur() {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    this.showEmailError = !emailRegex.test(this.email);
+    console.log(this.showEmailError);
+  }
+
+  onUserChange() {
+    this.showUserError = false;  // Reset error message on password change
+  }
+
+  onUserBlur() {
+    if(this.username == ""){
+      this.showUserError = true;
+    }
+  }
+
   onPasswordChange() {
-    this.showPasswordError = false;  // Reset error message on password change
+    this.showPasswordError = false;
   }
 
   onPasswordBlur() {
@@ -60,9 +81,7 @@ export class RegisterFormComponent implements OnInit {
 
     this.usernameError= false;
     this.emailExisting= false;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    this.showEmailError = !emailRegex.test(this.email);
-    console.log(this.showEmailError);
+
     if(this.password == this.conPassword && this.password.length >= 6 && !this.showEmailError){
       console.log('Submitted!', this.email, this.password);
       this.authService.register(this.username, this.email, this.password)
