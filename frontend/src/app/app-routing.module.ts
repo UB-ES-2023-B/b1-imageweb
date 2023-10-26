@@ -4,6 +4,9 @@ import {MainPageComponent} from './components/main-page/main-page.component';
 import {LoginFormComponent} from "./components/login-page/login-page.component";
 import {RegisterFormComponent} from "./components/register-page/register-page.component";
 import { HomePageComponent } from './components/home-page/home-page.component';
+import { ProfilePageComponent } from './components/profile-page/profile-page.component';
+import { AuthGuard  } from './guards/auth.guard';
+
 const routes: Routes = [
    //Initial route
    {
@@ -21,11 +24,17 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    component: HomePageComponent
+    component: HomePageComponent,
+    canActivate: [AuthGuard ]
   },
   {
     path: 'register',
     component: RegisterFormComponent
+  },
+  {
+    path: 'profile',
+    component: ProfilePageComponent,
+    canActivate: [AuthGuard ]
   },
   {
     path: '**',

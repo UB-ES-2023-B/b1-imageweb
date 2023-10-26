@@ -72,7 +72,7 @@ export class RegisterFormComponent implements OnInit {
               console.log('Response:', response);
               this.globalDataService.setUsername(this.username);
               this.globalDataService.setToken(response.body.token);
-              this.globalDataService.email = this.email;
+              this.globalDataService.setEmail(this.email);
               this.router.navigate(['/home']);
             }
           },

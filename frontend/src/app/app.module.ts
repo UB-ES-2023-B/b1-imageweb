@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { CommonModule } from '@angular/common';
 
+import { AuthGuard } from './guards/auth.guard';
+
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -12,6 +15,7 @@ import { MainPageComponent } from './components/main-page/main-page.component';
 import {LoginFormComponent} from "./components/login-page/login-page.component";
 import {RegisterFormComponent} from "./components/register-page/register-page.component";
 import { HomePageComponent } from './components/home-page/home-page.component';
+import { ProfilePageComponent } from './components/profile-page/profile-page.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +26,8 @@ import { HomePageComponent } from './components/home-page/home-page.component';
     LoginFormComponent,
     RegisterFormComponent,
     RegisterFormComponent,
-    HomePageComponent
+    HomePageComponent,
+    ProfilePageComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +36,15 @@ import { HomePageComponent } from './components/home-page/home-page.component';
     HttpClientModule,
     CommonModule
   ],
-    providers: [],
+  providers: [
+
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+
+  ],
     bootstrap: [AppComponent]
   })
   export class AppModule { }
