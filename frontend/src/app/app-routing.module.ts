@@ -25,7 +25,7 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomePageComponent,
-    canActivate: [AuthGuard ]
+    // canActivate: [AuthGuard ]
   },
   {
     path: 'register',
@@ -34,7 +34,7 @@ const routes: Routes = [
   {
     path: 'profile',
     component: ProfilePageComponent,
-    canActivate: [AuthGuard ]
+    // canActivate: [AuthGuard ]
   },
   {
     path: '**',

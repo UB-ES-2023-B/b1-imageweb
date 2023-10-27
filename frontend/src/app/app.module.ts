@@ -16,6 +16,7 @@ import {LoginFormComponent} from "./components/login-page/login-page.component";
 import {RegisterFormComponent} from "./components/register-page/register-page.component";
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { ProfilePageComponent } from './components/profile-page/profile-page.component';
+import { SecondaryNavbarComponent } from './components/secondary-navbar/secondary-navbar.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { ProfilePageComponent } from './components/profile-page/profile-page.com
     RegisterFormComponent,
     RegisterFormComponent,
     HomePageComponent,
-    ProfilePageComponent
+    ProfilePageComponent,
+    SecondaryNavbarComponent
   ],
   imports: [
     BrowserModule,
