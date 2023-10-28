@@ -28,7 +28,6 @@ public class GalleryController {
         Iterable<Photo> photos = service.getAllPhotos();
         return new ResponseEntity<>(photos, HttpStatus.OK);
     }
-
     /*//Not finished
     @GetMapping(path="/viewPhoto/{photoId}")
     public ResponseEntity<Photo> getPhotoById(@PathVariable("id") Integer id) {

@@ -16,6 +16,10 @@ public class User {
     @JoinColumn(name = "galleryId")
     private Gallery gallery;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "photoId")
+    private Photo profilePicture;
+
     public User(){}
 
     public User(String userName, String userEmail, String userPassword) {
@@ -50,5 +54,13 @@ public class User {
     }
     public void setGallery(Gallery gallery) {
         this.gallery = gallery;
+    }
+
+    public Photo getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(Photo profilePicture) {
+        this.profilePicture = profilePicture;
     }
 }

@@ -8,7 +8,7 @@ public class Photo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer photoId;
     @Lob
-    @Column(name = "image", columnDefinition = "LONGBLOB")
+    @Column(name = "image", columnDefinition = "BLOB")
     private byte[] data; // Datos binarios de la imagen
     @ManyToOne
     private Gallery gallery;
