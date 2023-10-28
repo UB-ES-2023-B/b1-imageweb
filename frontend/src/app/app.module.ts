@@ -17,6 +17,7 @@ import {RegisterFormComponent} from "./components/register-page/register-page.co
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { ProfilePageComponent } from './components/profile-page/profile-page.component';
 import { SecondaryNavbarComponent } from './components/secondary-navbar/secondary-navbar.component';
+import { GalleryComponent } from './components/gallery/gallery.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { SecondaryNavbarComponent } from './components/secondary-navbar/secondar
     RegisterFormComponent,
     HomePageComponent,
     ProfilePageComponent,
-    SecondaryNavbarComponent
+    SecondaryNavbarComponent,
+    GalleryComponent
   ],
   imports: [
     BrowserModule,
