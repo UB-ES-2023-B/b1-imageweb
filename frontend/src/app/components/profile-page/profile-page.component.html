@@ -15,7 +15,7 @@
     </div>
   </div>
 </div>
-<app-secondary-navbar></app-secondary-navbar>
+<app-secondary-navbar [activeItem]="activeItem" (itemClicked)="handleItemClicked($event)"></app-secondary-navbar>
 
 <!--&lt;!&ndash; Fotos del usuario &ndash;&gt;-->
 <!--<div class="container mt-4">-->

@@ -4,3 +4,24 @@
   margin-right: auto;
   max-width: 80%;
 }
+
+.custom-navbar {
+  border: 1px solid #ccc;
+}
+
+.nav-item .nav-link.active {
+  border-bottom: 4px solid #16273c;
+  padding-bottom: 5px;
+}
+
+.nav-item .nav-link {
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  transition: font-size 0.2s;
+
+  /* Tamaño de fuente responsive */
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
+
+}

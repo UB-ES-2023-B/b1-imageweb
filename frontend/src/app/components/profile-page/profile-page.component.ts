@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 })
 
 export class ProfilePageComponent implements OnInit {
+  activeItem: string = 'gallery';
 
   user: any = {
     profilePicture: "../assets/images/perfil.jpg",
@@ -35,6 +36,10 @@ export class ProfilePageComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUserData();
+  }
+  handleItemClicked(item: string): void {
+    this.activeItem = item;
+    console.log('update var::', this.activeItem)
   }
 
   getUserData(): void {
