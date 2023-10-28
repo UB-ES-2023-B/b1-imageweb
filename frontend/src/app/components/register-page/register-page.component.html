@@ -20,7 +20,8 @@
           <div class="form-group">
             <label for="password" [class]="{'text-danger': showPasswordError}">Contraseña:</label>
             <input type="password" id="password" [(ngModel)]="password" class="form-control" placeholder="Introduce tu contraseña" (ngModelChange)="onPasswordChange()"  (blur)="onPasswordBlur()" >
-            <div *ngIf="showPasswordError" class="text-danger">La contraseña debe tener al menos 6 caracteres.</div>
+            <div *ngIf="showPasswordError" class="text-danger">La contraseña debe tener al menos 6 caracteres, una letra minúscula
+              una letra mayúscula, un número y un signo de puntuación.</div>
           </div>
           <div class="form-group">
             <label for="conPassword" [class]="{'text-danger': showConPasswordError}">Confirma la contraseña:</label>

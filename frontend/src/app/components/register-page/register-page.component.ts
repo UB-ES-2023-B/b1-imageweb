@@ -64,7 +64,8 @@ export class RegisterFormComponent implements OnInit {
   }
 
   onPasswordBlur() {
-    this.showPasswordError = this.password.length < 6;
+    const passRegex = /^(?=.*[!@#$%^&*,.])((?=.*[A-Z])(?=.*[a-z])(?=.*\d)).{6,}$/;
+    this.showPasswordError = !passRegex.test(this.password);
   }
 
   onConPasswordChange() {
