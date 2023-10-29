@@ -28,18 +28,15 @@ public class GalleryController {
         Iterable<Photo> photos = service.getAllPhotos();
         return new ResponseEntity<>(photos, HttpStatus.OK);
     }
-    /*//Not finished
+    
     @GetMapping(path="/viewPhoto/{photoId}")
-    public ResponseEntity<Photo> getPhotoById(@PathVariable("id") Integer id) {
+    public ResponseEntity<Photo> getPhotoById(@PathVariable("photoId") Integer id) {
         Photo photo = service.getPhotoById(id);
-        if (photo == null){
-            throw new PhotoNotFoundException("No photo found with the given ID");
-        }
         return new ResponseEntity<>(photo, HttpStatus.OK);
     }
 
     //Not finished 
-    @GetMapping(path="/viewGalery/{userName}")
+    /*@GetMapping(path="/viewGalery/{userName}")
     public ResponseEntity<Iterable<Photo>> getPhotosByGallery(@PathVariable("userName") String userName) {
         Iterable<Photo> photos  = service.getPhotosByGallery(userName);
         if (photos == null){
