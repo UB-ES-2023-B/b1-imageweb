@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { GalleryService } from 'src/app/services/gallery.service';
-import { GlobalDataService } from '../../services/global-data.service';
 
 
 @Component({
@@ -9,7 +8,7 @@ import { GlobalDataService } from '../../services/global-data.service';
   styleUrls: ['./gallery.component.css']
 })
 export class GalleryComponent {
-
+  loading:boolean=true;
   images:any[]=[];
 
   constructor(private galleryService:GalleryService){
@@ -26,6 +25,7 @@ export class GalleryComponent {
             }
           });
         }
+        this.loading=false;
       },
       (error)=>{
         console.log('error al obtener all gallery', error)
