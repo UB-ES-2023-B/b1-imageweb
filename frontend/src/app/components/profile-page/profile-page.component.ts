@@ -40,7 +40,6 @@ export class ProfilePageComponent implements OnInit {
   }
   handleItemClicked(item: string): void {
     this.activeItem = item;
-    console.log('update var::', this.activeItem)
   }
 
   getUserData(): void {
