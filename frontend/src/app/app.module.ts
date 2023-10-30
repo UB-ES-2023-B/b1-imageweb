@@ -3,7 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { CommonModule } from '@angular/common';
-
+import { NgxBootstrapIconsModule } from 'ngx-bootstrap-icons';
+import { allIcons } from 'ngx-bootstrap-icons';
 import { AuthGuard } from './guards/auth.guard';
 
 import { AuthInterceptor } from './interceptors/auth.interceptor';
@@ -38,7 +39,8 @@ import { GalleryComponent } from './components/gallery/gallery.component';
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    CommonModule
+    CommonModule,
+    NgxBootstrapIconsModule.pick(allIcons)
   ],
   providers: [
 

@@ -17,6 +17,11 @@
       <ul class="navbar-nav d-flex align-items-center ms-auto mb-2 mb-lg-0">
           <li *ngIf="username == ''" class="nav-item"><a class="nav-link" [routerLink]="['/login']">Iniciar sesión</a></li>
           <li *ngIf="username == ''" class="nav-item"><a class="nav-link" [routerLink]="['/register']">Regístrate</a></li>
+          <li class="nav-item" *ngIf="username !== ''">
+            <a class="nav-link" [routerLink]="['/upload']">
+              <i class="bi bi-cloud-upload"></i>
+            </a>
+          </li>
         <li class="nav-item" *ngIf="username !== ''">
           <div class="btn-group">
           <a class="nav-link btn btn-secondary dropdown-toggle"  role="button" data-bs-toggle="dropdown" aria-expanded="false" >
@@ -26,8 +31,9 @@
             <li><a class="dropdown-item" [routerLink]="['/profile']">Mi Perfil</a></li>
             <li class="dropdown-item" (click)="logout() " style="cursor: pointer;">Cerrar sesión</li>
           </ul>
-        </div>
+          </div>
         </li>
+
       </ul>
     </div>
   </div>
