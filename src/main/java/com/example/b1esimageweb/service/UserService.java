@@ -58,7 +58,11 @@ public class UserService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            profilePhoto.setPhotoName(photo.getOriginalFilename());
+            String fileName = photo.getOriginalFilename();
+            int lastDotIndex = fileName.lastIndexOf(".");
+            String extension = fileName.substring(lastDotIndex + 1);
+            profilePhoto.setPhotoName(fileName);
+            profilePhoto.setPhotoExtension(extension);
             currentUser.setProfilePicture(profilePhoto);
             userRepository.save(currentUser);
             return photoRepository.save(profilePhoto);
@@ -85,5 +89,9 @@ public class UserService {
 
     public boolean emailExists(String email){
         return userRepository.existsUserByUserEmail(email);
+    }
+
+    public Gallery getGalleryByUser(User user){
+        return userRepository.getGalleryByUserId(user.getUserId());
     }
 }
