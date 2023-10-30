@@ -30,4 +30,10 @@ export class NavbarComponent {
 
   }
 
+  uploadImage(): void {
+
+      console.log('Cargando imagen en proceso');
+
+  }
+
 }

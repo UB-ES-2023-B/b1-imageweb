@@ -11,11 +11,13 @@ import { Subscription } from 'rxjs';
 })
 
 export class ProfilePageComponent implements OnInit {
+  activeItem: string = 'gallery';
 
   user: any = {
     profilePicture: "../assets/images/perfil.jpg",
     coverPhoto: "../assets/images/mountainSea.jpg",
     name: this.globalDataService.getUsername(),
+
     email: '',
     id: 0,
     followers: [],
@@ -35,6 +37,9 @@ export class ProfilePageComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUserData();
+  }
+  handleItemClicked(item: string): void {
+    this.activeItem = item;
   }
 
   getUserData(): void {
