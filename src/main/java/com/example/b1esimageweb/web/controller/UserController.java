@@ -2,7 +2,8 @@ package com.example.b1esimageweb.web.controller;
 
 import com.example.b1esimageweb.Exceptions.UserNotFoundException;
 import com.example.b1esimageweb.model.User;
-import com.example.b1esimageweb.service.Service;
+import com.example.b1esimageweb.service.UserService;
+import com.example.b1esimageweb.web.Security.CurrentUserDetails;
 import com.example.b1esimageweb.web.dto.UserRegistrationDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,12 +21,12 @@ import java.util.Optional;
 @RequestMapping(path="/user")
 public class UserController {
 
-    private final Service service;
+    private final UserService service;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserController(Service service) {
+    public UserController(UserService service) {
         this.service = service;
     }
     
@@ -79,5 +81,11 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable("id") Integer id) {
         service.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(path="/uploadPhotoProfile")
+    public ResponseEntity<String> uploadUserProfilePhoto(@RequestParam("profilePhoto") MultipartFile profilePhoto) {
+        service.addProfilePicture(profilePhoto);
+        return new ResponseEntity<>("Profile Picture successfully", HttpStatus.OK);
     }
 }

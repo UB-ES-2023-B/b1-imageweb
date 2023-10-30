@@ -1,7 +1,7 @@
 package com.example.b1esimageweb.web.controller;
 
 import com.example.b1esimageweb.model.User;
-import com.example.b1esimageweb.service.Service;
+import com.example.b1esimageweb.service.UserService;
 import com.example.b1esimageweb.web.dto.UserLoginDto;
 import com.example.b1esimageweb.web.Security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import java.util.Map;
 @RequestMapping(path="/login")
 public class LoginController {
 
-    private final Service service;
+    private final UserService service;
 
     @Autowired
     private PasswordEncoder passwordEncoder; //tendria que pasar sin encoder y encodear
@@ -27,7 +27,7 @@ public class LoginController {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    public LoginController(Service service) {
+    public LoginController(UserService service) {
         this.service = service;
     }
 

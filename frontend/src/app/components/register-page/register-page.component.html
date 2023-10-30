@@ -6,20 +6,22 @@
         <div class="register-box">
           <h2>Regístrese gratis:</h2>
           <div class="form-group">
-            <label for="email">Dirección de correo:</label>
-            <input type="text" id="email" [(ngModel)]="email" class="form-control" placeholder="Introduce tu dirección de correo">
+            <label for="email"  [class]="{'text-danger': showEmailError}">Dirección de correo:</label>
+            <input type="text" id="email" [(ngModel)]="email" class="form-control" placeholder="Introduce tu dirección de correo" (ngModelChange)="onEmailChange()" (blur)="onEmailBlur()" >
             <div *ngIf="showEmailError" class="text-danger">
               Invalid email format. Please enter a valid email.
             </div>
           </div>
           <div class="form-group">
-            <label for="username">Nombre de usuario:</label>
-            <input type="text" id="username" [(ngModel)]="username" class="form-control" placeholder="Introduce tu nombre de usuario">
+            <label for="username" [class]="{'text-danger': showUserError}">Nombre de usuario:</label>
+            <input type="text" id="username" [(ngModel)]="username" class="form-control" placeholder="Introduce tu nombre de usuario" (ngModelChange)="onUserChange()" (blur)="onUserBlur()">
+            <div *ngIf="showUserError" class="text-danger">El nombre de usuario no puede estar vacío.</div>
           </div>
           <div class="form-group">
             <label for="password" [class]="{'text-danger': showPasswordError}">Contraseña:</label>
             <input type="password" id="password" [(ngModel)]="password" class="form-control" placeholder="Introduce tu contraseña" (ngModelChange)="onPasswordChange()"  (blur)="onPasswordBlur()" >
-            <div *ngIf="showPasswordError" class="text-danger">La contraseña debe tener al menos 6 caracteres.</div>
+            <div *ngIf="showPasswordError" class="text-danger">La contraseña debe tener al menos 6 caracteres, una letra minúscula
+              una letra mayúscula, un número y un signo de puntuación.</div>
           </div>
           <div class="form-group">
             <label for="conPassword" [class]="{'text-danger': showConPasswordError}">Confirma la contraseña:</label>
