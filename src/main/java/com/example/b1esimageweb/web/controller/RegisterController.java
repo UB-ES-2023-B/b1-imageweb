@@ -1,8 +1,8 @@
-package com.example.b1esimageweb.web.controller;
+/*package com.example.b1esimageweb.web.controller;
 
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.UserService;
-import com.example.b1esimageweb.web.Security.JwtTokenProvider;
+import com.example.b1esimageweb.web.Jwt.JwtTokenProvider;
 import com.example.b1esimageweb.web.dto.UserRegistrationDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -52,4 +52,4 @@ public class RegisterController {
         return new ResponseEntity<>(response,headers, HttpStatus.OK);
     }
 
-}
+}*/

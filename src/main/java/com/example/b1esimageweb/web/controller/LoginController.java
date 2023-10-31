@@ -1,9 +1,9 @@
-package com.example.b1esimageweb.web.controller;
+/*package com.example.b1esimageweb.web.controller;
 
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.UserService;
 import com.example.b1esimageweb.web.dto.UserLoginDto;
-import com.example.b1esimageweb.web.Security.JwtTokenProvider;
+import com.example.b1esimageweb.web.Jwt.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -40,7 +40,7 @@ public class LoginController {
         }
 
         User loginUser = service.getUserByUserName(userDto.getUsername());
-        String userPassword = loginUser.getUserPassword();
+        String userPassword = loginUser.getPassword();
         if(!passwordEncoder.matches(userDto.getPassword(),userPassword)){
             response.put("message", "Incorrect Password!");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -53,4 +53,4 @@ public class LoginController {
         return new ResponseEntity<>(response,headers, HttpStatus.OK);
     }
 
-}
+}*/

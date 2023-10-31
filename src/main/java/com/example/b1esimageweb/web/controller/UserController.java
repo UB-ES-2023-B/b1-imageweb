@@ -30,12 +30,12 @@ public class UserController {
         this.service = service;
     }
     
-    @PostMapping(path="/addNew")
+   /* @PostMapping(path="/addNew")
     public ResponseEntity<User> addNewUser(@RequestBody UserRegistrationDto user) {
         User newUser = new User(user.getUsername(), user.getEmail(), user.getPassword());
         service.addNewUser(newUser);
         return new ResponseEntity<>(newUser, HttpStatus.CREATED);
-    }
+    }*/
 
     @GetMapping(path="/getAll")
     public ResponseEntity<Iterable<User>> getAllUsers(){
@@ -59,7 +59,7 @@ public class UserController {
         User userExisting = service.getUserByUserName(username);
         Map<String, User> response = new HashMap<>();
         if (userExisting != null){
-            if(!updated_user.getUsername().equalsIgnoreCase(userExisting.getUserName())  && service.userNameExists(updated_user.getUsername())){
+            if(!updated_user.getUsername().equalsIgnoreCase(userExisting.getUsername())  && service.userNameExists(updated_user.getUsername())){
                 response.put("Username already exists!",userExisting);
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
