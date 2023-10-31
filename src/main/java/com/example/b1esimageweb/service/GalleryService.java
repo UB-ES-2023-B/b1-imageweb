@@ -17,6 +17,7 @@ public class GalleryService {
     
     private PhotoRepository photoRepository;
     private GalleryRepository galleryRepository;
+    
     @Autowired
     public GalleryService(PhotoRepository photoRepository, GalleryRepository galleryRepository){
         this.photoRepository = photoRepository;
@@ -32,7 +33,11 @@ public class GalleryService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        newPhoto.setPhotoName(photo.getOriginalFilename());
+        String fileName = photo.getOriginalFilename();
+        int lastDotIndex = fileName.lastIndexOf(".");
+        String extension = fileName.substring(lastDotIndex + 1);
+        newPhoto.setPhotoName(fileName);
+        newPhoto.setPhotoExtension(extension);
         newPhoto.setGallery(gallery);
 
         return photoRepository.save(newPhoto);
@@ -42,12 +47,16 @@ public class GalleryService {
         return photoRepository.findAll();
     }
 
-    public Photo getPhotoById(int id) {
-        return photoRepository.findById(id).orElseThrow(()-> new PhotoNotFoundException("Photo with id " + id + "not found"));
+    public Photo getPhotoById(int photoId) {
+        return photoRepository.findById(photoId).orElseThrow(()-> new PhotoNotFoundException("Photo with id " + photoId + "not found"));
     }
 
-    /*public Iterable<Photo> getPhotosByGallery(int id) {
-        
-    }*/
+    public Gallery getGalleryById(int galleryId){
+        return galleryRepository.findById(galleryId).orElseThrow(() -> new GalleryNotFoundException("Gallery with id " + galleryId + " not found"));
+    }
+
+    public Iterable<Photo> getPhotosByGallery(Gallery gallery) {
+        return photoRepository.findByGallery(gallery);
+    }
 
 }

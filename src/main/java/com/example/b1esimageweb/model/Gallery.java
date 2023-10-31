@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 public class Gallery {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer galeryId;
+    private Integer galleryId;
     private String galleryName;
     
     public Gallery(){}
@@ -15,7 +15,7 @@ public class Gallery {
         this.galleryName = galleryName;
     }
     public Integer getGalleryrId() {
-        return galeryId;
+        return galleryId;
     }
 
     public String getGalleryName() {

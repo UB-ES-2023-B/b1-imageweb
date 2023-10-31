@@ -13,7 +13,7 @@ public class User {
     private String userPassword;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "galleryId")
+    @JoinColumn(name = "gallery_id")
     private Gallery gallery;
 
     @OneToOne(cascade = CascadeType.ALL)
