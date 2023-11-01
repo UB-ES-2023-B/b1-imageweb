@@ -1,22 +1,16 @@
 package com.example.b1esimageweb.web.controller;
 
 
-import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.AuthService;
-import com.example.b1esimageweb.service.UserService;
 import com.example.b1esimageweb.web.dto.UserLoginDto;
 import com.example.b1esimageweb.web.dto.UserRegistrationDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")

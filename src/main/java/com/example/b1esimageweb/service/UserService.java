@@ -3,23 +3,11 @@ package com.example.b1esimageweb.service;
 import com.example.b1esimageweb.Exceptions.UserNotFoundException;
 import com.example.b1esimageweb.model.Gallery;
 import com.example.b1esimageweb.model.Photo;
-import com.example.b1esimageweb.model.Role;
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.repository.GalleryRepository;
 import com.example.b1esimageweb.repository.PhotoRepository;
 import com.example.b1esimageweb.repository.UserRepository;
-import com.example.b1esimageweb.web.Jwt.JwtTokenProvider;
-import com.example.b1esimageweb.web.Security.CurrentUserDetails;
-import com.example.b1esimageweb.web.controller.AuthResponse;
-import com.example.b1esimageweb.web.dto.UserLoginDto;
-import com.example.b1esimageweb.web.dto.UserRegistrationDto;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,10 +17,18 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
-    private GalleryRepository galleryRepository;
-    private PhotoRepository photoRepository;
+    private final UserRepository userRepository;
+    private final GalleryRepository galleryRepository;
+    private final PhotoRepository photoRepository;
 
+    public UserService(UserRepository userRepository, GalleryRepository galleryRepository, PhotoRepository photoRepository) {
+        this.userRepository = userRepository;
+        this.galleryRepository = galleryRepository;
+        this.photoRepository = photoRepository;
+    }
+
+    // Now we add(register) new user in the AuthService class
+    // this method is not used anymore
     public User addNewUser(User user) {
         Gallery gallery = new Gallery();
         gallery.setGalleryName("My first Gallery");
@@ -54,11 +50,12 @@ public class UserService {
     }
 
     public Photo addProfilePicture (MultipartFile photo){
-        CurrentUserDetails details = new CurrentUserDetails();
-        String currentUserName = details.getCurrentLoggedInUser();
-        Optional<User> currentUser = this.getUserByUsername(currentUserName);
-        User curr = currentUser.get();
-        if(currentUser.isPresent()) {
+        Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User currentUser = null;
+        if(obj instanceof User){
+            currentUser = (User) obj;
+        }
+        if(currentUser != null) {
             Photo profilePhoto = new Photo();
             try {
                 profilePhoto.setData(photo.getBytes());
@@ -66,8 +63,8 @@ public class UserService {
                 e.printStackTrace();
             }
             profilePhoto.setPhotoName(photo.getOriginalFilename());
-            curr.setProfilePicture(profilePhoto);
-            userRepository.save(curr);
+            currentUser.setProfilePicture(profilePhoto);
+            userRepository.save(currentUser);
             return photoRepository.save(profilePhoto);
         }else{
             throw new UserNotFoundException("User does not exists");
@@ -79,22 +76,22 @@ public class UserService {
     }
 
     public User getUserByUserEmail(String email){
-        return userRepository.findUserByUserEmail(email);
+        return userRepository.findUserByEmail(email);
     }
 
-    public Optional<User> getUserByUsername(String username){
-        return userRepository.findByUsername(username);
+    public User getUserByUsername(String username){
+        return userRepository.findByUsername(username).get();
     }
 
     public User getUserByUserName(String username){
-        return userRepository.getUserByUserName(username);
+        return userRepository.findByUsername(username).get();
     }
     public boolean emailExists(String email){
-        return userRepository.existsUserByUserEmail(email);
+        return userRepository.existsUserByEmail(email);
     }
 
-    public boolean userNameExists(String userName) {
-        return userRepository.existsUserByUserName(userName);
+    public boolean userNameExists(String username) {
+        return userRepository.existsUserByUsername(username);
     }
 
 }

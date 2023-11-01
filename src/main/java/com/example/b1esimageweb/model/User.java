@@ -3,6 +3,7 @@ package com.example.b1esimageweb.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +21,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
     private String username;
-    private String userEmail;
+    private String email;
     private String password;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -38,15 +39,15 @@ public class User implements UserDetails {
         return userId;
     }
     public String getUserEmail(){
-        return userEmail;
+        return email;
     }
     public void setUserEmail(String email) {
-        this.userEmail = email;
+        this.email = email;
     }
     public String getUsername() {
         return username;
     }
-    public void setUserName(String userName) {
+    public void setUsername(String userName) {
         this.username = userName;
     }
     public String getPassword() {

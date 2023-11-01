@@ -21,8 +21,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AuthService {
 
-    private UserRepository userRepository;
-    private GalleryRepository galleryRepository;
+    private final UserRepository userRepository;
+    private final GalleryRepository galleryRepository;
     private final JwtTokenProvider jwtService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -43,6 +43,7 @@ public class AuthService {
         galleryRepository.save(gallery);
         User user = User.builder()
                 .username(userDto.getUsername())
+                .email(userDto.getEmail())
                 .password(passwordEncoder.encode(userDto.getPassword()))
                 .role(Role.USER)
                 .build();
