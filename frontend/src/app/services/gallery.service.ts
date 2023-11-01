@@ -13,4 +13,13 @@ export class GalleryService {
   getGalleryPhotos(): Observable<any> {
     return this.http.get(`/api/gallery/getAll`, {  observe: 'response' });
   }
+
+  uploadImage(idGallery: string, photo: File): Observable<any> {
+    const formData = {
+      photo: photo
+    };
+    return this.http.post(`/api/gallery/uploadPhotoGalery/${idGallery}`, formData,{ observe: 'response'});
+  }
+
+
 }
