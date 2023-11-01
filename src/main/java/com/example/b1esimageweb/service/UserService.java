@@ -7,26 +7,28 @@ import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.repository.GalleryRepository;
 import com.example.b1esimageweb.repository.PhotoRepository;
 import com.example.b1esimageweb.repository.UserRepository;
-import com.example.b1esimageweb.web.Security.CurrentUserDetails;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
-@org.springframework.stereotype.Service
+@Service
 public class UserService {
 
-    private UserRepository userRepository;
-    private GalleryRepository galleryRepository;
-    private PhotoRepository photoRepository;
+    private final UserRepository userRepository;
+    private final GalleryRepository galleryRepository;
+    private final PhotoRepository photoRepository;
 
-    @Autowired
-    public UserService(UserRepository repository, GalleryRepository galleryRepository, PhotoRepository photoRepository) {
-        this.userRepository = repository;
+    public UserService(UserRepository userRepository, GalleryRepository galleryRepository, PhotoRepository photoRepository) {
+        this.userRepository = userRepository;
         this.galleryRepository = galleryRepository;
         this.photoRepository = photoRepository;
     }
 
+    // Now we add(register) new user in the AuthService class
+    // this method is not used anymore
     public User addNewUser(User user) {
         Gallery gallery = new Gallery();
         gallery.setGalleryName("My first Gallery");
@@ -48,9 +50,11 @@ public class UserService {
     }
 
     public Photo addProfilePicture (MultipartFile photo){
-        CurrentUserDetails details = new CurrentUserDetails();
-        String currentUserName = details.getCurrentLoggedInUser();
-        User currentUser = this.getUserByUserName(currentUserName);
+        Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User currentUser = null;
+        if(obj instanceof User){
+            currentUser = (User) obj;
+        }
         if(currentUser != null) {
             Photo profilePhoto = new Photo();
             try {
@@ -76,19 +80,22 @@ public class UserService {
     }
 
     public User getUserByUserEmail(String email){
-        return userRepository.getUserByUserEmail(email);
+        return userRepository.findUserByEmail(email);
     }
 
-    public User getUserByUserName(String userName){
-        return userRepository.getUserByUserName(userName);
+    public User getUserByUsername(String username){
+        return userRepository.findByUsername(username).get();
     }
 
-    public boolean userNameExists(String userName){
-        return userRepository.existsUserByUserName(userName);
+    public User getUserByUserName(String username){
+        return userRepository.findByUsername(username).get();
     }
-
     public boolean emailExists(String email){
-        return userRepository.existsUserByUserEmail(email);
+        return userRepository.existsUserByEmail(email);
+    }
+
+    public boolean userNameExists(String username) {
+        return userRepository.existsUserByUsername(username);
     }
 
     public Gallery getGalleryByUser(User user){
