@@ -62,7 +62,11 @@ public class UserService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            profilePhoto.setPhotoName(photo.getOriginalFilename());
+            String fileName = photo.getOriginalFilename();
+            int lastDotIndex = fileName.lastIndexOf(".");
+            String extension = fileName.substring(lastDotIndex + 1);
+            profilePhoto.setPhotoName(fileName);
+            profilePhoto.setPhotoExtension(extension);
             currentUser.setProfilePicture(profilePhoto);
             userRepository.save(currentUser);
             return photoRepository.save(profilePhoto);
@@ -94,4 +98,7 @@ public class UserService {
         return userRepository.existsUserByUsername(username);
     }
 
+    public Gallery getGalleryByUser(User user){
+        return userRepository.getGalleryByUserId(user.getUserId());
+    }
 }

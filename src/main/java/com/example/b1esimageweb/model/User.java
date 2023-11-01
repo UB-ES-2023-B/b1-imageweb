@@ -25,7 +25,7 @@ public class User implements UserDetails {
     private String password;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "galleryId")
+    @JoinColumn(name = "gallery_id")
     private Gallery gallery;
 
     @OneToOne(cascade = CascadeType.ALL)
