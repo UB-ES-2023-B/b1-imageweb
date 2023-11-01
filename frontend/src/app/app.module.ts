@@ -7,6 +7,8 @@ import { NgxBootstrapIconsModule } from 'ngx-bootstrap-icons';
 import { allIcons } from 'ngx-bootstrap-icons';
 import { AuthGuard } from './guards/auth.guard';
 import { ToastrModule } from 'ngx-toastr';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { AppRoutingModule } from './app-routing.module';
@@ -44,7 +46,10 @@ import { UploadPhotoComponent } from './components/upload-photo/upload-photo.com
     HttpClientModule,
     CommonModule,
     NgxBootstrapIconsModule.pick(allIcons),
+    BrowserAnimationsModule,
     ToastrModule.forRoot(),
+    ImageCropperModule,
+
   ],
   providers: [
 
