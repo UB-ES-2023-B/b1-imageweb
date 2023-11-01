@@ -20,6 +20,8 @@ export class GalleryService {
     };
     return this.http.post(`/api/gallery/uploadPhotoGalery/${idGallery}`, formData,{ observe: 'response'});
   }
-
+  getGalleryUser(userName:string): Observable<any> {
+    return this.http.get(`/api/gallery/viewGalleryFromUser/${userName}`, {  observe: 'response' });
+  }
 
 }

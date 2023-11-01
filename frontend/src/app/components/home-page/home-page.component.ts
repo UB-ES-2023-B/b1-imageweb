@@ -14,7 +14,6 @@ export class HomePageComponent {
 
   ngOnInit(): void {
     this.username = this.globalDataService.getUsername();
-    console.log(this.globalDataService.getUsername(), 'holaaa', this.username )
 
   }
 

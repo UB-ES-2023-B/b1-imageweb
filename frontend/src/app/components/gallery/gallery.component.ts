@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { GalleryService } from 'src/app/services/gallery.service';
-
+import { GlobalDataService } from 'src/app/services/global-data.service';
 
 @Component({
   selector: 'app-gallery',
@@ -11,11 +11,10 @@ export class GalleryComponent {
   loading:boolean=true;
   images:any[]=[];
 
-  constructor(private galleryService:GalleryService){
-
+  constructor(private galleryService:GalleryService, private globalDataService:GlobalDataService){
   }
   getGallery():void{
-    this.galleryService.getGalleryPhotos().subscribe(
+    this.galleryService.getGalleryUser(this.globalDataService.getUsername()).subscribe(
       (response)=>{
         if (response.body && Array.isArray(response.body)) {
           response.body.forEach((element: any) => {
