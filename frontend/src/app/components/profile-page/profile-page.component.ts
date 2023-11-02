@@ -47,7 +47,6 @@ export class ProfilePageComponent implements OnInit {
         (response) => {
           this.user.email = response.body.userEmail;
           this.user.id = response.body.userId;
-          this.globalDataService.setGalleryId(response.body.gallery.galleryrId);
           console.log('Datos del usuario:', response.body);
         },
         (error) => {
