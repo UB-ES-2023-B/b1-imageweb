@@ -25,7 +25,7 @@ export class LoginFormComponent implements OnInit {
 
   onSubmit(): void {
     this.loginError= false;
-      this.authService.login(this.username, this.password)
+      this.authService.login(this.username, this.password )
         .subscribe(
           (response) => {
             if (response.status === 200) {

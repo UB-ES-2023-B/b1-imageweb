@@ -3,7 +3,7 @@ package com.example.b1esimageweb;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.example.b1esimageweb.web.Security.SecretKeyGenerator;
+import com.example.b1esimageweb.web.Jwt.SecretKeyGenerator;
 
 
 @SpringBootApplication

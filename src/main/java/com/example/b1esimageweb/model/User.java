@@ -1,53 +1,60 @@
 package com.example.b1esimageweb.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import net.minidev.json.annotate.JsonIgnore;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import lombok.Builder;
+import java.util.Collection;
+import java.util.List;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name="users")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
-    private String userName;
-    private String userEmail;
-    private String userPassword;
+    private String username;
+    private String email;
+    private String password;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "galleryId")
+    @JoinColumn(name = "gallery_id")
     private Gallery gallery;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "photoId")
     private Photo profilePicture;
 
-    public User(){}
-
-    public User(String userName, String userEmail, String userPassword) {
-        this.userName = userName;
-        this.userEmail = userEmail;
-        this.userPassword = userPassword;
-    }
+    @Enumerated(EnumType.STRING)
+    Role role;
 
     public Integer getUserId() {
         return userId;
     }
     public String getUserEmail(){
-        return userEmail;
+        return email;
     }
     public void setUserEmail(String email) {
-        this.userEmail = email;
+        this.email = email;
     }
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String userName) {
+        this.username = userName;
     }
-    public String getUserPassword() {
-        return userPassword;
+    public String getPassword() {
+        return password;
     }
     public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
+        this.password = userPassword;
     }
     public Gallery getGallery() {
         return gallery;
@@ -62,5 +69,26 @@ public class User {
 
     public void setProfilePicture(Photo profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority((role.name())));
+    }
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

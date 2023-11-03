@@ -2,6 +2,8 @@
   width: 100%;
   max-height: 250px;
   object-fit: contain;
-  margin-top: 5%; /* Ajusta la cantidad de espacio en la parte superior según tus preferencias */
+  /*max-width: 100%;
+  max-height: 250px; */
+  margin-top: 5%;
 }
 

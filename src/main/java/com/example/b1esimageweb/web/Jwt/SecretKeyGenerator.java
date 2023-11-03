@@ -1,4 +1,4 @@
-package com.example.b1esimageweb.web.Security;
+package com.example.b1esimageweb.web.Jwt;
 
 import java.security.SecureRandom;
 

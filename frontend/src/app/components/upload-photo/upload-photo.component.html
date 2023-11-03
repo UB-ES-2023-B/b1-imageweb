@@ -1,0 +1,27 @@
+<div style="display: flex; align-items: center;">
+  <label class="image-upload-container btn btn-bwm">
+    <img src="../../../assets/images/upload-icon.svg"  width="40" height="40" alt="Icono">
+    <input #imageInput
+           type="file"
+           accept="image/*"
+           (change)="processFile(imageInput)"
+           [value]="null"
+           id="imageInputId">
+  </label>
+  <div *ngIf="selectedFile">
+    <div *ngIf="selectedFile.pending"  class="img-spinning-circle"></div>
+  </div>
+</div>
+
+
+<!-- <div *ngIf="selectedFile" class="img-preview-container"> -->
+
+  <!-- <div class="img-preview{{selectedFile.status === 'fail' ? '-error' : ''}}"
+       [ngStyle]="{'background-image': 'url('+ selectedFile.src + ')'}">
+  </div> -->
+
+  <!-- <div *ngIf="selectedFile.pending" class="img-loading-overlay">
+    <div class="img-spinning-circle"></div>
+  </div>
+
+</div> -->
