@@ -9,6 +9,7 @@ export class GlobalDataService {
   private usernameSubject = new BehaviorSubject<string>(sessionStorage.getItem('username') || '');
   private tokenSubject = new BehaviorSubject<string>(sessionStorage.getItem('token') || '');
   private emailSubject = new BehaviorSubject<string>(sessionStorage.getItem('email') || '');
+  private galleryIdSubject = new BehaviorSubject<string>(sessionStorage.getItem('galleryId') || '');
 
   username$ = this.usernameSubject.asObservable()
   token$ = this.tokenSubject.asObservable()
@@ -44,8 +45,18 @@ export class GlobalDataService {
     sessionStorage.removeItem('username');
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('email');
+    sessionStorage.removeItem('galleryId');
     this.usernameSubject.next('');
     this.emailSubject.next('');
+  }
+
+  setGalleryId(galleryId: string) {
+    sessionStorage.setItem('galleryId', galleryId);
+    this.galleryIdSubject.next(galleryId);
+  }
+
+  getGalleryId(): string {
+    return this.galleryIdSubject.getValue();
   }
 
 }

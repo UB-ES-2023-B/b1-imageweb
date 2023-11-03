@@ -12,13 +12,14 @@ export class NavbarComponent {
   username: string = '';
   private usernameSubscription: Subscription = new Subscription();
 
-
   constructor(private globalDataService:GlobalDataService, private router: Router) { }
 
   ngOnInit(): void {
     this.usernameSubscription = this.globalDataService.username$.subscribe(username => {
       this.username = username;
     });
+
+
   }
   ngOnDestroy() {
     this.usernameSubscription.unsubscribe();
