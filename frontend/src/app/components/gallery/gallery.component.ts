@@ -11,6 +11,8 @@ import { Subscription } from 'rxjs';
 export class GalleryComponent {
   loading:boolean=true;
   images:any[]=[];
+  showUploadHint: boolean = false;
+
   private imagesSubscription: Subscription = new Subscription();
 
 
@@ -30,6 +32,7 @@ export class GalleryComponent {
         }
         this.galleryService.setImages(this.images);
         this.loading=false;
+
       },
       (error)=>{
         console.log('error al obtener all gallery', error)

@@ -5,7 +5,14 @@
   <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;animation-duration: 3s" role="status"></div>
   <h4 style="margin-top: 20px;">Cargando...</h4>
 </div>
-
+<div *ngIf="!loading && images.length===0"class="d-flex justify-content-center align-items-center flex-column mt-5"
+(mouseover)="showUploadHint = true" (mouseout)="showUploadHint = false">
+  <h4>Aún no has subido ninguna imagen</h4>
+  <app-upload-photo></app-upload-photo>
+  <div class="upload-hint" *ngIf="showUploadHint">
+    Subir imagen
+  </div>
+</div>
 
 <div class="album py-5 bg-light">
   <div class="container">
