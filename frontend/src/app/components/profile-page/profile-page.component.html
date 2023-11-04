@@ -1,19 +1,34 @@
-<div class="profile-cover" style="background-image: url('{{ user.coverPhoto }}')">
-  <div class="container mt-4">
-    <div class="row">
-      <div class="col-md-2">
-        <img class="profile-picture" [src]="user.profilePicture" alt="Profile Picture">
-      </div>
-      <div class="user-titles col-md-6">
-        <h1>{{ user.name }}</h1>
-        <h4>{{ user.email }}</h4>
-        <h6>{{ user.followers.length }} seguidores · {{ user.following.length }} siguiendo</h6>
-      </div>
-      <div class="col-md-7">
-        <button class="btn-editar btn btn-primary edit-profile-button" (click)="editProfile()">Editar Perfil</button>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.0/css/bootstrap.min.css" rel="stylesheet" />
+
+
+<div class="header-wrapper" style="background-image: url('{{ user.coverPhoto }}')">
+  <header></header>
+  <div class="column">
+    <div class="profile-picture">
+      <img [src]="user.profilePicture" alt="Profile Picture">
+    </div>
+    <div class="user-titles">
+      <h1>{{ user.name }}</h1>
+      <h5>{{ user.email }}</h5>
+      <h6>{{ user.followers.length }} seguidores · {{ user.following.length }} siguiendo</h6>
+    </div>
+    <div class="dropdown">
+      <button class="btn btn btn-outline-light" type="button" id="dropdownMenuButton"
+              data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-ellipsis-h"></i>
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" (click)="editProfile()">Editar perfil</a>
       </div>
     </div>
+
   </div>
 </div>
+
 <app-secondary-navbar [activeItem]="activeItem" (itemClicked)="handleItemClicked($event)"></app-secondary-navbar>
 <div *ngIf="activeItem=='gallery'"><app-gallery></app-gallery></div>
+
+
