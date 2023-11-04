@@ -24,6 +24,10 @@ public class GalleryController {
 
     @PostMapping(path="/uploadPhotoGalery/{galleryId}")
     public ResponseEntity<String> uploadPhotoGallery(@PathVariable("galleryId") Integer galleryId, @RequestParam("photo") MultipartFile photo) {
+        // Verificar el tamaño del archivo
+        if (photo.getSize() > 2 * 1024 * 1024) { // 3MB en bytes
+            return new ResponseEntity<>("Photo size exceeds the maximum allowed size of 2MB", HttpStatus.BAD_REQUEST);
+        }
         galleryService.addNewPhoto(galleryId, photo);
         return new ResponseEntity<>("Photography upload successfully", HttpStatus.OK);
     }
