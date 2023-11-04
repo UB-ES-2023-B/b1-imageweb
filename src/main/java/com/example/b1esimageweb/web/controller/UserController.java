@@ -1,6 +1,7 @@
 package com.example.b1esimageweb.web.controller;
 
 import com.example.b1esimageweb.Exceptions.UserNotFoundException;
+import com.example.b1esimageweb.model.Photo;
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.UserService;
 //import com.example.b1esimageweb.web.Security.CurrentUserDetails;
@@ -81,5 +82,12 @@ public class UserController {
     public ResponseEntity<String> uploadUserProfilePhoto(@RequestParam("profilePhoto") MultipartFile profilePhoto) {
         service.addProfilePicture(profilePhoto);
         return new ResponseEntity<>("Profile Picture successfully", HttpStatus.OK);
+    }
+
+    @GetMapping(path="/viewPhotoProfile/{username}")
+    public ResponseEntity<Photo> viewUserProfilePhoto(@PathVariable("username") String username) {
+        User user = service.getUserByUserName(username);
+        Photo photo = service.getPhotoProfileByUser(user);
+        return new ResponseEntity<>(photo, HttpStatus.OK);
     }
 }
