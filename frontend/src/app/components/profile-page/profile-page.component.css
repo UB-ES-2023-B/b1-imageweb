@@ -1,34 +1,130 @@
-/* user-profile.component.css */
-
-.profile-cover {
-  margin-top: 60px;
-  height: 250px;
-  background-size: cover;
-  background-position: center;
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  min-height: 100vh;
 }
 
-.profile-picture {
+.header-wrapper {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.header-wrapper header {
+  width: 100%;
+  height: auto;
+  max-width: 1200px;
+}
+
+.header-wrapper .column {
+  padding: 25px 20px;
+  text-align: center;
+  max-width: 350px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.header-wrapper .column .profile-picture {
+  position: relative;
   width: 150px;
   height: 150px;
   border: 4px solid #fff;
   border-radius: 50%;
-  margin-top: 25px
+  margin-top: 25px;
+  top: 60px;
+  left: 50%;
+  transform: translatex(-50%);
 }
 
-.user-titles {
+.header-wrapper .column .profile-picture img {
+  width: 142px;
+  height: 142px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  box-shadow: 1px 3px 12px rgba(0, 0, 0, 0.18);
+}
+
+.header-wrapper .column .profile-picture span {
+  position: absolute;
+  background: #2afa6a;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  bottom: 3px;
+  right: 11px;
+  border: 2px solid #fff;
+}
+
+.header-wrapper .column .user-titles {
   margin-top: 60px;
-  margin-left: 25px;
   color: #ffff;
 }
 
-.btn-editar {
-  margin-top: 20px;
-  margin-left: 20px;
+.header-wrapper .column .user-titles h1 {
+  margin-top: 60px;
+  font-weight: 600;
+  margin-bottom: 5px;
 }
 
-.edit-profile-button {
+.header-wrapper .column .user-titles h5, h6 {
+  margin: 0;
+}
+
+.header-wrapper .column .dropdown {
   margin-top: 10px;
 }
+
+.header-wrapper .column .dropdown button {
+  width: 70px;
+}
+
+@media (min-width: 868px) {
+  .header-wrapper .column {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 90%;
+    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 50px;
+  }
+  .header-wrapper .column .user-titles {
+    transform: translatex(-50%);
+  }
+}
+
+@media (min-width: 1017px) {
+  .header-wrapper .column {
+    margin: 0;
+    margin-right: auto;
+  }
+}
+
+
+
+/*!* Estilos para el botón de editar *!*/
+/*.btn-editar {*/
+/*  background-color: transparent; !* Hacer el botón transparente *!*/
+/*  border: 1px solid #fff; !* Agregar un borde blanco *!*/
+/*  border-radius: 0;*/
+/*  color: #fff; !* Color del icono (blanco) *!*/
+/*  padding: 5px 10px; !* Ajusta el espaciado interno del botón a tu preferencia *!*/
+/*  display: flex; !* Utilizar flex para alinear verticalmente el icono y el nombre *!*/
+/*  align-items: center; !* Alinear verticalmente los elementos *!*/
+/*}*/
+
+/*!* Estilos para el icono de tres puntos *!*/
+/*.fa-ellipsis-h {*/
+/*  font-size: 5rem;*/
+/*  margin-right: 5px; !* Agregar un espacio entre el icono y el nombre del usuario *!*/
+/*}*/
+
+/*.edit-profile-button {*/
+/*  margin-top: 10px;*/
+/*}*/
 
 /* Estilos para el apartado de Información del Usuario */
 .card-title {
@@ -40,16 +136,50 @@
   max-height: 200px;
 }
 
-.titulo {
-  margin: auto;
-  width: 50%;
-  padding: 10px;
-  text-align:center;
-}
+/*.titulo {*/
+/*  margin: auto;*/
+/*  width: 50%;*/
+/*  padding: 10px;*/
+/*  text-align:center;*/
+/*}*/
 
-.no-foto {
-  margin: auto;
-  padding: 10px;
-  text-align:center;
-  transform: translate(100%, 25%);
-}
+/*.no-foto {*/
+/*  margin: auto;*/
+/*  padding: 10px;*/
+/*  text-align:center;*/
+/*  transform: translate(100%, 25%);*/
+/*}*/
+
+/*!* Estilos para el botón de tres puntos y el menú desplegable *!*/
+/*.dropdown .btn {*/
+/*  background-color: transparent;*/
+/*  color: #fff;*/
+/*  border: 1px solid #fff;*/
+/*  border-radius: 0;*/
+/*}*/
+
+/*.dropdown .btn:hover {*/
+/*  background-color: transparent;*/
+/*  border: 1px solid #000;*/
+/*}*/
+
+/*.dropdown .dropdown-menu {*/
+/*  border: 1px solid #000;*/
+/*}*/
+
+/*.dropdown .dropdown-item {*/
+/*  color: #000;*/
+/*}*/
+
+/*!* Estilos para el icono de tres puntos *!*/
+/*.fa-ellipsis-h {*/
+/*  font-size: 1.5rem;*/
+/*}*/
+
+/*!* Agregar márgenes en pantallas con ancho menor a 992px *!*/
+/*@media (max-width: 992px) {*/
+/*  .user-titles {*/
+/*    padding-left: 50px; !* Agregar margen izda en pantallas pequeñas *!*/
+/*  }*/
+/*}*/
+
