@@ -30,7 +30,8 @@
             <img  src="../../../assets/images/perfil.jpg" width="40" height="40" alt="Perfil" class="rounded-circle">
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" [routerLink]="['/profile']">Mi Perfil</a></li>
+            <li class="dropdown-item" (click)="goToProfile('info') " style="cursor: pointer;">Mi Perfil</li>
+            <li class="dropdown-item" (click)="goToProfile('gallery') " style="cursor: pointer;">Galería</li>
             <li class="dropdown-item" (click)="logout() " style="cursor: pointer;">Cerrar sesión</li>
           </ul>
           </div>

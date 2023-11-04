@@ -5,8 +5,8 @@
            type="file"
            accept="image/*"
            (change)="processFile(imageInput)"
-           [value]="null"
-           id="imageInputId">
+
+           >
   </label>
   <div *ngIf="selectedFile">
     <div *ngIf="selectedFile.pending"  class="img-spinning-circle"></div>

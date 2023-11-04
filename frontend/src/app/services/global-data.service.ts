@@ -6,6 +6,8 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class GlobalDataService {
+
+  private _activeItem: BehaviorSubject<string> = new BehaviorSubject<string>('info');
   private usernameSubject = new BehaviorSubject<string>(sessionStorage.getItem('username') || '');
   private tokenSubject = new BehaviorSubject<string>(sessionStorage.getItem('token') || '');
   private emailSubject = new BehaviorSubject<string>(sessionStorage.getItem('email') || '');
@@ -57,6 +59,15 @@ export class GlobalDataService {
 
   getGalleryId(): string {
     return this.galleryIdSubject.getValue();
+  }
+
+  get activeItem$() {
+    return this._activeItem.asObservable();
+  }
+
+  // Proporciona un método para actualizar el valor de activeItem
+  setActiveItem(newItem: string) {
+    this._activeItem.next(newItem);
   }
 
 }
