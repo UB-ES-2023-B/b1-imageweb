@@ -29,6 +29,9 @@ public class Photo {
         return photoId;
     }
 
+    public void setPhotoId(int id ) {
+        this.photoId = id;
+    }
     public byte[] getData() {
         return data;
     }

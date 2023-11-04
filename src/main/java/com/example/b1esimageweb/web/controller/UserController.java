@@ -84,6 +84,12 @@ public class UserController {
         return new ResponseEntity<>("Profile Picture successfully", HttpStatus.OK);
     }
 
+
+    @DeleteMapping(path="/deleteProfilePhoto")
+    public ResponseEntity<String> deleteUserProfilePhoto() {
+        service.deteleUserProficePicture();
+        return new ResponseEntity<>("Profile Picture successfully deleted", HttpStatus.OK);
+
     @GetMapping(path="/viewPhotoProfile/{username}")
     public ResponseEntity<Photo> viewUserProfilePhoto(@PathVariable("username") String username) {
         User user = service.getUserByUserName(username);
