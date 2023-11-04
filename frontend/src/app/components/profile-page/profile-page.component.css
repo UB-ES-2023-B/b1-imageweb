@@ -81,8 +81,6 @@ body {
   width: 70px;
 }
 
-
-
 @media (min-width: 868px) {
   .header-wrapper .column {
     max-width: 1200px;
@@ -92,6 +90,9 @@ body {
     display: grid;
     grid-template-columns: 1fr 2fr;
     gap: 50px;
+  }
+  .header-wrapper .column .user-titles {
+    transform: translatex(-50%);
   }
 }
 
