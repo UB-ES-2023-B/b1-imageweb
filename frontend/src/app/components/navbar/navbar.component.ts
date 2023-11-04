@@ -25,6 +25,13 @@ export class NavbarComponent {
     this.usernameSubscription.unsubscribe();
   }
 
+
+  goToProfile(itemActive:string): void {
+    this.globalDataService.setActiveItem(itemActive);
+
+    this.router.navigate(['/profile']);
+  }
+
   logout() {
     this.globalDataService.clearSession();
     this.router.navigate(['/#']); // Redirige al usuario a la página de inicio

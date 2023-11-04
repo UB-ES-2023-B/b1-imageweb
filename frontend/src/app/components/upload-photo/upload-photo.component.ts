@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component,  ViewChild, ElementRef  } from '@angular/core';
 import { GalleryService } from 'src/app/services/gallery.service';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -18,6 +18,9 @@ class ImageSnippet {
 })
 export class UploadPhotoComponent {
 
+  @ViewChild('imageInput') imageInput!: ElementRef;
+
+
   selectedFile!: ImageSnippet;
   imageChangedEvent: any;
 
@@ -33,16 +36,17 @@ export class UploadPhotoComponent {
     this.selectedFile.status = 'ok';
     this.gallleryService.addImage(this.selectedFile.src)
     this.toastr.success('Imagen cargada satisfactoriamente');
-    const newInput = document.getElementById('imageInputId') as HTMLInputElement;
+    this.resetImageInput(); // Llamamos a la función para restablecer el campo de entrada de archivos
 
-      if (newInput) {
-            newInput.type = 'file'; // Cambia el tipo a 'file'
-            newInput.accept = 'image/*'; // Cambia el atributo 'accept' a 'image/*'
-        }
 
 
   }
-
+  private resetImageInput() {
+    if (this.imageInput && this.imageInput.nativeElement) {
+      this.imageInput.nativeElement.value = ''; // Reiniciamos el valor del campo de entrada de archivos
+      console.log('cambia algooooooooooooooooooooooooooo')
+    }
+  }
   private onError() {
     this.selectedFile.pending = false;
     this.selectedFile.status = 'fail';

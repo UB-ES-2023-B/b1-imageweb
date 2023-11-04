@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import {GlobalDataService} from '../../services/global-data.service'
 import { Subscription } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home-page',
@@ -12,13 +13,19 @@ export class HomePageComponent {
   username: string = '';
 
   constructor(private globalDataService:GlobalDataService,
-    private userService:UserService) { }
+    private userService:UserService, private router: Router) { }
 
   ngOnInit(): void {
     this.username = this.globalDataService.getUsername();
     this.getUserData()
 
 
+  }
+
+  goToProfile(itemActive:string): void {
+    this.globalDataService.setActiveItem(itemActive);
+
+    this.router.navigate(['/profile']);
   }
 
 
