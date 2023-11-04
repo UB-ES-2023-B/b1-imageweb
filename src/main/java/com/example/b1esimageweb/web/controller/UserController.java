@@ -82,4 +82,10 @@ public class UserController {
         service.addProfilePicture(profilePhoto);
         return new ResponseEntity<>("Profile Picture successfully", HttpStatus.OK);
     }
+
+    @DeleteMapping(path="/deleteProfilePhoto")
+    public ResponseEntity<String> deleteUserProfilePhoto() {
+        service.deteleUserProficePicture();
+        return new ResponseEntity<>("Profile Picture successfully deleted", HttpStatus.OK);
+    }
 }
