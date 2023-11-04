@@ -1,6 +1,7 @@
 package com.example.b1esimageweb.repository;
 
 import com.example.b1esimageweb.model.Gallery;
+import com.example.b1esimageweb.model.Photo;
 import com.example.b1esimageweb.model.User;
 
 import org.springframework.data.jpa.repository.Query;
@@ -16,5 +17,6 @@ public interface UserRepository extends CrudRepository<User, Integer> {
     boolean existsUserByUsername(String username);
     @Query("SELECT u.gallery FROM User u WHERE u.id = :userId")
     Gallery getGalleryByUserId(@Param("userId") Integer userId);
-
+    @Query("SELECT u.profilePicture FROM User u WHERE u.userId = :userId")
+    Photo getPhotoProfileByUserId(@Param("userId") Integer userId);
 }

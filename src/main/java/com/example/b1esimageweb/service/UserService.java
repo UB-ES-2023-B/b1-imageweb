@@ -98,6 +98,10 @@ public class UserService {
         return userRepository.existsUserByUsername(username);
     }
 
+    public Photo getPhotoProfileByUser(User user){
+        return userRepository.getPhotoProfileByUserId(user.getUserId());
+    }
+    
     public Gallery getGalleryByUser(User user){
         return userRepository.getGalleryByUserId(user.getUserId());
     }
