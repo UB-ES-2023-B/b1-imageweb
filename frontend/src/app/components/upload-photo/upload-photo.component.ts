@@ -47,11 +47,12 @@ export class UploadPhotoComponent {
       this.imageInput.nativeElement.value = ''; // Reiniciamos el valor del campo de entrada de archivos
     }
   }
-  private onError() {
+  private onError(message:string) {
+    if(message=="") message="Error al subir la imagen"
     this.selectedFile.pending = false;
     this.selectedFile.status = 'fail';
     this.selectedFile.src = '';
-    this.toastr.error('Error al subir la imagen');
+    this.toastr.error(message,'Error');
   }
 
   processFile(imageInput: any) {
@@ -79,8 +80,12 @@ export class UploadPhotoComponent {
 
         },
         (error) => {
-            this.onError();
-            console.error('Error en la subida de la imagen:', error);
+            let message=""
+            if (error.status==400){
+              message="Ha superado el tamaño de 2 MB"
+            }
+            this.onError(message);
+
       }
 
      );

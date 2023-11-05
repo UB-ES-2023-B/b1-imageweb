@@ -12,7 +12,7 @@ import { Lightbox } from 'ngx-lightbox';
 export class GalleryComponent {
   loading:boolean=true;
   images:any[]=[];
-  showUploadHint: boolean = false;
+  showUploadHint: boolean = true;
 
   private imagesSubscription: Subscription = new Subscription();
 

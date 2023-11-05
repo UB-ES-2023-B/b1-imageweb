@@ -9,15 +9,13 @@
 
 .upload-hint {
   display: none;
-  position: absolute;
+
   background-color: #333;
   color: #fff;
   padding: 5px 10px;
   border-radius: 5px;
-  margin-top: 5px;
   transform: translateX(-50%);
-  bottom: 10px; /* Ajusta la posición vertical */
-  left: 50%; /* Centra horizontalmente */
+
 
 }
 
