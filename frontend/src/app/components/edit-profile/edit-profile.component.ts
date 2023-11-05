@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 export class EditProfileComponent implements OnInit{
   newUsername: string = '';
   newEmail: string = '';
+  newProfilePic: string = '';
 
   user: any = {
     profilePicture: "../assets/images/perfil.jpg",
@@ -27,6 +28,7 @@ export class EditProfileComponent implements OnInit{
 
   ngOnInit(): void {
     this.getUserData();
+
   }
 
   getUserData(): void {
@@ -35,6 +37,9 @@ export class EditProfileComponent implements OnInit{
         this.user.email = response.body.userEmail;
         this.user.id = response.body.userId;
         if(response.body.profilePicture !== null) this.user.profilePicture = response.body.profilePicture;
+        this.newUsername = this.user.name;
+        this.newEmail = response.body.userEmail;
+        console.log(this.newUsername, this.newEmail);
       },
       (error) => {
         // Maneja el error aquí
@@ -45,10 +50,14 @@ export class EditProfileComponent implements OnInit{
 
   actualizarFotoPerfil(event: any) {
     const file: File = event.target.files[0];
+    let picture: string;
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        if (e.target) this.user.profilePicture = e.target.result as string;
+        if (e.target) {
+          this.user.profilePicture = e.target.result as string;
+          this.newProfilePic = e.target.result as string;
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -56,14 +65,37 @@ export class EditProfileComponent implements OnInit{
 
   borrarFotoPerfil() {
     this.user.profilePicture = "../assets/images/perfil.jpg";
+    this.newProfilePic ="../assets/images/perfil.jpg";
   }
 
   actualizarPerfil() {
+    const updatedUser = {
+      username: this.newUsername,
+      email: this.newEmail,
+      profilePicture: this.newProfilePic
+    };
 
+    this.userService.updateUser(this.user.name, updatedUser).subscribe(
+      (response) => {
+        if (response.status === 200) {
+          console.log('Response:', response);
+          this.globalDataService.setUsername(this.newUsername);
+          this.globalDataService.setEmail(this.newEmail);
+          this.globalDataService.setProfilePicture(this.newProfilePic);
+          this.globalDataService.setToken(response.body.token);
+          console.log('Usuario actualizado');
+          this.router.navigate(["/profile"])
+        }
+      },
+      (error) => {
+        // Maneja el error aquí
+        console.error('Error al actualizar el usuario', error);
+      }
+    );
   }
 
   volver() {
-    this.router.navigate(["/profile"])
+    this.router.navigate(["/profile"]);
   }
 
 }
