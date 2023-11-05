@@ -94,6 +94,11 @@ body {
   .header-wrapper .column .user-titles {
     transform: translatex(-50%);
   }
+  .header-wrapper .column .dropdown {
+    position: relative;
+    transform: translate(235px, -100px);
+    margin-left: auto;
+  }
 }
 
 @media (min-width: 1017px) {

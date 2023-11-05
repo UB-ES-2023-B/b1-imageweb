@@ -31,8 +31,7 @@ export class ProfilePageComponent implements OnInit {
 
   editProfile() : void {
     // Redirige al usuario a la página de edición de perfil
-    //this.router.navigate(['/profile/edit']);
-    console.log("not implemented yet")
+    this.router.navigate(['/profile/edit']);
   }
 
   ngOnInit(): void {
@@ -50,6 +49,7 @@ export class ProfilePageComponent implements OnInit {
         (response) => {
           this.user.email = response.body.userEmail;
           this.user.id = response.body.userId;
+          if(response.body.profilePicture !== null) this.user.profilePicture = response.body.profilePicture;
           console.log('Datos del usuario:', response.body);
         },
         (error) => {
