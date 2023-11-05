@@ -12,6 +12,7 @@ export class GlobalDataService {
   private tokenSubject = new BehaviorSubject<string>(sessionStorage.getItem('token') || '');
   private emailSubject = new BehaviorSubject<string>(sessionStorage.getItem('email') || '');
   private galleryIdSubject = new BehaviorSubject<string>(sessionStorage.getItem('galleryId') || '');
+  // private profilePictureSubject: BehaviorSubject<any> = new BehaviorSubject<any>(sessionStorage.getItem('profilePicture') || '');
 
   username$ = this.usernameSubject.asObservable()
   token$ = this.tokenSubject.asObservable()
@@ -40,14 +41,15 @@ export class GlobalDataService {
   }
 
   getEmail(): string {
-      return this.emailSubject.getValue();
-    }
+    return this.emailSubject.getValue();
+  }
 
   clearSession() {
     sessionStorage.removeItem('username');
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('email');
     sessionStorage.removeItem('galleryId');
+    // sessionStorage.removeItem('profilePicture')
     this.usernameSubject.next('');
     this.emailSubject.next('');
   }
@@ -60,6 +62,15 @@ export class GlobalDataService {
   getGalleryId(): string {
     return this.galleryIdSubject.getValue();
   }
+
+  // setProfilePicture(profilePicture: any) {
+  //   sessionStorage.setItem('profilePicture', profilePicture);
+  //   this.profilePictureSubject.next(profilePicture);
+  // }
+  //
+  // getProfilePicture(): any {
+  //   return this.profilePictureSubject.getValue();
+  // }
 
   get activeItem$() {
     return this._activeItem.asObservable();

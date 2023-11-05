@@ -16,14 +16,9 @@ export class EditProfileComponent implements OnInit{
 
   user: any = {
     profilePicture: "../assets/images/perfil.jpg",
-    coverPhoto: "../assets/images/mountainSea.jpg",
     name: this.globalDataService.getUsername(),
-
     email: '',
-    id: 0,
-    followers: [],
-    following: [],
-    photos: []
+    id: 0
   }
 
   constructor(private globalDataService: GlobalDataService,
@@ -48,12 +43,27 @@ export class EditProfileComponent implements OnInit{
     );
   }
 
+  actualizarFotoPerfil(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target) this.user.profilePicture = e.target.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  borrarFotoPerfil() {
+    this.user.profilePicture = "../assets/images/perfil.jpg";
+  }
+
   actualizarPerfil() {
 
   }
 
   volver() {
-
+    this.router.navigate(["/profile"])
   }
 
 }
