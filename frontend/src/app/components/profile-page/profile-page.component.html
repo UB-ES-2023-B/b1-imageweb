@@ -3,12 +3,16 @@
 <div class="header-wrapper" style="background-image: url('{{ user.coverPhoto }}')">
   <header></header>
   <div class="column">
-    <div class="profile-picture">
+    <div class="profile-picture" (mouseover)="mostrarEditarIcono()" (mouseout)="ocultarEditarIcono()">
       <img [src]="user.profilePicture" alt="Profile Picture">
+      <i class="fas fa-pencil-alt editar-icono" (click)="abrirInputFile()"></i>
+      <input type="file" id="fileInput" (change)="cambiarFotoPerfil($event)" style="display: none">
     </div>
+
+
     <div class="user-titles">
       <h1>{{ user.name }}</h1>
-      <h5>{{ user.email }}</h5>
+      <h5 style="padding-bottom: 5px">{{ user.email }}</h5>
       <h6>{{ user.followers.length }} seguidores · {{ user.following.length }} siguiendo</h6>
     </div>
     <div class="dropdown">
@@ -25,6 +29,8 @@
 </div>
 
 <app-secondary-navbar [activeItem]="activeItem" (itemClicked)="handleItemClicked($event)"></app-secondary-navbar>
-<div *ngIf="activeItem=='gallery'"><app-gallery></app-gallery></div>
+<div *ngIf="activeItem=='gallery'">
+  <app-gallery></app-gallery>
+</div>
 
 

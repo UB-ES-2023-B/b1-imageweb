@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 
 export class ProfilePageComponent implements OnInit {
   activeItem: string = 'info';
+  mostrarIconoLapiz: boolean = false; // Agregar una propiedad para controlar la visibilidad del ícono de lápiz
 
   user: any = {
     profilePicture: "../assets/images/perfil.jpg",
@@ -45,17 +46,54 @@ export class ProfilePageComponent implements OnInit {
   }
 
   getUserData(): void {
-      this.userService.getUser(this.user.name).subscribe(
-        (response) => {
-          this.user.email = response.body.userEmail;
-          this.user.id = response.body.userId;
-          if(response.body.profilePicture !== null) this.user.profilePicture = response.body.profilePicture;
-          console.log('Datos del usuario:', response.body);
-        },
-        (error) => {
-          // Maneja el error aquí
-          console.error('Error al obtener los datos del usuario', error);
-        }
-      );
+    this.userService.getUser(this.user.name).subscribe(
+      (response) => {
+        this.user.email = response.body.userEmail;
+        this.user.id = response.body.userId;
+        if(response.body.profilePicture !== null) this.user.profilePicture = response.body.profilePicture;
+        console.log('Datos del usuario:', response.body);
+      },
+      (error) => {
+        // Maneja el error aquí
+        console.error('Error al obtener los datos del usuario', error);
+      }
+    );
+  }
+
+  // Método para mostrar el ícono de lápiz al hacer hover en la foto de perfil
+  mostrarEditarIcono(): void {
+    this.mostrarIconoLapiz = true;
+  }
+
+// Método para ocultar el ícono de lápiz cuando se quita el hover de la foto de perfil
+  ocultarEditarIcono(): void {
+    this.mostrarIconoLapiz = false;
+  }
+
+// Método para abrir el cuadro de diálogo de selección de archivo
+  abrirInputFile(): void {
+    const inputElement = document.getElementById('fileInput');
+    if (inputElement) {
+      inputElement.click();
     }
+  }
+
+// Método para cambiar la foto de perfil
+  cambiarFotoPerfil(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target) this.user.profilePicture = e.target.result as string;
+      };
+      reader.readAsDataURL(file);
+      // Actualizar la base de datos u otras acciones necesarias
+    }
+  }
+
+
+
+
+
+
 }
