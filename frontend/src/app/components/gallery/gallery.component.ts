@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { GalleryService } from 'src/app/services/gallery.service';
 import { GlobalDataService } from 'src/app/services/global-data.service';
 import { Subscription } from 'rxjs';
+import { Lightbox } from 'ngx-lightbox';
 
 @Component({
   selector: 'app-gallery',
@@ -16,7 +17,7 @@ export class GalleryComponent {
   private imagesSubscription: Subscription = new Subscription();
 
 
-  constructor(private galleryService:GalleryService, private globalDataService:GlobalDataService){
+  constructor(private galleryService:GalleryService, private globalDataService:GlobalDataService, private _lightbox: Lightbox){
   }
   getGallery():void{
     this.images=[]
@@ -26,7 +27,7 @@ export class GalleryComponent {
           response.body.forEach((element: any) => {
             if (element.data) {
               this.images.push({
-            "imageSrc":`data:image/${element.photoName.slice(-3)};base64,${element.data}`});
+            "src":`data:image/${element.photoName.slice(-3)};base64,${element.data}`});
             }
           });
         }
@@ -47,6 +48,16 @@ export class GalleryComponent {
 
 
 
+  }
+
+  open(index: number): void {
+    // open lightbox
+    this._lightbox.open(this.images, index);
+  }
+
+  close(): void {
+    // close lightbox programmatically
+    this._lightbox.close();
   }
   ngOnDestroy(): void {
     this.imagesSubscription.unsubscribe();

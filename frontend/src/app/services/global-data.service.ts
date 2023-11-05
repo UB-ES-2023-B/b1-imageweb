@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class GlobalDataService {
 
-  private _activeItem: BehaviorSubject<string> = new BehaviorSubject<string>('info');
+  private _activeItem: BehaviorSubject<string> = new BehaviorSubject<string>('gallery');
   private usernameSubject = new BehaviorSubject<string>(sessionStorage.getItem('username') || '');
   private tokenSubject = new BehaviorSubject<string>(sessionStorage.getItem('token') || '');
   private emailSubject = new BehaviorSubject<string>(sessionStorage.getItem('email') || '');

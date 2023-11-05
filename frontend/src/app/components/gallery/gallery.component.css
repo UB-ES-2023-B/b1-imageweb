@@ -24,3 +24,8 @@
 .d-flex:hover .upload-hint {
   display: block;
 }
+
+
+.photo:hover {
+  outline: 3px solid #16273c4d;
+}
