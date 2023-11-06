@@ -35,6 +35,7 @@ export class UploadPhotoComponent {
     this.selectedFile.pending = false;
     this.selectedFile.status = 'ok';
     this.gallleryService.addImage(this.selectedFile.src)
+    console.log('este es el src ', this.selectedFile.src)
     this.toastr.success('Imagen cargada satisfactoriamente');
     this.resetImageInput(); // Llamamos a la función para restablecer el campo de entrada de archivos
 
@@ -44,14 +45,14 @@ export class UploadPhotoComponent {
   private resetImageInput() {
     if (this.imageInput && this.imageInput.nativeElement) {
       this.imageInput.nativeElement.value = ''; // Reiniciamos el valor del campo de entrada de archivos
-      console.log('cambia algooooooooooooooooooooooooooo')
     }
   }
-  private onError() {
+  private onError(message:string) {
+    if(message=="") message="Error al subir la imagen"
     this.selectedFile.pending = false;
     this.selectedFile.status = 'fail';
     this.selectedFile.src = '';
-    this.toastr.error('Error al subir la imagen');
+    this.toastr.error(message,'Error');
   }
 
   processFile(imageInput: any) {
@@ -74,12 +75,17 @@ export class UploadPhotoComponent {
       this.gallleryService.uploadImage(this.globalDataService.getGalleryId(),this.selectedFile.file)
       .subscribe(
         (response) => {
+          console.log(response)
             this.onSuccess();
 
         },
         (error) => {
-            this.onError();
-            console.error('Error en la subida de la imagen:', error);
+            let message=""
+            if (error.status==400){
+              message="Ha superado el tamaño de 2 MB"
+            }
+            this.onError(message);
+
       }
 
      );
