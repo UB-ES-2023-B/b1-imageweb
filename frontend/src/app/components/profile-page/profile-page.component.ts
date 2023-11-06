@@ -73,9 +73,7 @@ export class ProfilePageComponent implements OnInit {
 // Método para abrir el cuadro de diálogo de selección de archivo
   abrirInputFile(): void {
     const inputElement = document.getElementById('fileInput');
-    if (inputElement) {
-      inputElement.click();
-    }
+    if (inputElement) inputElement.click();
   }
 
 // Método para cambiar la foto de perfil
@@ -90,10 +88,4 @@ export class ProfilePageComponent implements OnInit {
       // Actualizar la base de datos u otras acciones necesarias
     }
   }
-
-
-
-
-
-
 }

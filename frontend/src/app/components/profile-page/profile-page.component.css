@@ -134,6 +134,18 @@ body {
   }
 }
 
+@media (min-width: 1109px) {
+  .header-wrapper .column .user-titles {
+    margin-left: 140px;
+  }
+}
+
+@media (min-width: 1300px) {
+  .header-wrapper .column .user-titles {
+    margin-left: 160px;
+  }
+}
+
 
 
 /*!* Estilos para el botón de editar *!*/
