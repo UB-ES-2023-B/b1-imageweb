@@ -14,6 +14,7 @@ export class LoginFormComponent implements OnInit {
   username: string = '';
   password: string = '';
   loginError: boolean = false;
+  showPassword: boolean = false;
 
   constructor(private globalDataService: GlobalDataService,
               private http: HttpClient,
@@ -21,6 +22,10 @@ export class LoginFormComponent implements OnInit {
               private authService: AuthenticationService) { }
 
   ngOnInit(): void {
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
   onSubmit(): void {

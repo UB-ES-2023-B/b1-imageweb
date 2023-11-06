@@ -22,6 +22,8 @@ export class RegisterFormComponent implements OnInit {
   showEmailError: boolean = false;
   usernameError: boolean = false;
   emailExisting: boolean = false;
+  showPassword: boolean = false;
+  showConPassword: boolean = false;
   registrationForm: FormGroup;
 
 
@@ -76,6 +78,14 @@ export class RegisterFormComponent implements OnInit {
     if(this.password != this.conPassword){
       this.showConPasswordError = true;
     }
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  toggleConPasswordVisibility() {
+    this.showConPassword = !this.showConPassword;
   }
 
   onSubmit(): void {
