@@ -2,7 +2,8 @@
   <!-- Update Avatar Form -->
   <div class="media align-items-center mb-7">
     <div class="u-lg-avatar mr-3">
-      <img class="img-fluid rounded-circle" [src]="user.profilePicture" alt="Image Description">
+      <img class="img-fluid rounded-circle" alt="Image Description"
+           src="data:image/{{user.profilePicture.photoName.slice(-3)}};base64,{{user.profilePicture.data}}">
     </div>
 
     <div class="media-body">

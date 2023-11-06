@@ -4,9 +4,14 @@
   <header></header>
   <div class="column">
     <div class="profile-picture" (mouseover)="mostrarEditarIcono()" (mouseout)="ocultarEditarIcono()">
-      <img [src]="user.profilePicture" alt="Profile Picture">
+      <ng-container *ngIf="user.profilePicture">
+        <img [src]="user.profilePictureUrl" alt="Profile Picture">
+      </ng-container>
+      <ng-container *ngIf="!user.profilePicture">
+        <img src="../assets/images/perfil.jpg" alt="Imagen Predeterminada">
+      </ng-container>
       <i class="fas fa-pencil-alt editar-icono" (click)="abrirInputFile()"></i>
-      <input type="file" id="fileInput" (change)="cambiarFotoPerfil($event)" style="display: none">
+      <input type="file" id="fileInput" (change)="cambiarFotoPerfil($event)">
     </div>
 
 

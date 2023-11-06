@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -13,13 +13,10 @@ export class UserService {
     return this.http.get(`/api/user/getByUserName/${username}`, {  observe: 'response' });
   }
 
-  setUserProfilePic(profilePhoto: string): Observable<any> {
-    const requestBody = { profilePhoto: profilePhoto };
-
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    const options = { headers: headers };
-
-    return this.http.post('/api/user/uploadPhotoProfile', requestBody, options);
+  setUserProfilePic(photo_file: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('profilePhoto', photo_file);
+    return this.http.post('/api/user/uploadPhotoProfile', formData,{ responseType: 'text' });
   }
 
   updateUser(username: string, updatedUser: any): Observable<any> {

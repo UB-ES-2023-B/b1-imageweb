@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { GlobalDataService } from '../../services/global-data.service';
 import { UserService } from '../../services/user.service';
 import { Subscription } from 'rxjs';
+import {type} from "ngx-bootstrap-icons";
 
 @Component({
   selector: 'app-profile-page',
@@ -12,18 +13,17 @@ import { Subscription } from 'rxjs';
 
 export class ProfilePageComponent implements OnInit {
   activeItem: string = 'info';
-  mostrarIconoLapiz: boolean = false; // Agregar una propiedad para controlar la visibilidad del ícono de lápiz
+  mostrarIconoLapiz: boolean = false;
 
   user: any = {
-    profilePicture: "../assets/images/perfil.jpg",
+    profilePicture: null,
+    profilePictureUrl: '',
     coverPhoto: "../assets/images/mountainSea.jpg",
     name: this.globalDataService.getUsername(),
-
     email: '',
     id: 0,
     followers: [],
-    following: [],
-    photos: []
+    following: []
   }
 
   constructor(private globalDataService: GlobalDataService,
@@ -41,6 +41,7 @@ export class ProfilePageComponent implements OnInit {
     });
     this.getUserData();
   }
+
   handleItemClicked(item: string): void {
     this.activeItem = item;
   }
@@ -50,11 +51,13 @@ export class ProfilePageComponent implements OnInit {
       (response) => {
         this.user.email = response.body.userEmail;
         this.user.id = response.body.userId;
-        if(response.body.profilePicture !== null) this.user.profilePicture = response.body.profilePicture;
+        if(response.body.profilePicture !== null) {
+          this.user.profilePicture = response.body.profilePicture;
+          this.user.profilePictureUrl = `data:image/${this.user.profilePicture.photoName};base64,${this.user.profilePicture.data}`
+        }
         console.log('Datos del usuario:', response.body);
       },
       (error) => {
-        // Maneja el error aquí
         console.error('Error al obtener los datos del usuario', error);
       }
     );
@@ -81,11 +84,34 @@ export class ProfilePageComponent implements OnInit {
     const file: File = event.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
-        if (e.target) this.user.profilePicture = e.target.result as string;
-      };
+      reader.addEventListener('load', (e: any) => {
+        if (e.target) {
+          // Llama al servicio para guardar la nueva foto de perfil en el servidor
+          this.userService.setUserProfilePic(file).subscribe(
+            (response) => {
+              console.log('Foto de perfil actualizada con éxito en el servidor', response);
+              this.globalDataService.setProfilePicture(file);
+              this.user.profilePicture = this.globalDataService.getProfilePicture();
+              this.user.profilePictureUrl = `data:image/${file.name};base64,${this.urlTreatment(e.target.result as string)}`;
+              console.log(this.user.profilePictureUrl)
+            },
+            (error) => {
+              console.error('Error al actualizar la foto de perfil en el servidor', error);
+            }
+          );
+        }
+      });
       reader.readAsDataURL(file);
-      // Actualizar la base de datos u otras acciones necesarias
     }
+
+  }
+
+  urlTreatment(url: string) {
+    const regex = /([^,]+),(.+)/;
+    const match = url.match(regex);
+
+    if (match && match.length === 3) return match[2];
+    else console.log("No se encontró una coma en la URL.");
+    return '';
   }
 }

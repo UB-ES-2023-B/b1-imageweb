@@ -13,10 +13,9 @@ import { Subscription } from 'rxjs';
 export class EditProfileComponent implements OnInit{
   newUsername: string = '';
   newEmail: string = '';
-  newProfilePic: string = '';
 
   user: any = {
-    profilePicture: "../assets/images/perfil.jpg",
+    profilePicture: null,
     name: this.globalDataService.getUsername(),
     email: '',
     id: 0
@@ -56,7 +55,6 @@ export class EditProfileComponent implements OnInit{
       reader.onload = (e) => {
         if (e.target) {
           this.user.profilePicture = e.target.result as string;
-          this.newProfilePic = e.target.result as string;
         }
       };
       reader.readAsDataURL(file);
@@ -65,14 +63,12 @@ export class EditProfileComponent implements OnInit{
 
   borrarFotoPerfil() {
     this.user.profilePicture = "../assets/images/perfil.jpg";
-    this.newProfilePic ="../assets/images/perfil.jpg";
   }
 
   actualizarPerfil() {
     const updatedUser = {
       username: this.newUsername,
       email: this.newEmail,
-      profilePicture: this.newProfilePic
     };
 
     this.userService.updateUser(this.user.name, updatedUser).subscribe(
@@ -81,7 +77,6 @@ export class EditProfileComponent implements OnInit{
           console.log('Response:', response);
           this.globalDataService.setUsername(this.newUsername);
           this.globalDataService.setEmail(this.newEmail);
-          this.globalDataService.setProfilePicture(this.newProfilePic);
           this.globalDataService.setToken(response.body.token);
           console.log('Usuario actualizado');
           this.router.navigate(["/profile"])
