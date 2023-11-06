@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GlobalDataService } from '../../services/global-data.service';
 import { UserService } from '../../services/user.service';
-import { Subscription } from 'rxjs';
-import {type} from "ngx-bootstrap-icons";
 
 @Component({
   selector: 'app-profile-page',
@@ -90,7 +88,7 @@ export class ProfilePageComponent implements OnInit {
           this.userService.setUserProfilePic(file).subscribe(
             (response) => {
               console.log('Foto de perfil actualizada con éxito en el servidor', response);
-              this.globalDataService.setProfilePicture(file);
+              this.globalDataService.setProfilePicture(file, `data:image/${file.name};base64,${this.urlTreatment(e.target.result as string)}`);
               this.user.profilePicture = this.globalDataService.getProfilePicture();
               this.user.profilePictureUrl = `data:image/${file.name};base64,${this.urlTreatment(e.target.result as string)}`;
             },

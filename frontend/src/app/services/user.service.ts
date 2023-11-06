@@ -25,4 +25,8 @@ export class UserService {
 
     return this.http.put(`/api/user/update/${username}`, updatedUser, options);
   }
+
+  deleteUserProfilePhoto(): Observable<string> {
+    return this.http.delete('/api/user/deleteProfilePhoto', { responseType: 'text' });
+  }
 }

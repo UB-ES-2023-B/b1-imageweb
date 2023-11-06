@@ -60,7 +60,7 @@ export class EditProfileComponent implements OnInit{
           this.userService.setUserProfilePic(file).subscribe(
             (response) => {
               console.log('Foto de perfil actualizada con éxito en el servidor', response);
-              this.globalDataService.setProfilePicture(file);
+              this.globalDataService.setProfilePicture(file, `data:image/${file.name};base64,${this.urlTreatment(e.target.result as string)}`);
               this.user.profilePicture = this.globalDataService.getProfilePicture();
               this.user.profilePictureUrl = `data:image/${file.name};base64,${this.urlTreatment(e.target.result as string)}`;
             },
@@ -75,7 +75,24 @@ export class EditProfileComponent implements OnInit{
   }
 
   borrarFotoPerfil() {
-    this.user.profilePicture = "../assets/images/perfil.jpg";
+    this.userService.deleteUserProfilePhoto().subscribe(
+      (response) => {
+        console.log('Foto de perfil eliminada con éxito', response);
+        this.eliminarFotoPerfil(); // Llama a la función en tu componente para limpiar la información de la foto de perfil
+      },
+      (error) => {
+        console.error('Error al eliminar la foto de perfil', error);
+      }
+    );
+  }
+
+  eliminarFotoPerfil() {
+    // Limpia la información de la foto de perfil en tu servicio GlobalDataService
+    this.globalDataService.setProfilePicture(null, '');
+
+    // Actualiza la propiedad user en tu componente para que muestre la imagen predeterminada
+    this.user.profilePicture = null;
+    this.user.profilePictureUrl = '../assets/images/perfil.jpg';
   }
 
   actualizarPerfil() {

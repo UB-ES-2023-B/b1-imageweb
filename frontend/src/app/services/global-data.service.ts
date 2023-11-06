@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
+interface ProfilePictureInfo {
+  file: File | null;
+  previousUrl: string;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +17,11 @@ export class GlobalDataService {
   private tokenSubject = new BehaviorSubject<string>(sessionStorage.getItem('token') || '');
   private emailSubject = new BehaviorSubject<string>(sessionStorage.getItem('email') || '');
   private galleryIdSubject = new BehaviorSubject<string>(sessionStorage.getItem('galleryId') || '');
-  private profilePictureSubject: BehaviorSubject<any> = new BehaviorSubject<any>(sessionStorage.getItem('profilePicture') || '');
+  private profilePictureSubject: BehaviorSubject<ProfilePictureInfo> = new BehaviorSubject<ProfilePictureInfo>({
+    file: null,
+    previousUrl: '',
+  });
+
 
   username$ = this.usernameSubject.asObservable()
   token$ = this.tokenSubject.asObservable()
@@ -63,12 +72,14 @@ export class GlobalDataService {
     return this.galleryIdSubject.getValue();
   }
 
-  setProfilePicture(profilePicture: any) {
-    sessionStorage.setItem('profilePicture', profilePicture);
-    this.profilePictureSubject.next(profilePicture);
+  setProfilePicture(profilePicture: File | null, previousUrl: string) {
+    if (profilePicture) sessionStorage.setItem('profilePicture', 'true'); //Almacenar un marcador para indicar que hay una imagen de perfil
+    else sessionStorage.removeItem('profilePicture'); // Elimina el marcador si no hay imagen de perfil
+
+    this.profilePictureSubject.next({ file: profilePicture, previousUrl });
   }
 
-  getProfilePicture(): any {
+  getProfilePicture(): ProfilePictureInfo {
     return this.profilePictureSubject.getValue();
   }
 

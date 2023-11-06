@@ -10,7 +10,7 @@ import { Router } from '@angular/router'; // Importa el módulo Router
 })
 export class NavbarComponent {
   username: string = '';
-  profilePic = "../assets/images/perfil.jpg";
+  profilePicUrl = '';
   private usernameSubscription: Subscription = new Subscription();
 
   constructor(private globalDataService:GlobalDataService, private router: Router) { }
@@ -19,9 +19,9 @@ export class NavbarComponent {
     this.usernameSubscription = this.globalDataService.username$.subscribe(username => {
       this.username = username;
     });
-    this.profilePic = this.globalDataService.getProfilePicture()
-
+    this.getUrl()
   }
+
   ngOnDestroy() {
     this.usernameSubscription.unsubscribe();
   }
@@ -40,9 +40,12 @@ export class NavbarComponent {
   }
 
   uploadImage(): void {
-
       console.log('Cargando imagen en proceso');
+  }
 
+  getUrl() {
+    const profilePictureInfo = this.globalDataService.getProfilePicture();
+    return this.profilePicUrl = profilePictureInfo.previousUrl;
   }
 
 }

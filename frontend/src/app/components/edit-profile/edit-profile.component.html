@@ -40,7 +40,7 @@
           <div class="form-group">
             <input type="text" class="form-control" name="username" [(ngModel)]="newUsername"
                    placeholder="Entra tu nombre de usuario" aria-label="Entra tu nombre de usuario"
-                   required="" aria-describedby="usernameLabel" data-msg="Entra tu nombre de usuario."
+                   required="true" aria-describedby="usernameLabel" data-msg="Entra tu nombre de usuario."
                    data-error-class="u-has-error" data-success-class="u-has-success" [value]="newUsername">
 
           </div>
@@ -58,7 +58,7 @@
           <div class="form-group">
             <input type="email" class="form-control" name="email" [(ngModel)]="newEmail"
                    placeholder="Entra tu correo electrónico" aria-label="Entra tu correo electrónico"
-                   required="" aria-describedby="emailLabel"
+                   required="true" aria-describedby="emailLabel"
                    data-msg="Entra una dirección de correo electrónico válida."
                    data-error-class="u-has-error" data-success-class="u-has-success" [value]="user.email">
             <small class="form-text text-muted">No compartiremos tu correo con nadie más.</small>

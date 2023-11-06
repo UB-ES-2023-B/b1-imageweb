@@ -91,11 +91,11 @@ public class UserController {
         service.deteleUserProficePicture();
         return new ResponseEntity<>("Profile Picture successfully deleted", HttpStatus.OK);
     }
-        @GetMapping(path = "/viewPhotoProfile/{username}")
-        public ResponseEntity<Photo> viewUserProfilePhoto (@PathVariable("username") String username){
-            User user = service.getUserByUserName(username);
-            Photo photo = service.getPhotoProfileByUser(user);
-            return new ResponseEntity<>(photo, HttpStatus.OK);
-        }
 
+    @GetMapping(path = "/viewPhotoProfile/{username}")
+    public ResponseEntity<Photo> viewUserProfilePhoto (@PathVariable("username") String username){
+        User user = service.getUserByUserName(username);
+        Photo photo = service.getPhotoProfileByUser(user);
+        return new ResponseEntity<>(photo, HttpStatus.OK);
+    }
 }
