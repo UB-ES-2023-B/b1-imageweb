@@ -6,6 +6,11 @@ import { CommonModule } from '@angular/common';
 import { NgxBootstrapIconsModule } from 'ngx-bootstrap-icons';
 import { allIcons } from 'ngx-bootstrap-icons';
 import { AuthGuard } from './guards/auth.guard';
+import { ToastrModule } from 'ngx-toastr';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LightboxModule } from 'ngx-lightbox';
+import { FileSaverModule } from 'ngx-filesaver';
 
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { AppRoutingModule } from './app-routing.module';
@@ -19,6 +24,7 @@ import { HomePageComponent } from './components/home-page/home-page.component';
 import { ProfilePageComponent } from './components/profile-page/profile-page.component';
 import { SecondaryNavbarComponent } from './components/secondary-navbar/secondary-navbar.component';
 import { GalleryComponent } from './components/gallery/gallery.component';
+import { UploadPhotoComponent } from './components/upload-photo/upload-photo.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +38,8 @@ import { GalleryComponent } from './components/gallery/gallery.component';
     HomePageComponent,
     ProfilePageComponent,
     SecondaryNavbarComponent,
-    GalleryComponent
+    GalleryComponent,
+    UploadPhotoComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +47,13 @@ import { GalleryComponent } from './components/gallery/gallery.component';
     FormsModule,
     HttpClientModule,
     CommonModule,
-    NgxBootstrapIconsModule.pick(allIcons)
+    NgxBootstrapIconsModule.pick(allIcons),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    ImageCropperModule,
+    LightboxModule,
+    FileSaverModule
+
   ],
   providers: [
 

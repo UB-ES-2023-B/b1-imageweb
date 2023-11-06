@@ -6,9 +6,12 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class GlobalDataService {
+
+  private _activeItem: BehaviorSubject<string> = new BehaviorSubject<string>('gallery');
   private usernameSubject = new BehaviorSubject<string>(sessionStorage.getItem('username') || '');
   private tokenSubject = new BehaviorSubject<string>(sessionStorage.getItem('token') || '');
   private emailSubject = new BehaviorSubject<string>(sessionStorage.getItem('email') || '');
+  private galleryIdSubject = new BehaviorSubject<string>(sessionStorage.getItem('galleryId') || '');
 
   username$ = this.usernameSubject.asObservable()
   token$ = this.tokenSubject.asObservable()
@@ -44,8 +47,27 @@ export class GlobalDataService {
     sessionStorage.removeItem('username');
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('email');
+    sessionStorage.removeItem('galleryId');
     this.usernameSubject.next('');
     this.emailSubject.next('');
+  }
+
+  setGalleryId(galleryId: string) {
+    sessionStorage.setItem('galleryId', galleryId);
+    this.galleryIdSubject.next(galleryId);
+  }
+
+  getGalleryId(): string {
+    return this.galleryIdSubject.getValue();
+  }
+
+  get activeItem$() {
+    return this._activeItem.asObservable();
+  }
+
+  // Proporciona un método para actualizar el valor de activeItem
+  setActiveItem(newItem: string) {
+    this._activeItem.next(newItem);
   }
 
 }

@@ -1,13 +1,14 @@
 <div class="container margin justify-content-center" >
-  <p class="fs-1 mt-5 custom-style">👋Hola {{username}}...</p>
+  <p class="fs-1 custom-style" >👋Hola {{username}}...</p>
   <div class="row ">
-    <div class="col-md-4">
-      <div class="card" >
+    <div class="col-md-4 gallery-card" (click)="goToProfile('gallery')">
+      <div class="card "  >
         <div class="image-container d-flex justify-content-center align-items-center">
-          <img src="../../../assets/images/uploadFoto.jpeg" class="card-img-top resize-imagen" alt="subir foto">
+          <img src="../../../assets/images/galeria.jpg" class="card-img-top resize-imagen" alt="subir foto">
         </div>
         <div class="card-body">
-          <p class="card-text text-center">Próximamente, podrás subir tus fotos favoritas.</p>
+
+          <p class="card-text text-center"> <br> Visita tú galería</p>
         </div>
       </div>
     </div>
@@ -29,7 +30,7 @@
           <img src="../../../assets/images/followerFoto.jpg" class="card-img-top resize-imagen" alt="Seguidores">
         </div>
         <div class="card-body">
-          <p class="card-text text-center">Próximamente, podrás seguir a tus amigos, llenarte de creatividad y mucho más.</p>
+          <p class="card-text text-center">Próximamente, podrás seguir a tus amigos y mucho más.</p>
         </div>
       </div>
     </div>

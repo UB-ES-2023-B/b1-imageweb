@@ -1,13 +1,28 @@
 .custom-style {
   color: #16273c;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  margin-top: 9%;
+
 }
 .resize-imagen{
-  width: 200px;
   height: 200px;
-  object-fit: cover;
+  object-fit: contain;
+  margin-top: 3%;
 }
 
 .margin{
   margin-top: 5rem !important;
+}
+
+.gallery-card {
+  cursor: pointer;
+  border-radius: 10px;}
+
+.gallery-card:hover {
+  background-color: #c5d5e98c; /* Cambiar el color de fondo cuando el cursor esté encima */
+}
+.card-text {
+  font-size: 18px; /* Tamaño de fuente */
+  color: #333; /* Color de fuente */
+  font-family: 'Arial', sans-serif; /* Fuente */
 }

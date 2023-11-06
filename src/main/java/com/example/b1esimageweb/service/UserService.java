@@ -67,9 +67,37 @@ public class UserService {
             String extension = fileName.substring(lastDotIndex + 1);
             profilePhoto.setPhotoName(fileName);
             profilePhoto.setPhotoExtension(extension);
+
+            Photo oldPhoto = currentUser.getProfilePicture();
+            if(oldPhoto != null){
+                int oldPhotoId  = oldPhoto.getPhotoId();
+                currentUser.setProfilePicture(null);
+                profilePhoto.setPhotoId(oldPhotoId);
+            }
             currentUser.setProfilePicture(profilePhoto);
             userRepository.save(currentUser);
+
+            if(oldPhoto != null){
+                photoRepository.delete(oldPhoto);
+            }
             return photoRepository.save(profilePhoto);
+        }else{
+            throw new UserNotFoundException("User does not exists");
+        }
+    }
+
+
+    public void deteleUserProficePicture(){
+        Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User currentUser = null;
+        if(obj instanceof User){
+            currentUser = (User) obj;
+        }
+        if(currentUser != null) {
+            Photo profilePhoto = currentUser.getProfilePicture();
+            currentUser.setProfilePicture(null);
+            userRepository.save(currentUser);
+            photoRepository.delete(profilePhoto);
         }else{
             throw new UserNotFoundException("User does not exists");
         }
@@ -98,6 +126,10 @@ public class UserService {
         return userRepository.existsUserByUsername(username);
     }
 
+    public Photo getPhotoProfileByUser(User user){
+        return userRepository.getPhotoProfileByUserId(user.getUserId());
+    }
+    
     public Gallery getGalleryByUser(User user){
         return userRepository.getGalleryByUserId(user.getUserId());
     }

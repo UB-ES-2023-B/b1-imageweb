@@ -17,18 +17,24 @@
       <ul class="navbar-nav d-flex align-items-center ms-auto mb-2 mb-lg-0">
           <li *ngIf="username == ''" class="nav-item"><a class="nav-link" [routerLink]="['/login']">Iniciar sesión</a></li>
           <li *ngIf="username == ''" class="nav-item"><a class="nav-link" [routerLink]="['/register']">Regístrate</a></li>
+          <li class="nav-link btn btn-secondary" *ngIf="username !== ''"  style="cursor: pointer;">
+            <a class="nav-link"(click)="goToProfile('gallery') ">Galería</a></li>
           <li class="nav-item" *ngIf="username !== ''">
             <a class="nav-link btn btn-secondary" (click)="uploadImage()">
-              <img src="../../../assets/images/upload-icon.svg"  width="40" height="40" alt="Icono">
+
+              <!-- <img src="../../../assets/images/upload-icon.svg"  width="40" height="40" alt="Icono"> -->
+              <app-upload-photo></app-upload-photo>
             </a>
           </li>
+
         <li class="nav-item" *ngIf="username !== ''">
           <div class="btn-group">
           <a class="nav-link btn btn-secondary dropdown-toggle"  role="button" data-bs-toggle="dropdown" aria-expanded="false" >
             <img  src="../../../assets/images/perfil.jpg" width="40" height="40" alt="Perfil" class="rounded-circle">
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" [routerLink]="['/profile']">Mi Perfil</a></li>
+            <li class="dropdown-item" (click)="goToProfile('info') " style="cursor: pointer;">Mi Perfil</li>
+
             <li class="dropdown-item" (click)="logout() " style="cursor: pointer;">Cerrar sesión</li>
           </ul>
           </div>

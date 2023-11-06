@@ -2,6 +2,28 @@
   width: 100%;
   max-height: 250px;
   object-fit: contain;
-  margin-top: 5%; /* Ajusta la cantidad de espacio en la parte superior según tus preferencias */
+  /*max-width: 100%;
+  max-height: 250px; */
+  margin-top: 5%;
 }
 
+.upload-hint {
+  display: none;
+
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  transform: translateX(-50%);
+
+
+}
+
+.d-flex:hover .upload-hint {
+  display: block;
+}
+
+
+.photo:hover {
+  outline: 3px solid #16273c4d;
+}
