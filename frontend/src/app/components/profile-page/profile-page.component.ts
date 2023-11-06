@@ -93,7 +93,6 @@ export class ProfilePageComponent implements OnInit {
               this.globalDataService.setProfilePicture(file);
               this.user.profilePicture = this.globalDataService.getProfilePicture();
               this.user.profilePictureUrl = `data:image/${file.name};base64,${this.urlTreatment(e.target.result as string)}`;
-              console.log(this.user.profilePictureUrl)
             },
             (error) => {
               console.error('Error al actualizar la foto de perfil en el servidor', error);
@@ -103,7 +102,6 @@ export class ProfilePageComponent implements OnInit {
       });
       reader.readAsDataURL(file);
     }
-
   }
 
   urlTreatment(url: string) {

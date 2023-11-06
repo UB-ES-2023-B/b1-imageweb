@@ -16,6 +16,7 @@ export class EditProfileComponent implements OnInit{
 
   user: any = {
     profilePicture: null,
+    profilePictureUrl: '',
     name: this.globalDataService.getUsername(),
     email: '',
     id: 0
@@ -35,13 +36,15 @@ export class EditProfileComponent implements OnInit{
       (response) => {
         this.user.email = response.body.userEmail;
         this.user.id = response.body.userId;
-        if(response.body.profilePicture !== null) this.user.profilePicture = response.body.profilePicture;
+        if(response.body.profilePicture !== null) {
+          this.user.profilePicture = response.body.profilePicture;
+          this.user.profilePictureUrl = `data:image/${this.user.profilePicture.photoName};base64,${this.user.profilePicture.data}`
+        }
         this.newUsername = this.user.name;
         this.newEmail = response.body.userEmail;
         console.log(this.newUsername, this.newEmail);
       },
       (error) => {
-        // Maneja el error aquí
         console.error('Error al obtener los datos del usuario', error);
       }
     );
@@ -49,14 +52,24 @@ export class EditProfileComponent implements OnInit{
 
   actualizarFotoPerfil(event: any) {
     const file: File = event.target.files[0];
-    let picture: string;
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.addEventListener('load', (e: any) => {
         if (e.target) {
-          this.user.profilePicture = e.target.result as string;
+          // Llama al servicio para guardar la nueva foto de perfil en el servidor
+          this.userService.setUserProfilePic(file).subscribe(
+            (response) => {
+              console.log('Foto de perfil actualizada con éxito en el servidor', response);
+              this.globalDataService.setProfilePicture(file);
+              this.user.profilePicture = this.globalDataService.getProfilePicture();
+              this.user.profilePictureUrl = `data:image/${file.name};base64,${this.urlTreatment(e.target.result as string)}`;
+            },
+            (error) => {
+              console.error('Error al actualizar la foto de perfil en el servidor', error);
+            }
+          );
         }
-      };
+      });
       reader.readAsDataURL(file);
     }
   }
@@ -91,6 +104,15 @@ export class EditProfileComponent implements OnInit{
 
   volver() {
     this.router.navigate(["/profile"]);
+  }
+
+  urlTreatment(url: string) {
+    const regex = /([^,]+),(.+)/;
+    const match = url.match(regex);
+
+    if (match && match.length === 3) return match[2];
+    else console.log("No se encontró una coma en la URL.");
+    return '';
   }
 
 }
