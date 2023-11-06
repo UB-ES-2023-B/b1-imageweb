@@ -17,6 +17,8 @@
       <ul class="navbar-nav d-flex align-items-center ms-auto mb-2 mb-lg-0">
           <li *ngIf="username == ''" class="nav-item"><a class="nav-link" [routerLink]="['/login']">Iniciar sesión</a></li>
           <li *ngIf="username == ''" class="nav-item"><a class="nav-link" [routerLink]="['/register']">Regístrate</a></li>
+          <li class="nav-link btn btn-secondary" *ngIf="username !== ''"  style="cursor: pointer;">
+            <a class="nav-link"(click)="goToProfile('gallery') ">Galería</a></li>
           <li class="nav-item" *ngIf="username !== ''">
             <a class="nav-link btn btn-secondary" (click)="uploadImage()">
 
@@ -24,6 +26,7 @@
               <app-upload-photo></app-upload-photo>
             </a>
           </li>
+
         <li class="nav-item" *ngIf="username !== ''">
           <div class="btn-group">
           <a class="nav-link btn btn-secondary dropdown-toggle"  role="button" data-bs-toggle="dropdown" aria-expanded="false" >
@@ -31,7 +34,7 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-end">
             <li class="dropdown-item" (click)="goToProfile('info') " style="cursor: pointer;">Mi Perfil</li>
-            <li class="dropdown-item" (click)="goToProfile('gallery') " style="cursor: pointer;">Galería</li>
+
             <li class="dropdown-item" (click)="logout() " style="cursor: pointer;">Cerrar sesión</li>
           </ul>
           </div>

@@ -1,6 +1,6 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet"/>
 
-<div class="header-wrapper" style="background-image: url('{{ user.coverPhoto }}')">
+<div class="header-wrapper" [style.background-image]="'url(' + user.coverPhoto + ')'">
   <header></header>
   <div class="column">
     <div class="profile-picture" (mouseover)="mostrarEditarIcono()" (mouseout)="ocultarEditarIcono()">

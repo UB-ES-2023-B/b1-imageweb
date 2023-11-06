@@ -9,6 +9,8 @@ import { AuthGuard } from './guards/auth.guard';
 import { ToastrModule } from 'ngx-toastr';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LightboxModule } from 'ngx-lightbox';
+import { FileSaverModule } from 'ngx-filesaver';
 
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { AppRoutingModule } from './app-routing.module';
@@ -51,6 +53,8 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     ImageCropperModule,
+    LightboxModule,
+    FileSaverModule
 
   ],
   providers: [
