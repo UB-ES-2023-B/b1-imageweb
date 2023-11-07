@@ -103,13 +103,13 @@ export class EditProfileComponent implements OnInit{
 
     this.userService.updateUser(this.user.name, updatedUser).subscribe(
       (response) => {
-        if (response.status === 200) {
+        console.log(response);
+        if (response) {
           console.log('Response:', response);
           this.globalDataService.setUsername(this.newUsername);
           this.globalDataService.setEmail(this.newEmail);
-          this.globalDataService.setToken(response.body.token);
           console.log('Usuario actualizado');
-          this.router.navigate(["/profile"])
+          this.router.navigate(["/profile"]);
         }
       },
       (error) => {

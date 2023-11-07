@@ -33,7 +33,9 @@ export class HomePageComponent {
     this.userService.getUser(this.username).subscribe(
       (response) => {
         this.globalDataService.setGalleryId(response.body.gallery.galleryrId);
-        const url = `data:image/${response.body.profilePicture.photoName};base64,${response.body.profilePicture.data}`;
+        let url: string;
+        if (response.body.profilePicture) url = `data:image/${response.body.profilePicture.photoName};base64,${response.body.profilePicture.data}`;
+        else url = "../assets/images/perfil.jpg";
         this.globalDataService.setProfilePicture(response.body.profilePicture, url);
       },
       (error) => {

@@ -10,7 +10,7 @@
 }
 
 .media.align-items-center.mb-7 .u-lg-avatar {
-  flex: 1; /* Hace que la imagen ocupe todo el espacio disponible en la fila */
+  flex: 1;
 }
 
 .media.align-items-center.mb-7 .media-body {
