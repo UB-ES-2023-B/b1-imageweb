@@ -1,0 +1,48 @@
+
+
+<nav class="navbar navbar-expand-lg navbar-dark mainColor fixed-top">
+  <div class="container-fluid">
+    <a *ngIf="username !== ''; else homeLink" class="navbar-brand" [routerLink]="['/home']">
+      <img src="../../../assets/images/logo2.png" width="40" height="40" alt="Logo"> ImageWeb
+    </a>
+    <ng-template #homeLink>
+      <a class="navbar-brand" href="#!">
+        <img src="../../../assets/images/logo2.png" width="40" height="40" alt="Logo"> ImageWeb
+      </a>
+    </ng-template>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
+        class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav d-flex align-items-center ms-auto mb-2 mb-lg-0">
+          <li *ngIf="username == ''" class="nav-item"><a class="nav-link" [routerLink]="['/login']">Iniciar sesión</a></li>
+          <li *ngIf="username == ''" class="nav-item"><a class="nav-link" [routerLink]="['/register']">Regístrate</a></li>
+          <li class="nav-link btn btn-secondary" *ngIf="username !== ''"  style="cursor: pointer;">
+            <a class="nav-link"(click)="goToProfile('gallery') ">Galería</a></li>
+          <li class="nav-item" *ngIf="username !== ''">
+            <a class="nav-link btn btn-secondary" (click)="uploadImage()">
+
+              <!-- <img src="../../../assets/images/upload-icon.svg"  width="40" height="40" alt="Icono"> -->
+              <app-upload-photo></app-upload-photo>
+            </a>
+          </li>
+
+        <li class="nav-item" *ngIf="username !== ''">
+          <div class="btn-group">
+          <a class="nav-link btn btn-secondary dropdown-toggle"  role="button" data-bs-toggle="dropdown" aria-expanded="false" >
+            <img  src="../../../assets/images/perfil.jpg" width="40" height="40" alt="Perfil" class="rounded-circle">
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li class="dropdown-item" (click)="goToProfile('info') " style="cursor: pointer;">Mi Perfil</li>
+
+            <li class="dropdown-item" (click)="logout() " style="cursor: pointer;">Cerrar sesión</li>
+          </ul>
+          </div>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+

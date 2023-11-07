@@ -1,20 +1,69 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from "@angular/common/http";
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { CommonModule } from '@angular/common';
+import { NgxBootstrapIconsModule } from 'ngx-bootstrap-icons';
+import { allIcons } from 'ngx-bootstrap-icons';
+import { AuthGuard } from './guards/auth.guard';
+import { ToastrModule } from 'ngx-toastr';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LightboxModule } from 'ngx-lightbox';
+import { FileSaverModule } from 'ngx-filesaver';
 
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { MainPageComponent } from './components/main-page/main-page.component';
+import {LoginFormComponent} from "./components/login-page/login-page.component";
+import {RegisterFormComponent} from "./components/register-page/register-page.component";
+import { HomePageComponent } from './components/home-page/home-page.component';
+import { ProfilePageComponent } from './components/profile-page/profile-page.component';
+import { SecondaryNavbarComponent } from './components/secondary-navbar/secondary-navbar.component';
+import { GalleryComponent } from './components/gallery/gallery.component';
+import { UploadPhotoComponent } from './components/upload-photo/upload-photo.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NavbarComponent,
+    FooterComponent,
+    MainPageComponent,
+    LoginFormComponent,
+    RegisterFormComponent,
+    RegisterFormComponent,
+    HomePageComponent,
+    ProfilePageComponent,
+    SecondaryNavbarComponent,
+    GalleryComponent,
+    UploadPhotoComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    FormsModule,
+    HttpClientModule,
+    CommonModule,
+    NgxBootstrapIconsModule.pick(allIcons),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    ImageCropperModule,
+    LightboxModule,
+    FileSaverModule
+
   ],
-  providers: [],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
+  providers: [
+
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+
+  ],
+    bootstrap: [AppComponent]
+  })
+  export class AppModule { }

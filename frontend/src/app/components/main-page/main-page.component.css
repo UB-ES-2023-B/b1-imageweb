@@ -1,0 +1,33 @@
+/* CSS personalizado para el carrusel */
+#carousel-main {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+h5 {
+  color: #ffffff;
+  text-shadow: 2px 2px 8px rgba(22, 39, 60, 1);
+}
+.carousel-inner {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+.carousel-caption {
+  top: 58%;
+  left: 34%;
+  transform: translate(-18%, -50%);
+}
+.carousel-item {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-item img {
+  object-fit: cover; /* Asegura que la imagen cubra todo el área del carrusel */
+  width: 100%;
+  height: 100%;
+}
