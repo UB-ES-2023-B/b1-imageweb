@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { GlobalDataService } from '../../services/global-data.service';
-import { UserService } from '../../services/user.service';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {GlobalDataService} from '../../services/global-data.service';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -26,9 +26,10 @@ export class ProfilePageComponent implements OnInit {
 
   constructor(private globalDataService: GlobalDataService,
               private router: Router,
-              private userService: UserService) {}
+              private userService: UserService) {
+  }
 
-  editProfile() : void {
+  editProfile(): void {
     // Redirige al usuario a la página de edición de perfil
     this.router.navigate(['/profile/edit']);
   }
@@ -49,9 +50,9 @@ export class ProfilePageComponent implements OnInit {
       (response) => {
         this.user.email = response.body.userEmail;
         this.user.id = response.body.userId;
-        if(response.body.profilePicture !== null) {
+        if (response.body.profilePicture) { // Configura la foto de perfil y su URL
           this.user.profilePicture = response.body.profilePicture;
-          this.user.profilePictureUrl = `data:image/${this.user.profilePicture.photoName};base64,${this.user.profilePicture.data}`
+          this.user.profilePictureUrl = `data:image/${response.body.profilePicture.photoName};base64,${response.body.profilePicture.data}`;
         }
         console.log('Datos del usuario:', response.body);
       },

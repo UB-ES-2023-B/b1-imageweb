@@ -22,7 +22,6 @@ export class UserService {
   updateUser(username: string, updatedUser: any): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const options = { headers: headers };
-
     return this.http.put(`/api/user/update/${username}`, updatedUser, options);
   }
 
