@@ -1,3 +1,6 @@
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</head>
 <div class="container-fluid h-100"> <!-- Use Bootstrap container-fluid for full-page background -->
   <div class="row h-100 justify-content-center align-items-center">
     <div class="col-sm-12 col-md-6">
@@ -10,7 +13,20 @@
           </div>
           <div class="form-group">
             <label for="password">Contraseña:</label>
-            <input type="password" id="password" [(ngModel)]="password" class="form-control" placeholder="Introduce tu contraseña">
+            <div class="input-group">
+              <input
+                [type]="showPassword ? 'text' : 'password'"
+                id="password"
+                [(ngModel)]="password"
+                class="form-control"
+                placeholder="Introduce tu contraseña"
+              />
+              <div class="input-group-append" (click)="togglePasswordVisibility()">
+              <span class="input-group-text">
+                <i class="bi" [class]="showPassword ? 'bi-eye' : 'bi-eye-slash'"></i>
+              </span>
+              </div>
+            </div>
           </div>
           <div class="alert alert-danger" role="alert" *ngIf="loginError">
             Usuario y/o contraseña incorrectos. Por favor, vuelva a intentarlo.

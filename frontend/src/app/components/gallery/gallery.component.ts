@@ -26,7 +26,7 @@ export class GalleryComponent {
         if (response.body && Array.isArray(response.body)) {
           response.body.forEach((element: any) => {
             if (element.data) {
-              this.images.push({
+              this.images.unshift({
             "src":`data:image/${element.photoName.slice(-3)};base64,${element.data}`});
             }
           });

@@ -36,6 +36,8 @@ body {
   top: 60px;
   left: 50%;
   transform: translatex(-50%);
+  overflow: hidden;
+  cursor: pointer;
 }
 
 .header-wrapper .column .profile-picture img {
@@ -45,6 +47,7 @@ body {
   border-radius: 50%;
   display: block;
   box-shadow: 1px 3px 12px rgba(0, 0, 0, 0.18);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .header-wrapper .column .profile-picture span {
@@ -56,6 +59,25 @@ body {
   bottom: 3px;
   right: 11px;
   border: 2px solid #fff;
+}
+
+.editar-icono {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  display: none;
+  cursor: pointer;
+}
+
+.profile-picture:hover img {
+  transform: scale(1.05);
+  box-shadow: 3px 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.profile-picture:hover .editar-icono {
+  display: block;
 }
 
 .header-wrapper .column .user-titles {
@@ -93,6 +115,15 @@ body {
   }
   .header-wrapper .column .user-titles {
     transform: translatex(-50%);
+    margin-left: 120px;
+    text-align: left;
+    display: inline-block;
+
+  }
+  .header-wrapper .column .dropdown {
+    position: relative;
+    transform: translate(275px, -100px);
+    margin-left: auto;
   }
 }
 
@@ -100,6 +131,18 @@ body {
   .header-wrapper .column {
     margin: 0;
     margin-right: auto;
+  }
+}
+
+@media (min-width: 1109px) {
+  .header-wrapper .column .user-titles {
+    margin-left: 140px;
+  }
+}
+
+@media (min-width: 1300px) {
+  .header-wrapper .column .user-titles {
+    margin-left: 160px;
   }
 }
 

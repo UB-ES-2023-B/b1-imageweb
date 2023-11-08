@@ -1,0 +1,92 @@
+<div class="container space-2">
+  <!-- Update Avatar Form -->
+  <div class="media align-items-center mb-7">
+    <div class="u-lg-avatar mr-3">
+      <ng-container *ngIf="user.profilePicture">
+        <img class="img-fluid rounded-circle" [src]="user.profilePictureUrl" alt="Profile Picture">
+      </ng-container>
+      <ng-container *ngIf="!user.profilePicture">
+        <img class="img-fluid rounded-circle" src="../assets/images/perfil.jpg" alt="Imagen Predeterminada">
+      </ng-container>
+    </div>
+
+    <div class="media-body">
+      <div class="d-flex align-items-center"> <!-- Agregamos un contenedor flex -->
+        <label for="profileImage" class="btn btn-sm btn-primary transition-3d-hover file-attachment-btn mb-1 mb-sm-0 mr-1">
+          Editar foto de perfil
+          <input id="profileImage" type="file" (change)="actualizarFotoPerfil($event)" style="display: none">
+        </label>
+
+
+        <button type="submit" class="btn btn-sm btn-soft-secondary transition-3d-hover mb-1 mb-sm-0"
+                (click)="borrarFotoPerfil()">
+          Eliminar foto
+        </button>
+      </div>
+    </div>
+  </div>
+  <!-- End Update Avatar Form -->
+
+  <!-- Personal Info Form NO BORRAR COMMENTS-->
+  <form class="js-validate" novalidate="novalidate">
+    <div class="row">
+      <!-- Input -->
+<!--      <div class="col-sm-6 mb-6">-->
+<!--        <div class="js-form-message">-->
+<!--          <label id="usernameLabel" class="form-label">-->
+<!--            <h5>Nombre de usuario<span class="text-danger">*</span></h5>-->
+<!--          </label>-->
+
+<!--          <div class="form-group">-->
+<!--            <input type="text" class="form-control" name="username" [(ngModel)]="newUsername"-->
+<!--                   placeholder="Entra tu nombre de usuario" aria-label="Entra tu nombre de usuario"-->
+<!--                   required="true" aria-describedby="usernameLabel" data-msg="Entra tu nombre de usuario."-->
+<!--                   data-error-class="u-has-error" data-success-class="u-has-success" [value]="newUsername">-->
+
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+      <!-- End Input -->
+
+      <!-- Input -->
+      <div class="col-sm-6 mb-6">
+        <div class="js-form-message">
+          <label id="emailLabel" class="form-label">
+            <h5>Correo electrónico<span class="text-danger">*</span></h5>
+          </label>
+
+          <div class="form-group">
+            <input type="email" class="form-control" name="email" [(ngModel)]="newEmail"
+                   placeholder="Entra tu correo electrónico" aria-label="Entra tu correo electrónico"
+                   required="true" aria-describedby="emailLabel"
+                   data-msg="Entra una dirección de correo electrónico válida."
+                   data-error-class="u-has-error" data-success-class="u-has-success" [value]="user.email">
+            <small class="form-text text-muted">No compartiremos tu correo con nadie más.</small>
+          </div>
+        </div>
+      </div>
+      <!-- End Input -->
+    </div>
+
+    <!-- Description Form -->
+<!--    <div class="mb-3">-->
+<!--      <h2 class="h5 mb-0" style="margin-top: 20px">Descripción</h2>-->
+<!--      <small class="form-text text-muted">Cuéntame algo sobre ti en un par de frases.</small>-->
+<!--    </div>-->
+<!--    <div class="mb-6">-->
+<!--      <label class="form-label">-->
+<!--        <textarea name="texto" id="texto" rows="4" cols="70"></textarea>-->
+<!--      </label>-->
+<!--    </div>-->
+    <!-- End Description Form -->
+
+    <button type="submit" class="btn btn-sm btn-primary transition-3d-hover mr-1"
+            style="margin: 1em 10px 8em 0" (click)="actualizarPerfil()">Guardar cambios
+    </button>
+    <button type="submit" class="btn btn-sm btn-soft-secondary transition-3d-hover"
+            style="margin: 1em 0 8em 0" (click)="volver()">Volver
+    </button>
+  </form>
+</div>
+
+
