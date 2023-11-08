@@ -6,6 +6,7 @@ import {RegisterFormComponent} from "./components/register-page/register-page.co
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { ProfilePageComponent } from './components/profile-page/profile-page.component';
 import { AuthGuard  } from './guards/auth.guard';
+import {EditProfileComponent} from "./components/edit-profile/edit-profile.component";
 
 const routes: Routes = [
    //Initial route
@@ -35,6 +36,11 @@ const routes: Routes = [
     path: 'profile',
     component: ProfilePageComponent,
     canActivate: [AuthGuard ]
+  },
+  {
+    path: 'profile/edit',
+    component: EditProfileComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: '**',

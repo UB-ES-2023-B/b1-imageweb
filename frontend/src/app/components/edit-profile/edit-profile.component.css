@@ -1,0 +1,66 @@
+.container {
+  margin-top: 100px;
+}
+
+.media.align-items-center.mb-7 {
+  display: flex; /* Convertir el div en un contenedor flex */
+  justify-content: space-between; /* Alineación horizontal */
+  align-items: center; /* Alineación vertical */
+  margin-bottom: 20px; /* Espacio inferior para separar de otros elementos */
+}
+
+.media.align-items-center.mb-7 .u-lg-avatar {
+  flex: 1;
+}
+
+.media.align-items-center.mb-7 .media-body {
+  flex: 2; /* Hace que el contenido ocupe más espacio en la fila */
+}
+
+.media.align-items-center.mb-7 .media-body label, .media.align-items-center.mb-7 .media-body button {
+  margin-right: 10px; /* Espacio entre los elementos en la fila */
+}
+
+
+.u-lg-avatar{
+  display: inline-block; /* El div se adapta al ancho de su contenido */
+  text-align: center;
+  margin: auto;
+}
+
+/* Redimensiona la imagen de perfil */
+.u-lg-avatar img {
+  width: 150px; /* Ajusta el ancho deseado */
+  height: 150px; /* Ajusta la altura deseada */
+}
+
+/* Estilo para los botones */
+.file-attachment-btn {
+  margin-bottom: 10px; /* Espacio entre el botón "Upload New Picture" y el botón "Delete" */
+}
+
+textarea {
+  width: 100%;
+}
+
+/* Estilo para el botón "Delete" */
+.btn-soft-secondary {
+  background-color: #f2f2f2; /* Cambia el color de fondo según tu preferencia */
+  color: #333; /* Cambia el color de texto según tu preferencia */
+  border: 1px solid #ccc; /* Agrega un borde si es necesario */
+}
+
+/* Estilos para pantallas más pequeñas (menos de 550px) */
+@media screen and (max-width: 550px) {
+  .media.align-items-center.mb-7 {
+    flex-direction: column; /* Cambia la dirección de los elementos a columna */
+    text-align: center; /* Centra los elementos horizontalmente */
+  }
+
+  .media.align-items-center.mb-7 label,
+  .media.align-items-center.mb-7 button {
+    margin: 10px 0; /* Agrega espacio vertical entre los elementos */
+  }
+}
+
+
