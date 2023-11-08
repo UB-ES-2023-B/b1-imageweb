@@ -41,7 +41,7 @@ export class GalleryService {
   }
 
   addImage(image: any): void {
-    this.images.push({"src":image});
+    this.images.unshift({"src":image});
     this.imagesSubject.next(this.images);
   }
 

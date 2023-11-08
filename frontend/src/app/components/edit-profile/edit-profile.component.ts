@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GlobalDataService } from '../../services/global-data.service';
 import { UserService } from '../../services/user.service';
 import { Subscription } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-edit-profile',
@@ -24,7 +25,8 @@ export class EditProfileComponent implements OnInit{
 
   constructor(private globalDataService: GlobalDataService,
               private router: Router,
-              private userService: UserService) {}
+              private userService: UserService,
+              private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.getUserData();
@@ -63,9 +65,11 @@ export class EditProfileComponent implements OnInit{
               this.globalDataService.setProfilePicture(file, `data:image/${file.name};base64,${this.urlTreatment(e.target.result as string)}`);
               this.user.profilePicture = this.globalDataService.getProfilePicture();
               this.user.profilePictureUrl = `data:image/${file.name};base64,${this.urlTreatment(e.target.result as string)}`;
+              this.toastr.success('Foto de perfil cambiada satisfactoriamente');
             },
             (error) => {
               console.error('Error al actualizar la foto de perfil en el servidor', error);
+              this.toastr.error('Error al subir la imagen');
             }
           );
         }
@@ -108,12 +112,12 @@ export class EditProfileComponent implements OnInit{
           console.log('Response:', response);
           this.globalDataService.setUsername(this.newUsername);
           this.globalDataService.setEmail(this.newEmail);
+
           console.log('Usuario actualizado');
           this.router.navigate(["/profile"]);
         }
       },
       (error) => {
-        // Maneja el error aquí
         console.error('Error al actualizar el usuario', error);
       }
     );
