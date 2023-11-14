@@ -28,6 +28,14 @@ export class LoginFormComponent implements OnInit {
     this.showPassword = !this.showPassword;
   }
 
+  onUserChange() {
+    this.loginError = false;  // Reset error message on password change
+  }
+
+  onPasswordChange() {
+    this.loginError = false;
+  }
+
   onSubmit(): void {
     this.loginError= false;
       this.authService.login(this.username, this.password )
