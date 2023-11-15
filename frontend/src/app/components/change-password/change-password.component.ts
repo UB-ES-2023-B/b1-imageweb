@@ -10,8 +10,11 @@ export class ChangePasswordComponent {
   currentPassword: string = '';
   newPassword: string = '';
   confirmPassword: string = '';
-  showPasswordError: boolean = false;
+  showNewPasswordError: boolean = false;
   showConPasswordError: boolean = false;
+  showOldPassword: boolean = false;
+  showNewPassword: boolean = false;
+  showConPassword: boolean = false;
 
   @Output() passwordChanged = new EventEmitter<any>();
   @Output() modalClosed = new EventEmitter<void>();
@@ -19,7 +22,7 @@ export class ChangePasswordComponent {
   constructor() {}
 
   changePassword(): void {
-    if (this.showPasswordError && this.showConPasswordError) {
+    if (this.showNewPasswordError && this.showConPasswordError) {
       // ERROR
     }
     else {
@@ -38,13 +41,13 @@ export class ChangePasswordComponent {
     }
   }
 
-  onPasswordChange() {
-    this.showPasswordError = false;
+  onNewPasswordChange() {
+    this.showNewPasswordError = false;
   }
 
-  onPasswordBlur() {
+  onNewPasswordBlur() {
     const passRegex = /^(?=.*[!@#$%^&*,.])((?=.*[A-Z])(?=.*[a-z])(?=.*\d)).{6,}$/;
-    if (this.newPassword.length > 0) this.showPasswordError = !passRegex.test(this.newPassword);
+    if (this.newPassword.length > 0) this.showNewPasswordError = !passRegex.test(this.newPassword);
   }
 
   onConPasswordChange() {
@@ -55,5 +58,17 @@ export class ChangePasswordComponent {
     if(this.newPassword != this.confirmPassword){
       this.showConPasswordError = true;
     }
+  }
+
+  toggleOldPasswordVisibility() {
+    this.showOldPassword = !this.showOldPassword;
+  }
+
+  toggleNewPasswordVisibility() {
+    this.showNewPassword = !this.showNewPassword;
+  }
+
+  toggleConPasswordVisibility() {
+    this.showConPassword = !this.showConPassword;
   }
 }
