@@ -22,7 +22,7 @@ public class JwtTokenProvider {
     @Value("${jwt.expiration}")
     private long validityInMilliseconds;
 
-    public String createToken(UserDetails userDetails) {
+    public String createToken(User user) {
         try {
             String key = SecretKeyGenerator.getSecretKey();
             JWSSigner signer = new MACSigner(key);
@@ -31,7 +31,7 @@ public class JwtTokenProvider {
             Date validity = new Date(now.getTime() + validityInMilliseconds);
 
             JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                    .subject(userDetails.getUsername())
+                    .subject(user.getUserId().toString())
                     .issueTime(now)
                     .expirationTime(validity)
                     .claim("customKey", "customValue")
@@ -67,7 +67,7 @@ public class JwtTokenProvider {
         }
     }
 
-    public String getUsernameFromToken(String token) {
+    public String getUserIdFromToken(String token) {
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);
             JWTClaimsSet claims = signedJWT.getJWTClaimsSet();

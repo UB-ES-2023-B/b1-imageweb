@@ -1,5 +1,6 @@
 package com.example.b1esimageweb;
 
+import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.repository.UserRepository;
 import com.example.b1esimageweb.service.UserService;
 import com.example.b1esimageweb.web.Jwt.JwtTokenProvider;
@@ -52,7 +53,7 @@ public class UserControllerIntegrationTest {
     @WithMockUser (username = "adminUser", password = "password", roles = "ADMIN")
     public void setUp() {
         // Create a test user
-        UserDetails user=userRepository.findByUsername("adminUser").orElseThrow();
+        User user=userRepository.findByUsername("adminUser").orElseThrow();
         userToken = tokenProvider.createToken(user);
     }
 
