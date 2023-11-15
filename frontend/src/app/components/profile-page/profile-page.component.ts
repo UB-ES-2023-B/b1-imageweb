@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {GlobalDataService} from '../../services/global-data.service';
-import {UserService} from '../../services/user.service';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { GlobalDataService } from '../../services/global-data.service';
+import { UserService } from '../../services/user.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 
 export class ProfilePageComponent implements OnInit {
   activeItem: string = 'info';
+  changePwdModal: boolean = false;
   mostrarIconoLapiz: boolean = false;
 
   user: any = {
@@ -35,6 +36,19 @@ export class ProfilePageComponent implements OnInit {
     // Redirige al usuario a la página de edición de perfil
     this.router.navigate(['/profile/edit']);
   }
+
+  changePwd(){
+    // Redirige al usuario al modal de edición de contraseña
+    this.changePwdModal = true;
+  }
+
+  handleChangePassword(event: any): void {
+    // Aquí puedes agregar la lógica para manejar el cambio de contraseña
+    console.log('Contraseña actual:', event.currentPassword);
+    console.log('Nueva contraseña:', event.newPassword);
+    console.log('Confirmar contraseña:', event.confirmPassword);
+  }
+
 
   ngOnInit(): void {
     this.globalDataService.activeItem$.subscribe(newItem => {
