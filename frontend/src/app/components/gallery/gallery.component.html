@@ -16,14 +16,24 @@
 
 <div class="album py-5 bg-light" >
   <div class="container" >
+    <div class="text-center mb-4">
+      <p *ngIf="isEditMode" class="mb-3 texto"> Fotos seleccionadas:  {{selectedImageIds.length }}</p>
+      <div *ngIf="isEditMode" class="d-inline">
+        <button type="button" class="btn btn-secondary mr-2" style=" margin-right: 3%;" (click)="cancelEditMode()">Cancelar</button>
+        <button type="button" class="btn btn-danger" (click)="deleteSelectedImages()">Eliminar</button>
+      </div>
+    </div>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" >
       <div class="col" *ngFor="let image of images; let i = index"  >
         <a class="image-button" style="cursor:pointer" >
           <div class="card shadow-sm photo" >
             <img class="bd-placeholder-img card-img-top custom-image" [src]="image.src" alt="Image"  (click)="open(i)">
             <div class="card-body">
-              <div class="icon-container" >
-                <i class="fas fa-trash-alt trash-icon"></i>
+              <div *ngIf="isEditMode"  class="icon-container">
+                <input type="checkbox" [checked]="selectedImageIds.includes(image.id)" (change)="toggleEditMode(image.id)" class="select-checkbox">
+              </div>
+              <div class="icon-container" *ngIf="!isEditMode" >
+                <i class="fas fa-trash-alt trash-icon" (click)=" toggleEditMode(image.id)"></i>
               </div>
             </div>
           </div>

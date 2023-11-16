@@ -15,6 +15,11 @@
   padding: 5px;
   cursor: pointer;
 }
+
+.select-checkbox {
+  transform: scale(1.5); /* Ajusta este valor según tu preferencia */
+  margin-right: 5px; /* Espaciado opcional entre el checkbox y otros elementos */
+}
 .trash-icon {
   color: #090909; /* Puedes cambiar el color según tus preferencias */
 }
@@ -41,4 +46,16 @@
 
 .photo:hover {
   outline: 3px solid #16273c4d;
+}
+
+.texto {
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  transition: font-size 0.2s;
+
+  /* Tamaño de fuente responsive */
+  @media (max-width: 768px) {
+    font-size: 16px;
+  }
+
 }

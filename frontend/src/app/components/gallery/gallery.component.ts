@@ -13,8 +13,9 @@ export class GalleryComponent {
   loading:boolean=true;
   images:any[]=[];
   showUploadHint: boolean = true;
-  showIcon = false;
   isEditMode = false;
+  selectedImageIds: number[] = [];
+
 
 
   private imagesSubscription: Subscription = new Subscription();
@@ -67,18 +68,39 @@ export class GalleryComponent {
     this.imagesSubscription.unsubscribe();
   }
 
-  toggleEditMode() {
-    this.isEditMode = !this.isEditMode;
 
-    // Si estamos activando el modo de edición, seleccionamos automáticamente la imagen actual
-    if (this.isEditMode) {
-      const firstSelectedImage = this.images.find(image => image.isSelected);
-      if (!firstSelectedImage) {
-        // Si no hay ninguna imagen seleccionada, seleccionamos la primera
-        this.images[0].isSelected = true;
-      }
-    }
+
+  cancelEditMode() {
+    this.isEditMode = false;
+    this.selectedImageIds = [];
   }
+
+
+  deleteSelectedImages() {
+    // Agregar la llamada del back
+    console.log('Eliminar imágenes seleccionadas:', this.selectedImageIds);
+    this.isEditMode = false;
+    this.selectedImageIds = [];
+  }
+  toggleEditMode(id: number) {
+    if (this.isEditMode) {
+      // Si ya estamos en modo de edición, significa que se hizo clic en el checkbox
+      const index = this.selectedImageIds.indexOf(id);
+      if (index === -1) {
+        // Si el ID no está en la lista, lo añadimos
+        this.selectedImageIds.push(id);
+      } else {
+        // Si el ID ya está en la lista, lo eliminamos
+        this.selectedImageIds.splice(index, 1);
+      }
+    } else {
+      // Si no estamos en modo de edición, activamos el modo y añadimos la imagen actual
+      this.isEditMode = true;
+      this.selectedImageIds.push(id);
+    }
+    console.log('Lista de imágenes seleccionadas:', this.selectedImageIds);
+  }
+
 
 
 }
