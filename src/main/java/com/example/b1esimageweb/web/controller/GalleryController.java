@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path="/gallery")
 public class GalleryController {
@@ -58,5 +60,14 @@ public class GalleryController {
         return new ResponseEntity<>(photos, HttpStatus.OK);
     }
 
+    @DeleteMapping(path = "/deletephotos")
+    public ResponseEntity<String> deletePhotosFromGallery(@RequestBody List<Integer> photosId) {
+        try {
+            galleryService.deleteGalleryPhotos(photosId);
+            return new ResponseEntity<>("Photos successfully deleted from gallery", HttpStatus.OK);
+        } catch(Exception e){
+            return new ResponseEntity<>("Failed to delete photos from gallery", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     
 }
