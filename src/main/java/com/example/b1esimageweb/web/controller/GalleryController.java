@@ -5,6 +5,7 @@ import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.GalleryService;
 import com.example.b1esimageweb.service.UserService;
 
+import com.example.b1esimageweb.web.dto.PhotoDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -61,9 +62,10 @@ public class GalleryController {
     }
 
     @DeleteMapping(path = "/deletephotos")
-    public ResponseEntity<String> deletePhotosFromGallery(@RequestBody List<Integer> photosId) {
+    public ResponseEntity<String> deletePhotosFromGallery(@RequestBody PhotoDto photoDto) {
         try {
-            galleryService.deleteGalleryPhotos(photosId);
+            List<Integer> photoIds = photoDto.getPhotoIds();
+            galleryService.deleteGalleryPhotos(photoIds);
             return new ResponseEntity<>("Photos successfully deleted from gallery", HttpStatus.OK);
         } catch(Exception e){
             return new ResponseEntity<>("Failed to delete photos from gallery", HttpStatus.INTERNAL_SERVER_ERROR);
