@@ -30,10 +30,9 @@ export class EditProfileComponent implements OnInit{
 
   ngOnInit(): void {
     this.getUserData();
-
   }
 
-  getUserData(): void {
+  private getUserData(): void {
     this.userService.getUser(this.user.name).subscribe(
       (response) => {
         this.user.email = response.body.userEmail;
@@ -90,7 +89,7 @@ export class EditProfileComponent implements OnInit{
     );
   }
 
-  eliminarFotoPerfil() {
+  private eliminarFotoPerfil() {
     // Limpia la información de la foto de perfil en tu servicio GlobalDataService
     this.globalDataService.setProfilePicture(null, '');
 
@@ -127,7 +126,7 @@ export class EditProfileComponent implements OnInit{
     this.router.navigate(["/profile"]);
   }
 
-  urlTreatment(url: string) {
+  private urlTreatment(url: string) {
     const regex = /([^,]+),(.+)/;
     const match = url.match(regex);
 
