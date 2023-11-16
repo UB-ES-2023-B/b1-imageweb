@@ -1,6 +1,7 @@
 package com.example.b1esimageweb.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
@@ -57,6 +58,12 @@ public class GalleryService {
 
     public Iterable<Photo> getPhotosByGallery(Gallery gallery) {
         return photoRepository.findByGallery(gallery);
+    }
+
+    public void deleteGalleryPhotos(List<Integer> photosId){
+        for (int photoId : photosId){
+            photoRepository.deleteById(photoId);
+        }
     }
 
 }
