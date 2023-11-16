@@ -36,6 +36,7 @@ public class WebSecurityConfig{
         configuration.setAllowCredentials(true);
         configuration.addAllowedHeader("*");
         configuration.addAllowedOrigin("http://localhost:4200");
+        configuration.addAllowedOrigin("https://victorious-forest-0f7b07b03.4.azurestaticapps.net");
         configuration.addAllowedMethod("*");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

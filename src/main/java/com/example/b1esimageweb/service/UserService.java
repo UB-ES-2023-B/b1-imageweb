@@ -7,7 +7,13 @@ import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.repository.GalleryRepository;
 import com.example.b1esimageweb.repository.PhotoRepository;
 import com.example.b1esimageweb.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +21,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final GalleryRepository galleryRepository;
@@ -107,16 +113,12 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public User getUserByUserEmail(String email){
-        return userRepository.findUserByEmail(email);
-    }
-
-    public User getUserByUsername(String username){
-        return userRepository.findByUsername(username).get();
-    }
-
     public User getUserByUserName(String username){
         return userRepository.findByUsername(username).get();
+    }
+
+    public User getUserByUserEmail(String email){
+        return userRepository.findUserByEmail(email);
     }
     public boolean emailExists(String email){
         return userRepository.existsUserByEmail(email);
@@ -132,5 +134,11 @@ public class UserService {
     
     public Gallery getGalleryByUser(User user){
         return userRepository.getGalleryByUserId(user.getUserId());
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println("In loadUserByUsername: " + username);
+        return userRepository.findByUsername(username).get();
     }
 }
