@@ -30,6 +30,17 @@ export class GalleryService {
     return this.http.get(this.domain + `/gallery/viewGalleryFromUser/${userName}`, {  observe: 'response' });
   }
 
+  deletePhotoGallery(id: number[]): Observable<any> {
+    const formData = {
+      photoIds: id
+    };
+    return this.http.delete(this.domain + '/auth/register', {
+      body: formData,
+      observe: 'response'
+    });
+  }
+
+
 
   setImages(images: any[]): void {
     this.images = images;

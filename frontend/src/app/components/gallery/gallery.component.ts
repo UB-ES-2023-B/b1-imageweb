@@ -78,6 +78,16 @@ export class GalleryComponent {
 
   deleteSelectedImages() {
     // Agregar la llamada del back
+
+    this.galleryService.deletePhotoGallery( this.selectedImageIds).subscribe(
+      (response)=>{
+        console.log('ha entrado acá', response)
+      },
+      (error)=>{
+        console.log('error al eliminar', error)
+      }
+    )
+
     console.log('Eliminar imágenes seleccionadas:', this.selectedImageIds);
     this.isEditMode = false;
     this.selectedImageIds = [];
