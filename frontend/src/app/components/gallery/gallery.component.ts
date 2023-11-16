@@ -13,6 +13,9 @@ export class GalleryComponent {
   loading:boolean=true;
   images:any[]=[];
   showUploadHint: boolean = true;
+  showIcon = false;
+  isEditMode = false;
+
 
   private imagesSubscription: Subscription = new Subscription();
 
@@ -27,7 +30,8 @@ export class GalleryComponent {
           response.body.forEach((element: any) => {
             if (element.data) {
               this.images.unshift({
-            "src":`data:image/${element.photoName.slice(-3)};base64,${element.data}`});
+            "src":`data:image/${element.photoExtensio};base64,${element.data}`,
+             "id": element.photoId, "name":element.photoName, "description": 'Cambiar descripción'});
             }
           });
         }
@@ -61,6 +65,19 @@ export class GalleryComponent {
   }
   ngOnDestroy(): void {
     this.imagesSubscription.unsubscribe();
+  }
+
+  toggleEditMode() {
+    this.isEditMode = !this.isEditMode;
+
+    // Si estamos activando el modo de edición, seleccionamos automáticamente la imagen actual
+    if (this.isEditMode) {
+      const firstSelectedImage = this.images.find(image => image.isSelected);
+      if (!firstSelectedImage) {
+        // Si no hay ninguna imagen seleccionada, seleccionamos la primera
+        this.images[0].isSelected = true;
+      }
+    }
   }
 
 

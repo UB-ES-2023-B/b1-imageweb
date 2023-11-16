@@ -14,19 +14,24 @@
   </div>
 </div>
 
-<div class="album py-5 bg-light">
-  <div class="container">
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-      <div class="col" *ngFor="let image of images; let i = index ">
-        <a class="image-button" style="cursor:pointer" (click)="open(i)">
-        <div class="card shadow-sm photo">
-          <img class="bd-placeholder-img card-img-top custom-image"  [src]="image.src" alt="Image">
-          <div class="card-body">
+<div class="album py-5 bg-light" >
+  <div class="container" >
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" >
+      <div class="col" *ngFor="let image of images; let i = index"  >
+        <a class="image-button" style="cursor:pointer" >
+          <div class="card shadow-sm photo" >
+            <img class="bd-placeholder-img card-img-top custom-image" [src]="image.src" alt="Image"  (click)="open(i)">
+            <div class="card-body">
+              <div class="icon-container" >
+                <i class="fas fa-trash-alt trash-icon"></i>
+              </div>
+            </div>
           </div>
-        </div>
-      </a>
+        </a>
       </div>
     </div>
   </div>
 </div>
+
+
 

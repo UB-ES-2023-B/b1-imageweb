@@ -35,7 +35,6 @@ export class UploadPhotoComponent {
     this.selectedFile.pending = false;
     this.selectedFile.status = 'ok';
     this.gallleryService.addImage(this.selectedFile.src)
-    console.log('este es el src ', this.selectedFile.src)
     this.toastr.success('Imagen cargada satisfactoriamente');
     this.resetImageInput(); // Llamamos a la función para restablecer el campo de entrada de archivos
 

@@ -6,7 +6,22 @@
   max-height: 250px; */
   margin-top: 5%;
 }
+.icon-container {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgb(216 234 232 / 38%);
+  border-radius: 14%;
+  padding: 5px;
+  cursor: pointer;
+}
+.trash-icon {
+  color: #090909; /* Puedes cambiar el color según tus preferencias */
+}
 
+.photo.hovered {
+  outline: 3px solid #16273c4d;
+}
 .upload-hint {
   display: none;
 
