@@ -4,7 +4,11 @@ import com.example.b1esimageweb.model.Photo;
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.GalleryService;
 import com.example.b1esimageweb.service.UserService;
+import com.microsoft.azure.storage.CloudStorageAccount;
+import com.microsoft.azure.storage.blob.CloudBlobClient;
+import com.microsoft.azure.storage.blob.CloudBlobContainer;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +18,27 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping(path="/gallery")
 public class GalleryController {
 
+    @Value("${azure.storage.conection.string}")
+    private String storageConnectionAzure;
+
+    @Value("${azure.storage.container.name}")
+    private String nameContainer;
+
     private final GalleryService galleryService;
     private final UserService userService;
 
     public GalleryController (GalleryService galleryService, UserService userService){
         this.galleryService = galleryService;
         this.userService = userService;
+
+        try{
+            CloudStorageAccount account = CloudStorageAccount.parse(storageConnectionAzure);
+            CloudBlobClient serviceClient = account.createCloudBlobClient();
+            CloudBlobContainer container = serviceClient.getContainerReference(nameContainer);
+            
+        }catch(Exception e){
+            System.out.println("Error: " +e);
+        }
     }
 
     @PostMapping(path="/uploadPhotoGalery/{galleryId}")
