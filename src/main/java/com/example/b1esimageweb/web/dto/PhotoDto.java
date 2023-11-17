@@ -6,8 +6,7 @@ public class PhotoDto {
 
     private List<Integer> photoIds;
 
-    public PhotoDto(List<Integer> photoIds) {
-        this.photoIds = photoIds;
+    public PhotoDto() {
     }
 
     public List<Integer> getPhotoIds() {
