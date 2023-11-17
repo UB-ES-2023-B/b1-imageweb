@@ -34,7 +34,7 @@ export class GalleryService {
     const formData = {
       photoIds: id
     };
-    return this.http.delete(this.domain + '/auth/register', {
+    return this.http.delete(this.domain + '/gallery/deletephotos', {
       body: formData,
       observe: 'response'
     });
