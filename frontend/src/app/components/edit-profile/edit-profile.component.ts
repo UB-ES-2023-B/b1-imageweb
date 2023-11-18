@@ -11,16 +11,20 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./edit-profile.component.css']
 })
 
-export class EditProfileComponent implements OnInit{
+export class EditProfileComponent implements OnInit {
   newUsername: string = '';
   newEmail: string = '';
+  newDescription: string = '';
+  showEmailError: boolean = false;
+  showUserError: boolean = false;
 
   user: any = {
-    profilePicture: null,
-    profilePictureUrl: '',
+    id: 0,
     name: this.globalDataService.getUsername(),
-    email: '',
-    id: 0
+    profilePicture: this.globalDataService.getProfilePicture().file,
+    profilePictureUrl: this.globalDataService.getProfilePicture().previousUrl,
+    email: this.globalDataService.getEmail(),
+    description: this.globalDataService.getDescription()
   }
 
   constructor(private globalDataService: GlobalDataService,
@@ -37,9 +41,10 @@ export class EditProfileComponent implements OnInit{
       (response) => {
         this.user.email = response.body.userEmail;
         this.user.id = response.body.userId;
+        this.user.description = response.body.description;
         if(response.body.profilePicture !== null) {
           this.user.profilePicture = response.body.profilePicture;
-          this.user.profilePictureUrl = `data:image/${this.user.profilePicture.photoName};base64,${this.user.profilePicture.data}`
+          this.user.profilePictureUrl = `data:image/${this.user.profilePicture.photoName};base64,${this.user.profilePicture.data}`;
         }
         this.newUsername = this.user.name;
         this.newEmail = response.body.userEmail;
@@ -102,24 +107,32 @@ export class EditProfileComponent implements OnInit{
     const updatedUser = {
       username: this.newUsername,
       email: this.newEmail,
+      description: this.newDescription
     };
 
-    this.userService.updateUser(this.user.name, updatedUser).subscribe(
-      (response) => {
-        console.log(response);
-        if (response) {
+    if (this.showEmailError || this.showUserError)
+      this.toastr.error("Campo del username y/o email incorrectos");
+    else {
+      this.userService.updateUser(this.user.name, updatedUser).subscribe(
+        (response) => {
           console.log('Response:', response);
-          this.globalDataService.setUsername(this.newUsername);
-          this.globalDataService.setEmail(this.newEmail);
-
-          console.log('Usuario actualizado');
-          this.router.navigate(["/profile"]);
+          if (response) { // CANVIAR AIXO PERQUE NOMES DETECTI RESPONSES CORRECTES (CAS DE LA DEMO DEL SPRINT 1)
+            this.globalDataService.setUsername(this.newUsername);
+            this.globalDataService.setEmail(this.newEmail);
+            this.globalDataService.setDescription(this.newDescription);
+            console.log('Usuario actualizado');
+            this.toastr.success("Usuario actualizado con éxito")
+            this.router.navigate(["/profile"]);
+          }
+        },
+        (error) => {
+          console.error('Error al actualizar el usuario', error);
+          if (Object.keys(error.error)[0] === "Username already exists!")
+            this.toastr.error("Este nombre de usuario ya está en uso.")
+          else this.toastr.error("Error al actualizar el usuario")
         }
-      },
-      (error) => {
-        console.error('Error al actualizar el usuario', error);
-      }
-    );
+      );
+    }
   }
 
   volver() {
@@ -134,5 +147,17 @@ export class EditProfileComponent implements OnInit{
     else console.log("No se encontró una coma en la URL.");
     return '';
   }
+
+  onEmailChange() { this.showEmailError = false; } // Reset error message on email change
+
+  onEmailBlur() {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    this.showEmailError = !emailRegex.test(this.newEmail);
+    console.log(this.showEmailError);
+  }
+
+  onUserChange() { this.showUserError = false; }  // Reset error message on username change
+
+  onUserBlur() { if(this.newUsername == '') this.showUserError = true; }
 
 }
