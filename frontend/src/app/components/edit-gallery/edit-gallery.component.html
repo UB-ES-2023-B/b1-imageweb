@@ -41,15 +41,15 @@
               <img class="bd-placeholder-img card-img-top custom-image" [src]="image.src" alt="Image"  (click)="open(i)">
               <div class="card-body">
                 <ng-container *ngIf="image.id != editImageId; else editFields">
-                  <p>{{ image.name }} <i *ngIf="editImageId == -1" class="fas fa-pencil-alt" (click)="startEditInfo(image.id)"></i></p>
-                  <p>{{ image.description }} <i class="fas fa-pencil-alt" (click)="startEditInfo(image.id)"></i></p>
+                  <p>{{ image.name }} <i *ngIf="editImageId == -1" class="fas fa-pencil-alt" (click)="startEditInfo(image.id, image.name, image.description)"></i></p>
+                  <p>{{ image.description }} <i class="fas fa-pencil-alt" (click)="startEditInfo(image.id, image.name, image.description)"></i></p>
                 </ng-container>
                 <ng-template #editFields>
                   <div *ngIf="image.id === editImageId">
                   <input type="text" [(ngModel)]="image.name" class="form-control" placeholder="Nombre">
                   <input type="text" [(ngModel)]="image.description" class="form-control" placeholder="Descripción">
                   <div class="d-inline d-flex justify-content-center">
-                    <button type="button" class="btn btn-outline-secondary" (click)="cancelEditInfo()" style="margin:5%"><i class="fas fa-times-circle" style="color: red;"></i> Cancelar</button>
+                    <button type="button" class="btn btn-outline-secondary" (click)="cancelEditInfo(image.id)" style="margin:5%"><i class="fas fa-times-circle" style="color: red;"></i> Cancelar</button>
                     <button type="button" class="btn btn-outline-success"(click)="saveEditInfo(image.id, image.name, image.description)"  style="margin:5%"><i class="fas fa-check-circle" style="color: green;"></i> Guardar</button>
                   </div>
                 </div>

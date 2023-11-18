@@ -17,6 +17,7 @@ export class EditGalleryComponent {
   isEditMode = false;
   selectedImageIds: number[] = [];
   editImageId:number=-1;
+  editImageOriginalValues:any= {};
 
   modalResponse: string = '';
 
@@ -50,10 +51,20 @@ export class EditGalleryComponent {
 
   }
 
-  startEditInfo(id:number){
+  startEditInfo(id:number, name:string, description:string){
     this.editImageId=id;
+    this.editImageOriginalValues={name:name,description:description}
   }
-  cancelEditInfo(){
+  cancelEditInfo(id:number){
+    let index = this.images.findIndex(imagen => imagen.id === id);
+
+    if (index !== -1) {
+      this.images[index].name = this.editImageOriginalValues.name;
+      this.images[index].description = this.editImageOriginalValues.description;
+
+    } else {
+      console.log('Error en cancelar');
+    }
     this.editImageId=-1;
   }
   saveEditInfo(id:number, name:string, description:string){
