@@ -3,6 +3,8 @@ import { GalleryService } from 'src/app/services/gallery.service';
 import { GlobalDataService } from 'src/app/services/global-data.service';
 import { Subscription } from 'rxjs';
 import { Lightbox } from 'ngx-lightbox';
+import { ToastrService } from 'ngx-toastr';
+
 
 @Component({
   selector: 'app-gallery',
@@ -24,7 +26,7 @@ export class GalleryComponent {
   private imagesSubscription: Subscription = new Subscription();
 
 
-  constructor(private galleryService:GalleryService, private globalDataService:GlobalDataService, private _lightbox: Lightbox){
+  constructor(private galleryService:GalleryService, private globalDataService:GlobalDataService, private _lightbox: Lightbox, private toastr: ToastrService){
   }
 
 
@@ -75,13 +77,7 @@ export class GalleryComponent {
 
     this.getGallery();
 
-
-
   }
-
-
-
-
 
 
   open(index: number): void {
@@ -106,7 +102,6 @@ export class GalleryComponent {
 
 
   deleteSelectedImages() {
-    // Agregar la llamada del back
 
     this.galleryService.deletePhotoGallery( this.selectedImageIds).subscribe(
       (response)=>{
@@ -116,10 +111,11 @@ export class GalleryComponent {
       },
       (error)=>{
         console.log('error al eliminar', error)
+        this.toastr.error('No se ha eliminado correctamente','Error');
+
       }
     )
 
-    console.log('Eliminar imágenes seleccionadas:', this.selectedImageIds);
     this.isEditMode = false;
     this.classModal='text-center mb-4 '
     this.selectedImageIds = [];
@@ -141,7 +137,7 @@ export class GalleryComponent {
       this.isEditMode = true;
       this.selectedImageIds.push(id);
     }
-    console.log('Lista de imágenes seleccionadas:', this.selectedImageIds);
+    // console.log('Lista de imágenes seleccionadas:', this.selectedImageIds);
   }
 
 
