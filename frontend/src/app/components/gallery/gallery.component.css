@@ -15,7 +15,9 @@
   padding: 5px;
   cursor: pointer;
 }
-
+.hideText{
+  visibility:hidden
+}
 .select-checkbox {
   transform: scale(1.5); /* Ajusta este valor según tu preferencia */
   margin-right: 5px; /* Espaciado opcional entre el checkbox y otros elementos */

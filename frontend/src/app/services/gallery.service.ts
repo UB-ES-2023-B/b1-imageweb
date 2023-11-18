@@ -11,6 +11,7 @@ export class GalleryService {
   private domain: string |undefined
   private images: any[] = [];
   private imagesSubject: BehaviorSubject<any[]> = new BehaviorSubject(this.images);
+
   constructor(private http: HttpClient) {
     this.domain = environment.domain;
   }
@@ -59,5 +60,7 @@ export class GalleryService {
   getImagesObservable(): Observable<any[]> {
     return this.imagesSubject.asObservable();
   }
+
+
 
 }

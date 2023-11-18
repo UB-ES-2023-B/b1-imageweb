@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, AfterViewInit  } from '@angular/core';
 import { GalleryService } from 'src/app/services/gallery.service';
 import { GlobalDataService } from 'src/app/services/global-data.service';
 import { Subscription } from 'rxjs';
@@ -16,6 +16,9 @@ export class GalleryComponent {
   isEditMode = false;
   selectedImageIds: number[] = [];
 
+  modalResponse: string = '';
+
+  classModal:string='text-center mb-4'
 
 
   private imagesSubscription: Subscription = new Subscription();
@@ -23,6 +26,26 @@ export class GalleryComponent {
 
   constructor(private galleryService:GalleryService, private globalDataService:GlobalDataService, private _lightbox: Lightbox){
   }
+
+
+  changeIsModal(){
+    this.classModal='text-center mb-4 hideText'
+  }
+
+  handleModalClosed(response: string) {
+
+
+    if(response=='Save click'){
+      this.deleteSelectedImages()
+    }else{
+      this.classModal='text-center mb-4'
+    }
+
+    this.modalResponse = response;
+
+  }
+
+
   getGallery():void{
     this.images=[]
     this.galleryService.getGalleryUser(this.globalDataService.getUsername()).subscribe(
@@ -49,11 +72,17 @@ export class GalleryComponent {
     this.imagesSubscription = this.galleryService.getImagesObservable().subscribe((images) => {
       this.images = images;
     });
+
     this.getGallery();
 
 
 
   }
+
+
+
+
+
 
   open(index: number): void {
     // open lightbox
@@ -79,20 +108,22 @@ export class GalleryComponent {
   deleteSelectedImages() {
     // Agregar la llamada del back
 
-    this.galleryService.deletePhotoGallery( this.selectedImageIds).subscribe(
-      (response)=>{
-        console.log('ha entrado acá', response)
-      },
-      (error)=>{
-        console.log('error al eliminar', error)
-      }
-    )
+    // this.galleryService.deletePhotoGallery( this.selectedImageIds).subscribe(
+    //   (response)=>{
+    //     console.log('ha entrado acá', response)
+    //   },
+    //   (error)=>{
+    //     console.log('error al eliminar', error)
+    //   }
+    // )
 
     console.log('Eliminar imágenes seleccionadas:', this.selectedImageIds);
     this.isEditMode = false;
+    this.classModal='text-center mb-4 '
     this.selectedImageIds = [];
   }
   toggleEditMode(id: number) {
+
     if (this.isEditMode) {
       // Si ya estamos en modo de edición, significa que se hizo clic en el checkbox
       const index = this.selectedImageIds.indexOf(id);
@@ -110,6 +141,8 @@ export class GalleryComponent {
     }
     console.log('Lista de imágenes seleccionadas:', this.selectedImageIds);
   }
+
+
 
 
 
