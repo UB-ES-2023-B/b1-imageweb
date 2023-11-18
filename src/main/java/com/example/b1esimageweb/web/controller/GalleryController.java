@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path="/gallery")
@@ -62,13 +64,21 @@ public class GalleryController {
     }
 
     @DeleteMapping(path = "/deletephotos")
-    public ResponseEntity<String> deletePhotosFromGallery(@RequestBody PhotoDto photoDto) {
+    public ResponseEntity<Map<String, String>> deletePhotosFromGallery(@RequestBody PhotoDto photoDto) {
+        Map<String, String> response = new HashMap<>();
+        String msg = "";
         try {
             List<Integer> photoIds = photoDto.getPhotoIds();
-            galleryService.deleteGalleryPhotos(photoIds);
-            return new ResponseEntity<>("Photos successfully deleted from gallery", HttpStatus.OK);
+            if(photoIds.size() == 0){
+                response.put("message", "No photos to delete");
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
+            msg = galleryService.deleteGalleryPhotos(photoIds);
+            response.put("message", msg);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch(Exception e){
-            return new ResponseEntity<>("Failed to delete photos from gallery", HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("message", "Photos not found");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     

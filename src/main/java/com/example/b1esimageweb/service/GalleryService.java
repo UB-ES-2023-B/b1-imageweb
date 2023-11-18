@@ -60,10 +60,13 @@ public class GalleryService {
         return photoRepository.findByGallery(gallery);
     }
 
-    public void deleteGalleryPhotos(List<Integer> photosId){
+    public String deleteGalleryPhotos(List<Integer> photosId){
         for (int photoId : photosId){
-            photoRepository.deleteById(photoId);
+            if(photoRepository.findById(photoId).get() != null){
+                photoRepository.deleteById(photoId);
+            }
         }
+        return "Photos successfully deleted from gallery";
     }
 
 }
