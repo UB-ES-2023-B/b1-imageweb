@@ -90,6 +90,7 @@ export class EditProfileComponent implements OnInit {
       },
       (error) => {
         console.error('Error al eliminar la foto de perfil', error);
+        this.toastr.success('Error al eliminar la foto de perfil');
       }
     );
   }
@@ -101,6 +102,8 @@ export class EditProfileComponent implements OnInit {
     // Actualiza la propiedad user en tu componente para que muestre la imagen predeterminada
     this.user.profilePicture = null;
     this.user.profilePictureUrl = '../assets/images/perfil.jpg';
+
+    this.toastr.success('Foto de perfil eliminada satisfactoriamente');
   }
 
   actualizarPerfil() {
