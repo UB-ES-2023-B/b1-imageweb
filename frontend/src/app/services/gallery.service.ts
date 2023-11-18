@@ -52,8 +52,9 @@ export class GalleryService {
     return this.images;
   }
 
-  addImage(image: any): void {
-    this.images.unshift({"src":image});
+  addImage(image: any, id:number, name:string, description:string): void {
+
+    this.images.unshift({"src":image, "id": id, "name":name, "description": description});
     this.imagesSubject.next(this.images);
   }
 

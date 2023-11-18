@@ -29,6 +29,7 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { EditGalleryComponent } from './components/edit-gallery/edit-gallery.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     UploadPhotoComponent,
     EditProfileComponent,
     ChangePasswordComponent,
-    ModalComponent
+    ModalComponent,
+    EditGalleryComponent
   ],
   imports: [
     BrowserModule,

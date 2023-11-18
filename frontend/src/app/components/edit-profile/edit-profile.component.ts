@@ -116,7 +116,7 @@ export class EditProfileComponent implements OnInit {
       this.userService.updateUser(this.user.name, updatedUser).subscribe(
         (response) => {
           console.log('Response:', response);
-          if (response) { // CANVIAR AIXO PERQUE NOMES DETECTI RESPONSES CORRECTES (CAS DE LA DEMO DEL SPRINT 1)
+          if (response) { // TODO CANVIAR AIXO PERQUE NOMES DETECTI RESPONSES CORRECTES (CAS DE LA DEMO DEL SPRINT 1)
             this.globalDataService.setUsername(this.newUsername);
             this.globalDataService.setEmail(this.newEmail);
             this.globalDataService.setDescription(this.newDescription);
@@ -129,6 +129,8 @@ export class EditProfileComponent implements OnInit {
           console.error('Error al actualizar el usuario', error);
           if (Object.keys(error.error)[0] === "Username already exists!")
             this.toastr.error("Este nombre de usuario ya está en uso.")
+          else if (Object.keys(error.error)[0] === "Email already exists!")
+            this.toastr.error("Este correo electrónico ya está en uso.")
           else this.toastr.error("Error al actualizar el usuario")
         }
       );
