@@ -31,14 +31,16 @@ export class UploadPhotoComponent {
 
   }
 
-  private onSuccess() {
+  private onSuccess(response: any) {
     this.selectedFile.pending = false;
     this.selectedFile.status = 'ok';
-    this.gallleryService.addImage(this.selectedFile.src)
+    //falta enviarle, el id , el nombre y la descripcion.
+    let id=1563;
+    let name='Name photo';
+    let description='Description photo';
+    this.gallleryService.addImage(this.selectedFile.src,id,name,description)
     this.toastr.success('Imagen cargada satisfactoriamente');
     this.resetImageInput(); // Llamamos a la función para restablecer el campo de entrada de archivos
-
-
 
   }
   private resetImageInput() {
@@ -75,7 +77,7 @@ export class UploadPhotoComponent {
       .subscribe(
         (response) => {
           console.log(response)
-            this.onSuccess();
+            this.onSuccess(response);
 
         },
         (error) => {
