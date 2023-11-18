@@ -13,6 +13,10 @@ public class Photo {
     @ManyToOne
     @JoinColumn(name = "gallery_id")
     private Gallery gallery;
+
+    @ManyToOne
+    @JoinColumn(name = "album_id")
+    private Album album;
     private String photoName;
     private String photoExtension;
     

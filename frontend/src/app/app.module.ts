@@ -25,6 +25,8 @@ import { ProfilePageComponent } from './components/profile-page/profile-page.com
 import { SecondaryNavbarComponent } from './components/secondary-navbar/secondary-navbar.component';
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { UploadPhotoComponent } from './components/upload-photo/upload-photo.component';
+import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,9 @@ import { UploadPhotoComponent } from './components/upload-photo/upload-photo.com
     ProfilePageComponent,
     SecondaryNavbarComponent,
     GalleryComponent,
-    UploadPhotoComponent
+    UploadPhotoComponent,
+    EditProfileComponent,
+    ChangePasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +57,6 @@ import { UploadPhotoComponent } from './components/upload-photo/upload-photo.com
     ImageCropperModule,
     LightboxModule,
     FileSaverModule
-
   ],
   providers: [
 

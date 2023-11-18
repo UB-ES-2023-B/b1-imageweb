@@ -13,6 +13,10 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
+.custom-icon-width {
+  height: 46px; /* Adjust the width as needed */
+}
+
 .login-box h2 {
   text-align: center;
   margin-bottom: 20px;

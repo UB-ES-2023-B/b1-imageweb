@@ -5,10 +5,15 @@ import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.GalleryService;
 import com.example.b1esimageweb.service.UserService;
 
+import com.example.b1esimageweb.web.dto.PhotoDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path="/gallery")
@@ -58,5 +63,23 @@ public class GalleryController {
         return new ResponseEntity<>(photos, HttpStatus.OK);
     }
 
+    @DeleteMapping(path = "/deletephotos")
+    public ResponseEntity<Map<String, String>> deletePhotosFromGallery(@RequestBody PhotoDto photoDto) {
+        Map<String, String> response = new HashMap<>();
+        String msg = "";
+        try {
+            List<Integer> photoIds = photoDto.getPhotoIds();
+            if(photoIds.size() == 0){
+                response.put("message", "No photos to delete");
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
+            msg = galleryService.deleteGalleryPhotos(photoIds);
+            response.put("message", msg);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch(Exception e){
+            response.put("message", "Photos not found");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     
 }

@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import {key} from "ngx-bootstrap-icons";
+
+interface ProfilePictureInfo {
+  file: File | null;
+  previousUrl: string;
+}
 
 
 @Injectable({
@@ -12,10 +18,16 @@ export class GlobalDataService {
   private tokenSubject = new BehaviorSubject<string>(sessionStorage.getItem('token') || '');
   private emailSubject = new BehaviorSubject<string>(sessionStorage.getItem('email') || '');
   private galleryIdSubject = new BehaviorSubject<string>(sessionStorage.getItem('galleryId') || '');
+  private profilePictureSubject = new BehaviorSubject<ProfilePictureInfo>({
+    file: null,
+    previousUrl: '',
+  });
+
 
   username$ = this.usernameSubject.asObservable()
   token$ = this.tokenSubject.asObservable()
   email$ = this.emailSubject.asObservable()
+  profilePicture$ = this.profilePictureSubject.asObservable()
 
   setToken(newToken: string) {
     sessionStorage.setItem('token', newToken);
@@ -40,16 +52,20 @@ export class GlobalDataService {
   }
 
   getEmail(): string {
-      return this.emailSubject.getValue();
-    }
+    return this.emailSubject.getValue();
+  }
 
   clearSession() {
     sessionStorage.removeItem('username');
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('email');
     sessionStorage.removeItem('galleryId');
+    sessionStorage.removeItem('profilePicture')
+    sessionStorage.removeItem('profilePictureFile')
+    sessionStorage.removeItem('profilePicturePreviousUrl')
     this.usernameSubject.next('');
     this.emailSubject.next('');
+    this.profilePictureSubject.next({ file: null, previousUrl: '../assets/images/perfil.jpg' });
   }
 
   setGalleryId(galleryId: string) {
@@ -59,6 +75,25 @@ export class GlobalDataService {
 
   getGalleryId(): string {
     return this.galleryIdSubject.getValue();
+  }
+
+  setProfilePicture(profilePicture: File | null, previousUrl: string) {
+    if (profilePicture) {
+      sessionStorage.setItem('profilePicture', 'true'); // Almacena una marca para indicar que hay una imagen de perfil
+      sessionStorage.setItem('profilePictureFile', JSON.stringify(profilePicture));
+      sessionStorage.setItem('profilePicturePreviousUrl', previousUrl);
+    } else {
+      sessionStorage.removeItem('profilePicture'); // Elimina la marca si no hay imagen de perfil
+      sessionStorage.removeItem('profilePictureFile');
+      sessionStorage.removeItem('profilePicturePreviousUrl');
+    }
+
+    this.profilePictureSubject.next({ file: profilePicture, previousUrl });
+  }
+
+
+  getProfilePicture(): ProfilePictureInfo {
+    return this.profilePictureSubject.getValue();
   }
 
   get activeItem$() {
