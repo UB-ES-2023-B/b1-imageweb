@@ -11,6 +11,7 @@ export class GalleryService {
   private domain: string |undefined
   private images: any[] = [];
   private imagesSubject: BehaviorSubject<any[]> = new BehaviorSubject(this.images);
+
   constructor(private http: HttpClient) {
     this.domain = environment.domain;
   }
@@ -30,6 +31,17 @@ export class GalleryService {
     return this.http.get(this.domain + `/gallery/viewGalleryFromUser/${userName}`, {  observe: 'response' });
   }
 
+  deletePhotoGallery(id: number[]): Observable<any> {
+    const formData = {
+      photoIds: id
+    };
+    return this.http.delete(this.domain + '/gallery/deletephotos', {
+      body: formData,
+      observe: 'response'
+    });
+  }
+
+
 
   setImages(images: any[]): void {
     this.images = images;
@@ -48,5 +60,7 @@ export class GalleryService {
   getImagesObservable(): Observable<any[]> {
     return this.imagesSubject.asObservable();
   }
+
+
 
 }

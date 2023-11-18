@@ -14,19 +14,39 @@
   </div>
 </div>
 
-<div class="album py-5 bg-light">
-  <div class="container">
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-      <div class="col" *ngFor="let image of images; let i = index ">
-        <a class="image-button" style="cursor:pointer" (click)="open(i)">
-        <div class="card shadow-sm photo">
-          <img class="bd-placeholder-img card-img-top custom-image"  [src]="image.src" alt="Image">
-          <div class="card-body">
+
+<div class="album py-5 bg-light" >
+  <div class="container" >
+    <div   [class]="classModal "  >
+      <p *ngIf="isEditMode" class="mb-3 texto"> Fotos seleccionadas:  {{selectedImageIds.length }}</p>
+      <div *ngIf="isEditMode" class="d-inline">
+        <button type="button" class="btn btn-secondary mr-2" style=" margin-right: 3%;" (click)="cancelEditMode()">Cancelar</button>
+        <!-- <button type="button" class="btn btn-danger" (click)="deleteSelectedImages()">Eliminar</button> -->
+        <span *ngIf="selectedImageIds.length>0" (click)="changeIsModal()"><app-modal   [buttonColor]="'btn-danger'" [modalTitle]="'¿Deseas borrar ' + selectedImageIds.length + ' foto(s)?'" [ButtonText]="'Eliminar'" [saveButtonText]="'Eliminar'" [body] ="'No puedes deshacer esta acción. ¿Estás seguro de que quieres eliminar esta(s) foto(s) definitivamente?'"  (modalClosed)="handleModalClosed($event)">
+
+        </app-modal></span>
+      </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" >
+      <div class="col" *ngFor="let image of images; let i = index"  >
+        <a class="image-button" style="cursor:pointer" >
+          <div class="card shadow-sm photo" >
+            <img class="bd-placeholder-img card-img-top custom-image" [src]="image.src" alt="Image"  (click)="open(i)">
+            <div class="card-body">
+              <div *ngIf="isEditMode"  class="icon-container">
+                <input type="checkbox" [checked]="selectedImageIds.includes(image.id)" (change)="toggleEditMode(image.id)" class="select-checkbox">
+              </div>
+              <div class="icon-container" *ngIf="!isEditMode" >
+                <i class="fas fa-trash-alt trash-icon" (click)=" toggleEditMode(image.id)"></i>
+              </div>
+            </div>
           </div>
-        </div>
-      </a>
+        </a>
       </div>
     </div>
   </div>
 </div>
+
+
 
