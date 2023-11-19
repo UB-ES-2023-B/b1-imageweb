@@ -121,7 +121,7 @@ export class EditProfileComponent implements OnInit {
       this.userService.updateUser(this.user.name, updatedUser).subscribe(
         (response) => {
           console.log('Response:', response);
-          if (response) { // CANVIAR AIXO PERQUE NOMES DETECTI RESPONSES CORRECTES (CAS DE LA DEMO DEL SPRINT 1)
+          if (Object.keys(response)[0] === 'User details updated') {
             this.globalDataService.setUsername(this.newUsername);
             this.globalDataService.setEmail(this.newEmail);
             this.globalDataService.setDescription(this.newDescription);

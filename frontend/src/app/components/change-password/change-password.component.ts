@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { UserService } from "../../services/user.service";
+import {pass} from "ngx-bootstrap-icons";
 
 @Component({
   selector: 'app-change-password',
@@ -32,17 +33,25 @@ export class ChangePasswordComponent {
       this.toastr.error("Comprueba que las contraseñas no tengan errores o que ambas coincidan");
     else {
       this.loading = true;
-      // COMPARAR CONTRASENYES ANTIGUES
-      // CANVIAR DADES A BD
-      // CONFIRMACIÓ
-
-      this.passwordChanged.emit({
+      const passwords = {
         currentPassword: this.currentPassword,
-        newPassword: this.newPassword,
-        confirmPassword: this.confirmPassword
-      });
-      // Cierra el modal después de cambiar la contraseña
-      this.modalClosed.emit();
+        newPassword: this.newPassword
+      };
+      this.userService.changeUserPassword(passwords).subscribe(
+        (response) => {
+          console.log(response);
+          if (response.message === 'Your password was changed successfully') {
+            this.toastr.success("Contraseña cambiada correctamente");
+            console.log('Contraseña actualizada', response, passwords);
+            this.modalClosed.emit(); // Cierra el modal después de cambiar la contraseña
+          }
+        },
+        (error) => {
+          this.loading = false;
+          console.error('Error al actualizar la contraseña', error);
+          if (error.error) this.toastr.error("Contraseña actual errónea");
+          else this.toastr.error("Error al actualizar la cotraseña");
+        });
     }
   }
 
