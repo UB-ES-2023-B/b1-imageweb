@@ -1,5 +1,6 @@
 package com.example.b1esimageweb.service;
 
+import com.example.b1esimageweb.Exceptions.InvalidPasswordException;
 import com.example.b1esimageweb.Exceptions.UserNotFoundException;
 import com.example.b1esimageweb.model.Gallery;
 import com.example.b1esimageweb.model.Photo;
@@ -7,6 +8,7 @@ import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.repository.GalleryRepository;
 import com.example.b1esimageweb.repository.PhotoRepository;
 import com.example.b1esimageweb.repository.UserRepository;
+import com.example.b1esimageweb.web.dto.PasswordResetDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -14,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -139,5 +142,24 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username).get();
+    }
+
+    public String resetPassword (PasswordResetDto passwordResetDto, PasswordEncoder passwordEncoder){
+        Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User currentUser = null;
+        if(obj instanceof User){
+            currentUser = (User) obj;
+        }
+        if(currentUser != null) {
+           if(passwordEncoder.matches(passwordResetDto.getCurrentPassword(), currentUser.getPassword())){
+               currentUser.setUserPassword(passwordEncoder.encode(passwordResetDto.getNewPassword()));
+               userRepository.save(currentUser);
+           }else{
+               throw new InvalidPasswordException("Invalid current password");
+           }
+        }else{
+            throw new UserNotFoundException("User does not exists");
+        }
+        return "Your password was changes successfully";
     }
 }
