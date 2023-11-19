@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+import { UserService } from "../../services/user.service";
 
 @Component({
   selector: 'app-change-password',
@@ -15,17 +17,21 @@ export class ChangePasswordComponent {
   showOldPassword: boolean = false;
   showNewPassword: boolean = false;
   showConPassword: boolean = false;
+  loading: boolean = false
 
   @Output() passwordChanged = new EventEmitter<any>();
   @Output() modalClosed = new EventEmitter<void>();
 
-  constructor() {}
+  constructor(private userService: UserService,
+              private toastr: ToastrService) {}
 
   changePassword(): void {
-    if (this.showNewPasswordError && this.showConPasswordError) {
-      // ERROR
-    }
+    if (this.showNewPasswordError || this.showConPasswordError)
+      this.toastr.error("Comprueba que las contraseñas no tengan errores o que ambas coincidan");
+    else if (this.currentPassword === '' || this.newPassword === '' || this.confirmPassword === '')
+      this.toastr.error("Rellene todos los campos")
     else {
+      this.loading = true;
       // COMPARAR CONTRASENYES ANTIGUES
       // SPINNER DE CARREGANT
       // CANVIAR DADES A BD
