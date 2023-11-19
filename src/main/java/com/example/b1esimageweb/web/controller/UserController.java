@@ -4,6 +4,7 @@ import com.example.b1esimageweb.Exceptions.UserNotFoundException;
 import com.example.b1esimageweb.model.Photo;
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.UserService;
+import com.example.b1esimageweb.web.dto.PhotoDto;
 //import com.example.b1esimageweb.web.Security.CurrentUserDetails;
 import com.example.b1esimageweb.web.dto.UserRegistrationDto;
 
@@ -93,9 +94,9 @@ public class UserController {
     }
 
     @GetMapping(path = "/viewPhotoProfile/{username}")
-    public ResponseEntity<Photo> viewUserProfilePhoto (@PathVariable("username") String username){
+    public ResponseEntity<PhotoDto> viewUserProfilePhoto (@PathVariable("username") String username){
         User user = service.getUserByUserName(username);
-        Photo photo = service.getPhotoProfileByUser(user);
+        PhotoDto photo = service.getPhotoProfileByUser(user);
         return new ResponseEntity<>(photo, HttpStatus.OK);
     }
 }

@@ -7,9 +7,6 @@ public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer photoId;
-    @Lob
-    @Column(name = "image", columnDefinition = "LONGBLOB")
-    private byte[] data; // Datos binarios de la imagen
     @ManyToOne
     @JoinColumn(name = "gallery_id")
     private Gallery gallery;
@@ -22,8 +19,7 @@ public class Photo {
     
     public Photo(){}
 
-    public Photo(byte[] data, Gallery gallery, String photoName, String photoExtension) {
-        this.data = data;
+    public Photo(Gallery gallery, String photoName, String photoExtension) {
         this.gallery = gallery;
         this.photoName = photoName;
         this.photoExtension = photoExtension;
@@ -35,13 +31,6 @@ public class Photo {
 
     public void setPhotoId(int id ) {
         this.photoId = id;
-    }
-    public byte[] getData() {
-        return data;
-    }
-
-    public void setData(byte[] data) {
-        this.data = data;
     }
 
     public Gallery getGallery() {
@@ -67,6 +56,7 @@ public class Photo {
     public void setPhotoExtension(String photoExtension) {
         this.photoExtension = photoExtension;
     }
+
 
     
 
