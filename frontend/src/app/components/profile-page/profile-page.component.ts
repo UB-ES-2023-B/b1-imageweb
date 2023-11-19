@@ -20,8 +20,9 @@ export class ProfilePageComponent implements OnInit {
     profilePictureUrl: '',
     coverPhoto: "../assets/images/mountainSea.jpg",
     name: this.globalDataService.getUsername(),
-    email: '',
+    email: this.globalDataService.getEmail(),
     id: 0,
+    description: this.globalDataService.getDescription(),
     followers: [],
     following: []
   }
