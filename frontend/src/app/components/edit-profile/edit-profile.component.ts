@@ -39,6 +39,7 @@ export class EditProfileComponent implements OnInit {
   private getUserData(): void {
     this.userService.getUser(this.user.name).subscribe(
       (response) => {
+        console.log('GET DATA EDITAR PERFIL ', response.body)
         this.user.email = response.body.userEmail;
         this.user.id = response.body.userId;
         this.user.description = response.body.description;
@@ -46,9 +47,10 @@ export class EditProfileComponent implements OnInit {
           this.user.profilePicture = response.body.profilePicture;
           this.user.profilePictureUrl = `data:image/${this.user.profilePicture.photoName};base64,${this.user.profilePicture.data}`;
         }
+
         this.newUsername = this.user.name;
-        this.newEmail = response.body.userEmail;
-        console.log(this.newUsername, this.newEmail);
+        this.newEmail = this.user.email;
+        this.newDescription = this.user.description
       },
       (error) => {
         console.error('Error al obtener los datos del usuario', error);

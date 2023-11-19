@@ -71,7 +71,7 @@ export class ProfilePageComponent implements OnInit {
           this.user.profilePicture = response.body.profilePicture;
           this.user.profilePictureUrl = `data:image/${response.body.profilePicture.photoName};base64,${response.body.profilePicture.data}`;
         }
-        console.log('Datos del usuario:', response.body);
+        console.log('GET DATA VER PERFIL', response.body);
       },
       (error) => {
         console.error('Error al obtener los datos del usuario', error);

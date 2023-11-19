@@ -30,7 +30,7 @@ export class HomePageComponent {
   getUserData(): void {
     this.userService.getUser(this.username).subscribe(
       (response) => {
-        console.log('Datos del usuario:', response.body);
+        console.log('GET DATA HOME ', response.body);
         this.globalDataService.setEmail(response.body.email);
         this.globalDataService.setDescription(response.body.description);
         this.globalDataService.setGalleryId(response.body.gallery.galleryrId);
