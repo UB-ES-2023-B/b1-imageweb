@@ -56,7 +56,7 @@ public class UserControllerIntegrationTest {
     @WithMockUser (username = "adminUser", password = "password", roles = "ADMIN")
     public void setUp() {
         // Create a test user
-        User user=userRepository.findByUsername("adminUser").orElseThrow();
+        User user=userRepository.findByUsername("").orElseThrow();
         userToken = tokenProvider.createToken(user);
     }
 
@@ -73,7 +73,6 @@ public class UserControllerIntegrationTest {
                 .andDo(MockMvcResultHandlers.print()); // This prints the response for debugging
     }
     */
-
     @Test
     @WithMockUser (username = "adminUser", password = "password", roles = "ADMIN")
     public void testLoginUser() throws Exception {
