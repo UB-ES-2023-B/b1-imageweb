@@ -125,7 +125,7 @@ export class EditProfileComponent implements OnInit {
             this.globalDataService.setUsername(this.newUsername);
             this.globalDataService.setEmail(this.newEmail);
             this.globalDataService.setDescription(this.newDescription);
-            console.log('Usuario actualizado');
+            console.log('Usuario actualizado', updatedUser);
             this.toastr.success("Usuario actualizado con éxito")
             this.router.navigate(["/profile"]);
           }

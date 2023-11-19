@@ -26,17 +26,16 @@ export class ChangePasswordComponent {
               private toastr: ToastrService) {}
 
   changePassword(): void {
-    if (this.showNewPasswordError || this.showConPasswordError)
-      this.toastr.error("Comprueba que las contraseñas no tengan errores o que ambas coincidan");
-    else if (this.currentPassword === '' || this.newPassword === '' || this.confirmPassword === '')
+    if (this.currentPassword === '' || this.newPassword === '' || this.confirmPassword === '')
       this.toastr.error("Rellene todos los campos")
+    else if (this.showNewPasswordError || this.showConPasswordError)
+      this.toastr.error("Comprueba que las contraseñas no tengan errores o que ambas coincidan");
     else {
       this.loading = true;
       // COMPARAR CONTRASENYES ANTIGUES
-      // SPINNER DE CARREGANT
       // CANVIAR DADES A BD
       // CONFIRMACIÓ
-      // Lógica para cambiar la contraseña
+
       this.passwordChanged.emit({
         currentPassword: this.currentPassword,
         newPassword: this.newPassword,
