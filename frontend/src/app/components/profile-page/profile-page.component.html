@@ -1,4 +1,3 @@
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet"/>
 
 <div class="header-wrapper" [style.background-image]="'url(' + user.coverPhoto + ')'">
   <header></header>
@@ -40,6 +39,15 @@
 </div>
 
 <app-secondary-navbar [activeItem]="activeItem" (itemClicked)="handleItemClicked($event)"></app-secondary-navbar>
+
+<div *ngIf="activeItem=='info'">
+  <div class="user-description" >
+    <h4>Descripción</h4>
+    <p *ngIf="user.description">{{ user.description }}</p>
+    <p *ngIf="!user.description">Nada por aqui... Ves al apartado "Editar Perfil" para editar tu descripcion.</p>
+    <div class="separator-line"></div>
+  </div>
+</div>
 
 <div *ngIf="activeItem=='gallery'">
   <app-gallery></app-gallery>
