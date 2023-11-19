@@ -27,6 +27,9 @@ import { GalleryComponent } from './components/gallery/gallery.component';
 import { UploadPhotoComponent } from './components/upload-photo/upload-photo.component';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { ModalComponent } from './components/modal/modal.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { EditGalleryComponent } from './components/edit-gallery/edit-gallery.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +46,9 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
     GalleryComponent,
     UploadPhotoComponent,
     EditProfileComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    ModalComponent,
+    EditGalleryComponent
   ],
   imports: [
     BrowserModule,
@@ -56,7 +61,8 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
     ToastrModule.forRoot(),
     ImageCropperModule,
     LightboxModule,
-    FileSaverModule
+    FileSaverModule,
+    NgbModule
   ],
   providers: [
 

@@ -7,6 +7,7 @@ import com.example.b1esimageweb.service.UserService;
 import com.example.b1esimageweb.web.dto.PhotoDto;
 //import com.example.b1esimageweb.web.Security.CurrentUserDetails;
 import com.example.b1esimageweb.web.dto.UserRegistrationDto;
+import com.example.b1esimageweb.web.dto.UserUpdateDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,7 +53,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/update/{username}")
-    public ResponseEntity<Map<String, User>> updateUser(@RequestBody UserRegistrationDto updated_user, @PathVariable("username") String username) {
+    public ResponseEntity<Map<String, User>> updateUser(@RequestBody UserUpdateDto updated_user, @PathVariable("username") String username) {
         User userExisting = service.getUserByUserName(username);
         Map<String, User> response = new HashMap<>();
         if (userExisting != null) {
@@ -66,6 +67,7 @@ public class UserController {
             }
             userExisting.setUsername(updated_user.getUsername());
             userExisting.setUserEmail(updated_user.getEmail());
+            userExisting.setDescription(updated_user.getUserDescription());
             service.updateUser(userExisting);
             response.put("User details updated", userExisting);
             return new ResponseEntity<>(response, HttpStatus.OK);
