@@ -53,10 +53,10 @@ public class UserControllerIntegrationTest {
 
 
     @BeforeAll
-    @WithMockUser (username = "adminUser", password = "password", roles = "ADMIN")
+    @WithMockUser (username = "adminUser", password = "admin", roles = "ADMIN")
     public void setUp() {
         // Create a test user
-        User user=userRepository.findByUsername("").orElseThrow();
+        User user=userRepository.findByUsername("adminUser").orElseThrow();
         userToken = tokenProvider.createToken(user);
     }
 
@@ -74,7 +74,7 @@ public class UserControllerIntegrationTest {
     }
     */
     @Test
-    @WithMockUser (username = "adminUser", password = "password", roles = "ADMIN")
+    @WithMockUser (username = "adminUser", password = "admin", roles = "ADMIN")
     public void testLoginUser() throws Exception {
 
 
@@ -130,7 +130,7 @@ public class UserControllerIntegrationTest {
 
     @Test
     @Order(1)
-    @WithMockUser (username = "adminUser", password = "password", roles = "ADMIN")
+    @WithMockUser (username = "adminUser", password = "admin", roles = "ADMIN")
     public void testGetAllUsers() throws Exception {
         mockMvc.perform(get("/user/getAll")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + userToken))
