@@ -1,10 +1,13 @@
-<div>
+<div style="display: flex; align-items: center;" >
+  <label class="image-upload-container btn btn-bwm">
+    <img src="../../../assets/images/upload-icon.svg"  width="40" height="40" alt="Icono">
   <input #imageInput
          type="file"
          accept="image/*"
          (change)="processFile(imageInput)"
          multiple
          >
+  </label>
 </div>
 
 <div *ngIf="selectedFiles!=[]">
@@ -12,4 +15,5 @@
       <div *ngIf="file.pending"  class="img-spinning-circle"></div>
   </div>
 </div>
+
 
