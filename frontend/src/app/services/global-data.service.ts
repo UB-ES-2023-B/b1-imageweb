@@ -11,21 +11,22 @@ interface ProfilePictureInfo {
 @Injectable({
   providedIn: 'root'
 })
-export class GlobalDataService {
 
+
+export class GlobalDataService {
   private _activeItem: BehaviorSubject<string> = new BehaviorSubject<string>('gallery');
   private usernameSubject = new BehaviorSubject<string>(sessionStorage.getItem('username') || '');
   private tokenSubject = new BehaviorSubject<string>(sessionStorage.getItem('token') || '');
   private emailSubject = new BehaviorSubject<string>(sessionStorage.getItem('email') || '');
   private galleryIdSubject = new BehaviorSubject<string>(sessionStorage.getItem('galleryId') || '');
+  private descriptionSubject = new BehaviorSubject<string>(sessionStorage.getItem('description') || '');
   private profilePictureSubject = new BehaviorSubject<ProfilePictureInfo>({
     file: null,
     previousUrl: '',
   });
 
-
-  username$ = this.usernameSubject.asObservable()
   token$ = this.tokenSubject.asObservable()
+  username$ = this.usernameSubject.asObservable()
   email$ = this.emailSubject.asObservable()
   profilePicture$ = this.profilePictureSubject.asObservable()
 
@@ -34,48 +35,35 @@ export class GlobalDataService {
     this.tokenSubject.next(newToken);
   }
 
-  getToken(): string {
-    return this.tokenSubject.getValue();
-  }
+  getToken(): string { return this.tokenSubject.getValue(); }
+
   setUsername(newUsername: string) {
     sessionStorage.setItem('username', newUsername);
     this.usernameSubject.next(newUsername);
   }
 
-  getUsername(): string {
-    return this.usernameSubject.getValue();
-  }
+  getUsername(): string { return this.usernameSubject.getValue(); }
 
   setEmail(newEmail: string) {
     sessionStorage.setItem('email', newEmail);
     this.emailSubject.next(newEmail);
   }
 
-  getEmail(): string {
-    return this.emailSubject.getValue();
+  getEmail(): string { return this.emailSubject.getValue(); }
+
+  setDescription(newDescription: string) {
+    sessionStorage.setItem('description', newDescription);
+    this.descriptionSubject.next(newDescription);
   }
 
-  clearSession() {
-    sessionStorage.removeItem('username');
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('email');
-    sessionStorage.removeItem('galleryId');
-    sessionStorage.removeItem('profilePicture')
-    sessionStorage.removeItem('profilePictureFile')
-    sessionStorage.removeItem('profilePicturePreviousUrl')
-    this.usernameSubject.next('');
-    this.emailSubject.next('');
-    this.profilePictureSubject.next({ file: null, previousUrl: '../assets/images/perfil.jpg' });
-  }
+  getDescription(): string { return this.descriptionSubject.getValue(); }
 
   setGalleryId(galleryId: string) {
     sessionStorage.setItem('galleryId', galleryId);
     this.galleryIdSubject.next(galleryId);
   }
 
-  getGalleryId(): string {
-    return this.galleryIdSubject.getValue();
-  }
+  getGalleryId(): string { return this.galleryIdSubject.getValue(); }
 
   setProfilePicture(profilePicture: File | null, previousUrl: string) {
     if (profilePicture) {
@@ -87,22 +75,29 @@ export class GlobalDataService {
       sessionStorage.removeItem('profilePictureFile');
       sessionStorage.removeItem('profilePicturePreviousUrl');
     }
-
     this.profilePictureSubject.next({ file: profilePicture, previousUrl });
   }
 
+  getProfilePicture(): ProfilePictureInfo { return this.profilePictureSubject.getValue(); }
 
-  getProfilePicture(): ProfilePictureInfo {
-    return this.profilePictureSubject.getValue();
-  }
-
-  get activeItem$() {
-    return this._activeItem.asObservable();
-  }
+  get activeItem$() { return this._activeItem.asObservable(); }
 
   // Proporciona un método para actualizar el valor de activeItem
-  setActiveItem(newItem: string) {
-    this._activeItem.next(newItem);
-  }
+  setActiveItem(newItem: string) { this._activeItem.next(newItem); }
 
+  clearSession() {
+    sessionStorage.removeItem('username');
+    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('email');
+    sessionStorage.removeItem('galleryId');
+    sessionStorage.removeItem('profilePicture');
+    sessionStorage.removeItem('profilePictureFile');
+    sessionStorage.removeItem('profilePicturePreviousUrl');
+    sessionStorage.removeItem('description');
+
+    this.usernameSubject.next('');
+    this.emailSubject.next('');
+    this.descriptionSubject.next('')
+    this.profilePictureSubject.next({ file: null, previousUrl: '../assets/images/perfil.jpg' });
+  }
 }
