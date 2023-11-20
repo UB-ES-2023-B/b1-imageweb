@@ -5,6 +5,7 @@ import com.example.b1esimageweb.model.Photo;
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.UserService;
 import com.example.b1esimageweb.web.dto.PhotoDto;
+import com.example.b1esimageweb.web.dto.UserInfoDto;
 //import com.example.b1esimageweb.web.Security.CurrentUserDetails;
 import com.example.b1esimageweb.web.dto.PasswordResetDto;
 import com.example.b1esimageweb.web.dto.UserRegistrationDto;
@@ -48,9 +49,11 @@ public class UserController {
     }
 
     @GetMapping(value = "/getByUserName/{userName}")
-    public ResponseEntity<User> getUserByUserName(@PathVariable("userName") String userName) {
+    public ResponseEntity<UserInfoDto> getUserByUserName(@PathVariable("userName") String userName) {
         User user = service.getUserByUserName(userName);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        PhotoDto profilePhoto = service.getPhotoProfileByUser(user);
+        UserInfoDto userInfoDto = new UserInfoDto(user.getUserId(), user.getUsername(), user.getUserEmail(), user.getPassword(), user.getDescription(), user.getGallery(), profilePhoto, user.isAccountNonExpired(), user.isAccountNonExpired(), user.isAccountNonLocked(), user.isEnabled(), user.getAuthorities());
+        return new ResponseEntity<>(userInfoDto, HttpStatus.OK);
     }
 
     @PutMapping(value = "/update/{username}")
