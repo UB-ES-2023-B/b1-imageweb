@@ -160,6 +160,6 @@ public class UserService implements UserDetailsService {
         }else{
             throw new UserNotFoundException("User does not exists");
         }
-        return "Your password was changes successfully";
+        return "Your password was changed successfully";
     }
 }
