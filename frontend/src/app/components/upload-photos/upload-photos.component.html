@@ -1,0 +1,15 @@
+<div>
+  <input #imageInput
+         type="file"
+         accept="image/*"
+         (change)="processFile(imageInput)"
+         multiple
+         >
+</div>
+
+<div *ngIf="selectedFiles!=[]">
+  <div *ngFor="let file of selectedFiles; let i = index">
+      <div *ngIf="file.pending"  class="img-spinning-circle"></div>
+  </div>
+</div>
+
