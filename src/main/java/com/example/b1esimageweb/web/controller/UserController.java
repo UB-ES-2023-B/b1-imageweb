@@ -5,6 +5,7 @@ import com.example.b1esimageweb.model.Photo;
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.UserService;
 //import com.example.b1esimageweb.web.Security.CurrentUserDetails;
+import com.example.b1esimageweb.web.dto.PasswordResetDto;
 import com.example.b1esimageweb.web.dto.UserRegistrationDto;
 import com.example.b1esimageweb.web.dto.UserUpdateDto;
 
@@ -99,5 +100,18 @@ public class UserController {
         User user = service.getUserByUserName(username);
         Photo photo = service.getPhotoProfileByUser(user);
         return new ResponseEntity<>(photo, HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/resetPassword")
+    public ResponseEntity<Map<String, String>> updatePassword(@RequestBody PasswordResetDto passwordResetDto){
+        Map<String, String> response = new HashMap<>();
+        try {
+            String msg = service.resetPassword(passwordResetDto, passwordEncoder);
+            response.put("Message", msg);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            response.put("Message", "Invalid current password");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
