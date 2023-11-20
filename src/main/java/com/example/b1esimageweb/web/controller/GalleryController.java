@@ -6,6 +6,7 @@ import com.example.b1esimageweb.service.GalleryService;
 import com.example.b1esimageweb.service.UserService;
 
 import com.example.b1esimageweb.web.dto.PhotoDto;
+import com.example.b1esimageweb.web.dto.PhotoUpdateDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -80,6 +81,25 @@ public class GalleryController {
             response.put("message", "Photos not found");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PutMapping(path = "/editInfoPhoto/{photoId}")
+    public ResponseEntity<Map<String, String>> updatePhotoById(@PathVariable("photoId") int photoId, @RequestBody PhotoUpdateDto photoUpdateDto) {
+        Map<String, String> response = new HashMap<>();
+        try {
+            Photo photo = galleryService.updateInfoPhotoById(photoId, photoUpdateDto.getPhotoName(), photoUpdateDto.getPhotoDescription());
+            if (photo != null) {
+                response.put("message", "successful");
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.put("message", "Photo not found.");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+        } catch(Exception e) {
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
     
 }

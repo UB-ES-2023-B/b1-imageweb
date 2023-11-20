@@ -1,5 +1,6 @@
 package com.example.b1esimageweb.model;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name="photos")
@@ -19,14 +20,17 @@ public class Photo {
     private Album album;
     private String photoName;
     private String photoExtension;
+    @Size(max = 25, message = "Description must not exceed 25 words")
+    private String photoDescription;
     
     public Photo(){}
 
-    public Photo(byte[] data, Gallery gallery, String photoName, String photoExtension) {
+    public Photo(byte[] data, Gallery gallery, String photoName, String photoExtension, String photoDescription) {
         this.data = data;
         this.gallery = gallery;
         this.photoName = photoName;
         this.photoExtension = photoExtension;
+        this.photoDescription = photoDescription;
     }
 
     public Integer getPhotoId() {
@@ -68,6 +72,12 @@ public class Photo {
         this.photoExtension = photoExtension;
     }
 
-    
 
+    public String getPhotoDescription() {
+        return photoDescription;
+    }
+
+    public void setPhotoDescription(String photoDescription) {
+        this.photoDescription = photoDescription;
+    }
 }

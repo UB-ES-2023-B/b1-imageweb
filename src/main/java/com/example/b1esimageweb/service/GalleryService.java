@@ -2,6 +2,7 @@ package com.example.b1esimageweb.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
@@ -67,6 +68,16 @@ public class GalleryService {
             }
         }
         return "Photos successfully deleted from gallery";
+    }
+
+    public Photo updateInfoPhotoById(int photoId, String photoName, String photoDescription) {
+        Photo photo = photoRepository.findById(photoId).orElseThrow(()-> new PhotoNotFoundException("Photo with id " + photoId + "not found"));
+        if (photo != null) {
+            photo.setPhotoName(photoName);
+            photo.setPhotoDescription(photoDescription);
+            return photoRepository.save(photo);
+        }
+        return null;
     }
 
 }
