@@ -23,7 +23,7 @@ export class GalleryService {
 
   uploadImage(idGallery: string, photo_file: File):  Observable<string> {
     const formData = new FormData();
-
+    console.log('mira el photo file', photo_file)
     formData.append('photo', photo_file);
     return this.http.post(this.domain + `/gallery/uploadPhotoGalery/${idGallery}`, formData,{  responseType: 'text'});
   }

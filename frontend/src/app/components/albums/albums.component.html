@@ -19,7 +19,7 @@
       </div>
       <div class="mb-3">
         <div class="form-floating">
-          <textarea class="form-control" [(ngModel)]="description" (input)="countWords()" placeholder="Leave a comment here" id="floatingTextarea" [readonly]="remainingWords === 0"></textarea>
+          <textarea class="form-control" [(ngModel)]="description" (input)="countWords()" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
           <label for="floatingTextarea">Descripción:</label>
         </div>
         <p class="remaining-words">Palabras restantes: {{ remainingWords }}</p>
@@ -27,11 +27,41 @@
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" (click)="modal.close('close')">Cancelar</button>
-      <button type="button" class="btn btn-primary" [disabled]="!name || name.length > 5" (click)="modal.close('save')">Crear</button>
+      <button type="button" class="btn btn-primary" [disabled]="!name || name.length > 50 || remainingWords < 0" (click)="modal.close('save')">Crear</button>
     </div>
   </ng-template>
 </div>
 
 <div class="container">
   <!-- <app-upload-photos></app-upload-photos> -->
+  <!-- <img src="../../../assets/images/defaultImageAlbum.jpg"> -->
+</div>
+
+<div *ngIf="loading" class="d-flex justify-content-center align-items-center flex-column mt-5">
+  <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;animation-duration: 3s" role="status"></div>
+  <h4 style="margin-top: 20px;">Cargando...</h4>
+</div>
+
+
+<div class="album py-2 pb-5 bg-light" >
+  <div class="container pb-1"  >
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4" >
+      <div class="col" *ngFor="let album of albums; let i = index"  >
+        <div class="image-button" style="cursor:pointer" >
+          <div class="card shadow-sm photo" >
+            <img class="bd-placeholder-img custom-image" [src]="album.src" alt="Image" >
+            <div class="card-body">
+              <p class="custom-paragraph"><b>{{ album.name }}</b></p>
+              <p class="custom-paragraph">&nbsp;{{ album.description }}</p>
+              <div class="d-flex align-items-center justify-content-between mt-3"> <!-- Aplicar d-flex al contenedor principal y justify-content-between -->
+                <p class="custom-paragraph">&nbsp;Fotos: {{ album.photoLength }}</p>
+                <!-- <app-upload-photo></app-upload-photo> -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
