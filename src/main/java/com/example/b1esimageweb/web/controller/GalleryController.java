@@ -4,14 +4,22 @@ import com.example.b1esimageweb.model.Photo;
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.GalleryService;
 import com.example.b1esimageweb.service.UserService;
-
+import com.microsoft.azure.storage.CloudStorageAccount;
+import com.microsoft.azure.storage.StorageException;
+import com.microsoft.azure.storage.blob.CloudBlob;
+import com.microsoft.azure.storage.blob.CloudBlobClient;
+import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.example.b1esimageweb.web.dto.PhotoDto;
 import com.example.b1esimageweb.web.dto.PhotoUpdateDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,24 +37,27 @@ public class GalleryController {
     }
 
     @PostMapping(path="/uploadPhotoGalery/{galleryId}")
-    public ResponseEntity<String> uploadPhotoGallery(@PathVariable("galleryId") Integer galleryId, @RequestParam("photo") MultipartFile photo) {
+    public ResponseEntity<?> uploadPhotoGallery(@PathVariable("galleryId") Integer galleryId, @RequestParam("photo") MultipartFile photo) {
         // Verificar el tamaño del archivo
         if (photo.getSize() > 2 * 1024 * 1024) { // 3MB en bytes
             return new ResponseEntity<>("Photo size exceeds the maximum allowed size of 2MB", HttpStatus.BAD_REQUEST);
         }
-        galleryService.addNewPhoto(galleryId, photo);
-        return new ResponseEntity<>("Photography upload successfully", HttpStatus.OK);
+        PhotoDto newPhoto = galleryService.addNewPhoto(galleryId, photo);
+        if(newPhoto==null){
+            return new ResponseEntity<>("An error ocurred while uploading the Photo", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(newPhoto, HttpStatus.OK);
     }
 
     @GetMapping(path="/getAll")
-    public ResponseEntity<Iterable<Photo>> getAllPhotos(){
-        Iterable<Photo> photos = galleryService.getAllPhotos();
+    public ResponseEntity<Iterable<?>> getAllPhotos(){
+        Iterable<PhotoDto> photos = galleryService.getAllPhotos();
         return new ResponseEntity<>(photos, HttpStatus.OK);
     }
     
     @GetMapping(path="/viewPhoto/{photoId}")
-    public ResponseEntity<Photo> getPhotoById(@PathVariable("photoId") Integer id) {
-        Photo photo = galleryService.getPhotoById(id);
+    public ResponseEntity<PhotoDto> getPhotoById(@PathVariable("photoId") Integer id) {
+        PhotoDto photo = galleryService.getPhotoById(id);
         return new ResponseEntity<>(photo, HttpStatus.OK);
     }
 
@@ -57,15 +68,15 @@ public class GalleryController {
     }
 
     @GetMapping(path="/viewGalleryFromUser/{userName}")
-    public ResponseEntity<Iterable<Photo>> getPhotosByGallery(@PathVariable("userName") String userName) {
+    public ResponseEntity<Iterable<PhotoDto>> getPhotosByGallery(@PathVariable("userName") String userName) {
         User user = userService.getUserByUserName(userName);
         Gallery gallery = userService.getGalleryByUser(user);
-        Iterable<Photo> photos = galleryService.getPhotosByGallery(gallery);
+        Iterable<PhotoDto> photos = galleryService.getPhotosByGallery(gallery);
         return new ResponseEntity<>(photos, HttpStatus.OK);
     }
 
     @DeleteMapping(path = "/deletephotos")
-    public ResponseEntity<Map<String, String>> deletePhotosFromGallery(@RequestBody PhotoDto photoDto) {
+    public ResponseEntity<Map<String, String>> deletePhotosFromGallery(@RequestBody PhotosDto photoDto) {
         Map<String, String> response = new HashMap<>();
         String msg = "";
         try {
@@ -101,5 +112,5 @@ public class GalleryController {
         }
 
     }
-    
+
 }

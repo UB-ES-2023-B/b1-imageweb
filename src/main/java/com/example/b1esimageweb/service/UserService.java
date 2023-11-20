@@ -8,6 +8,15 @@ import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.repository.GalleryRepository;
 import com.example.b1esimageweb.repository.PhotoRepository;
 import com.example.b1esimageweb.repository.UserRepository;
+import com.example.b1esimageweb.web.dto.PhotoDto;
+import com.microsoft.azure.storage.CloudStorageAccount;
+import com.microsoft.azure.storage.StorageException;
+import com.microsoft.azure.storage.blob.CloudBlob;
+import com.microsoft.azure.storage.blob.CloudBlobClient;
+import com.microsoft.azure.storage.blob.CloudBlobContainer;
+
+import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
+import org.springframework.beans.factory.annotation.Value;
 import com.example.b1esimageweb.web.dto.PasswordResetDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +30,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Optional;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -30,10 +40,24 @@ public class UserService implements UserDetailsService {
     private final GalleryRepository galleryRepository;
     private final PhotoRepository photoRepository;
 
-    public UserService(UserRepository userRepository, GalleryRepository galleryRepository, PhotoRepository photoRepository) {
+    private CloudStorageAccount account;
+    private CloudBlobClient serviceClient;
+    private CloudBlobContainer container;
+
+    public UserService(UserRepository userRepository, GalleryRepository galleryRepository, PhotoRepository photoRepository, @Value("${azure.storage.conection.string}") String storageConnectionAzure,  @Value("${azure.storage.container.name}") String nameContainer) {
         this.userRepository = userRepository;
         this.galleryRepository = galleryRepository;
         this.photoRepository = photoRepository;
+
+        try {
+            account = CloudStorageAccount.parse(storageConnectionAzure);
+            serviceClient = account.createCloudBlobClient();
+            container = serviceClient.getContainerReference(nameContainer);
+        } catch (InvalidKeyException | URISyntaxException e) {
+            e.printStackTrace();
+        } catch (StorageException e) {
+            e.printStackTrace();
+        }
     }
 
     // Now we add(register) new user in the AuthService class
@@ -66,16 +90,25 @@ public class UserService implements UserDetailsService {
         }
         if(currentUser != null) {
             Photo profilePhoto = new Photo();
-            try {
-                profilePhoto.setData(photo.getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
             String fileName = photo.getOriginalFilename();
             int lastDotIndex = fileName.lastIndexOf(".");
             String extension = fileName.substring(lastDotIndex + 1);
             profilePhoto.setPhotoName(fileName);
             profilePhoto.setPhotoExtension(extension);
+
+            CloudBlob blob;
+            try {
+                blob = container.getBlockBlobReference(fileName);
+                byte[] decodedBytes = photo.getBytes();
+                blob.uploadFromByteArray(decodedBytes, 0, decodedBytes.length); 
+            } catch (URISyntaxException | StorageException e) {
+                e.printStackTrace();
+                return null;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
 
             Photo oldPhoto = currentUser.getProfilePicture();
             if(oldPhoto != null){
@@ -131,8 +164,20 @@ public class UserService implements UserDetailsService {
         return userRepository.existsUserByUsername(username);
     }
 
-    public Photo getPhotoProfileByUser(User user){
-        return userRepository.getPhotoProfileByUserId(user.getUserId());
+    public PhotoDto getPhotoProfileByUser(User user){
+        Photo photo = userRepository.getPhotoProfileByUserId(user.getUserId());
+        CloudBlob blob;
+        try {
+            blob = container.getBlockBlobReference(photo.getPhotoName());
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            blob.download(outputStream);
+            byte[] photoContent = outputStream.toByteArray();
+            return new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getPhotoExtension());
+        } catch (URISyntaxException | StorageException e) {
+            e.printStackTrace();
+            
+        }
+        return null;
     }
     
     public Gallery getGalleryByUser(User user){
@@ -160,6 +205,6 @@ public class UserService implements UserDetailsService {
         }else{
             throw new UserNotFoundException("User does not exists");
         }
-        return "Your password was changes successfully";
+        return "Your password was changed successfully";
     }
 }
