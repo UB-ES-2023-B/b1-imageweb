@@ -100,6 +100,9 @@
             "production": {
               "browserTarget": "frontend:build:production"
             },
+            "preproduction": {
+              "browserTarget": "frontend:build:preproduction"
+            },,
             "development": {
               "browserTarget": "frontend:build:development"
             }
