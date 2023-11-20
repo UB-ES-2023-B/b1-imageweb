@@ -166,16 +166,18 @@ public class UserService implements UserDetailsService {
 
     public PhotoDto getPhotoProfileByUser(User user){
         Photo photo = userRepository.getPhotoProfileByUserId(user.getUserId());
-        CloudBlob blob;
-        try {
-            blob = container.getBlockBlobReference(photo.getPhotoName());
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            blob.download(outputStream);
-            byte[] photoContent = outputStream.toByteArray();
-            return new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getPhotoExtension());
-        } catch (URISyntaxException | StorageException e) {
-            e.printStackTrace();
-            
+        if(photo!=null){
+            CloudBlob blob;
+            try {
+                blob = container.getBlockBlobReference(photo.getPhotoName());
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                blob.download(outputStream);
+                byte[] photoContent = outputStream.toByteArray();
+                return new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getPhotoExtension());
+            } catch (URISyntaxException | StorageException e) {
+                e.printStackTrace();
+                
+            }
         }
         return null;
     }
