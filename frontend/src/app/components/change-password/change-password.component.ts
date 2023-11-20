@@ -31,6 +31,8 @@ export class ChangePasswordComponent {
       this.toastr.error("Rellene todos los campos")
     else if (this.showNewPasswordError || this.showConPasswordError)
       this.toastr.error("Comprueba que las contraseñas no tengan errores o que ambas coincidan");
+    else if (this.currentPassword === this.newPassword)
+      this.toastr.error("La nueva contraseña debe ser diferente a la anterior");
     else {
       this.loading = true;
       const passwords = {
@@ -39,8 +41,8 @@ export class ChangePasswordComponent {
       };
       this.userService.changeUserPassword(passwords).subscribe(
         (response) => {
-          console.log(response);
-          if (response.message === 'Your password was changed successfully') {
+          console.log(Object.values(response)[0]);
+          if (Object.values(response)[0] === 'Your password was changed successfully') {
             this.toastr.success("Contraseña cambiada correctamente");
             console.log('Contraseña actualizada', response, passwords);
             this.modalClosed.emit(); // Cierra el modal después de cambiar la contraseña
@@ -57,11 +59,13 @@ export class ChangePasswordComponent {
 
   onNewPasswordChange() {
     this.showNewPasswordError = false;
+    if (this.newPassword == this.confirmPassword && this.confirmPassword !== '') this.showConPasswordError = false;
   }
 
   onNewPasswordBlur() {
     const passRegex = /^(?=.*[!@#$%^&*,.])((?=.*[A-Z])(?=.*[a-z])(?=.*\d)).{6,}$/;
     if (this.newPassword.length > 0) this.showNewPasswordError = !passRegex.test(this.newPassword);
+    if (this.newPassword !== this.confirmPassword && this.confirmPassword !== '') this.showConPasswordError = true;
   }
 
   onConPasswordChange() {
