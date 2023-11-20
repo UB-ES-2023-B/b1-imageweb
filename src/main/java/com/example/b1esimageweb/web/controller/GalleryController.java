@@ -10,6 +10,7 @@ import com.microsoft.azure.storage.blob.CloudBlob;
 import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.example.b1esimageweb.web.dto.PhotoDto;
+import com.example.b1esimageweb.web.dto.PhotosDto;
 import com.example.b1esimageweb.web.dto.PhotoUpdateDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
