@@ -11,6 +11,7 @@ import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.example.b1esimageweb.web.dto.PhotoDto;
 import com.example.b1esimageweb.web.dto.PhotosDto;
+import com.example.b1esimageweb.web.dto.PhotoUpdateDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +29,8 @@ import java.util.Map;
 @RequestMapping(path="/gallery")
 public class GalleryController {
 
-
     private final GalleryService galleryService;
     private final UserService userService;
-    
 
     public GalleryController (GalleryService galleryService, UserService userService){
         this.galleryService = galleryService;
@@ -95,5 +94,24 @@ public class GalleryController {
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    
+
+    @PutMapping(path = "/editInfoPhoto/{photoId}")
+    public ResponseEntity<Map<String, String>> updatePhotoById(@PathVariable("photoId") int photoId, @RequestBody PhotoUpdateDto photoUpdateDto) {
+        Map<String, String> response = new HashMap<>();
+        try {
+            Photo photo = galleryService.updateInfoPhotoById(photoId, photoUpdateDto.getPhotoName(), photoUpdateDto.getPhotoDescription());
+            if (photo != null) {
+                response.put("message", "successful");
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } else {
+                response.put("message", "Photo not found.");
+                return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+            }
+        } catch(Exception e) {
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
 }

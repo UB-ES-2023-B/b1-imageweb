@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,6 +144,16 @@ public class GalleryService {
             }
         }
         return "Photos successfully deleted from gallery";
+    }
+
+    public Photo updateInfoPhotoById(int photoId, String photoName, String photoDescription) {
+        Photo photo = photoRepository.findById(photoId).orElseThrow(()-> new PhotoNotFoundException("Photo with id " + photoId + "not found"));
+        if (photo != null) {
+            photo.setPhotoName(photoName);
+            photo.setPhotoDescription(photoDescription);
+            return photoRepository.save(photo);
+        }
+        return null;
     }
 
 }
