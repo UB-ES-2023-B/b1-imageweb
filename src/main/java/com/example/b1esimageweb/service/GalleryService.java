@@ -5,8 +5,8 @@ import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
+import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +24,6 @@ import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlob;
 import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
-import com.microsoft.azure.storage.blob.CloudBlockBlob;
 
 @org.springframework.stereotype.Service
 public class GalleryService {
@@ -69,8 +68,8 @@ public class GalleryService {
         try {
             blob = container.getBlockBlobReference(newPhoto.getPhotoId().toString());
             byte[] decodedBytes = photo.getBytes();
-            blob.uploadFromByteArray(decodedBytes, 0, decodedBytes.length); 
-            PhotoDto newPhotoDto = new PhotoDto(decodedBytes, newPhoto.getPhotoId(), gallery, fileName, extension, "");
+            blob.uploadFromByteArray(decodedBytes, 0, decodedBytes.length);
+            PhotoDto newPhotoDto = new PhotoDto(decodedBytes, newPhoto.getPhotoId(), gallery, fileName,null, extension, "");
             return newPhotoDto;
         } catch (URISyntaxException | StorageException e) {
             e.printStackTrace();
@@ -89,7 +88,7 @@ public class GalleryService {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 blob.download(outputStream);
                 byte[] photoContent = outputStream.toByteArray();
-                photos.add(new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getPhotoExtension(), photo.getPhotoDescription()));
+                photos.add(new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(),photo.getAlbum(), photo.getPhotoExtension(), photo.getPhotoDescription()));
             } catch (URISyntaxException | StorageException e) {
                 e.printStackTrace();
                 return null;
@@ -106,7 +105,7 @@ public class GalleryService {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             blob.download(outputStream);
             byte[] photoContent = outputStream.toByteArray();
-            return new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getPhotoExtension(), photo.getPhotoDescription());
+            return new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(),photo.getAlbum(), photo.getPhotoExtension(), photo.getPhotoDescription());
         } catch (URISyntaxException | StorageException e) {
             e.printStackTrace();
             
@@ -128,7 +127,7 @@ public class GalleryService {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 blob.download(outputStream);
                 byte[] photoContent = outputStream.toByteArray();
-                photos.add(new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getPhotoExtension(), photo.getPhotoDescription()));
+                photos.add(new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(),photo.getAlbum(), photo.getPhotoExtension(), photo.getPhotoDescription()));
             } catch (URISyntaxException | StorageException e) {
                 e.printStackTrace();
                 return null;

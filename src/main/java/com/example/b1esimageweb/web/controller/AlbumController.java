@@ -4,6 +4,7 @@ package com.example.b1esimageweb.web.controller;
 import com.example.b1esimageweb.model.Album;
 import com.example.b1esimageweb.service.AlbumService;
 import com.example.b1esimageweb.web.dto.AlbumDto;
+import com.example.b1esimageweb.web.dto.PhotoDto;
 import com.example.b1esimageweb.web.responses.AlbumResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections4.IterableUtils;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class AlbumController {
@@ -28,23 +30,30 @@ public class AlbumController {
             ObjectMapper objectMapper = new ObjectMapper();
             AlbumDto albumDto = objectMapper.readValue(albumDtoAsString, AlbumDto.class);
             albumDto.setCoverPhoto(coverPhoto);
-            Album newAlbum = albumService.createAlbum(albumDto);
-            return new ResponseEntity<>(newAlbum, HttpStatus.CREATED);
+            Album album= albumService.createAlbum(albumDto);
+            Iterable<PhotoDto> photos = albumService.getPhotosByAlbum(album);
+            return new ResponseEntity<>(photos, HttpStatus.CREATED);
         }catch(Exception e){
             return new ResponseEntity<>("No se ha podido crear un album",HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/getAlbums")
-    public ResponseEntity<AlbumResponse> getUserAlbums() {
+    public ResponseEntity<Object> getUserAlbums() {
         try {
-            Iterable<Album> albums = albumService.getAllAlbumsForUser();
-            if (albums == null) {
+            Iterable<PhotoDto> photos = null;
+            int lenght = 0;
+            Map<Iterable<PhotoDto>,Integer> map = albumService.getAllAlbumsForUser();
+            for (Iterable<PhotoDto> p : map.keySet()){
+                photos = p;
+                lenght = map.get(p);
+            }
+            if (photos == null) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             AlbumResponse response = new AlbumResponse();
-            response.setAlbums(albums);
-            response.setLength(IterableUtils.size(albums));
+            response.setAlbums(photos);
+            response.setLength(lenght);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -52,10 +61,12 @@ public class AlbumController {
     }
 
     @PostMapping("/addPhotosAlbum/{albumId}")
-    public ResponseEntity<?> addPhotosToAlbum(@PathVariable int albumId, @RequestParam("photos") List<MultipartFile> photos) {
+    public ResponseEntity<?> addPhotosToAlbum(@PathVariable int albumId, @RequestParam("photos") List<MultipartFile> photosList) {
         try {
-            Album album = albumService.addPhotosToAlbum(albumId, photos);
-            return new ResponseEntity<>(album, HttpStatus.OK);
+            Album album = albumService.addPhotosToAlbum(albumId, photosList);
+            Iterable<PhotoDto> photos = albumService.getPhotosByAlbum(album);
+            return new ResponseEntity<>(photos, HttpStatus.OK);
+
         } catch (Exception e) {
             return new ResponseEntity<>("Could not add photos to album", HttpStatus.INTERNAL_SERVER_ERROR);
         }
