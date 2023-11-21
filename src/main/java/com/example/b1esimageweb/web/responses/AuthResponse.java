@@ -1,4 +1,4 @@
-package com.example.b1esimageweb.web.controller;
+package com.example.b1esimageweb.web.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

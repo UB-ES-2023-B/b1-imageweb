@@ -30,6 +30,8 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
 import { ModalComponent } from './components/modal/modal.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { EditGalleryComponent } from './components/edit-gallery/edit-gallery.component';
+import { AlbumsComponent } from './components/albums/albums.component';
+import { UploadPhotosComponent } from './components/upload-photos/upload-photos.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,9 @@ import { EditGalleryComponent } from './components/edit-gallery/edit-gallery.com
     EditProfileComponent,
     ChangePasswordComponent,
     ModalComponent,
-    EditGalleryComponent
+    EditGalleryComponent,
+    AlbumsComponent,
+    UploadPhotosComponent
   ],
   imports: [
     BrowserModule,

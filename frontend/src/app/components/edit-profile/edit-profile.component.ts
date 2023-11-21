@@ -39,7 +39,6 @@ export class EditProfileComponent implements OnInit {
   private getUserData(): void {
     this.userService.getUser(this.user.name).subscribe(
       (response) => {
-        console.log('GET DATA EDITAR PERFIL ', response.body)
         this.user.email = response.body.userEmail;
         this.user.id = response.body.userId;
         this.user.description = response.body.description;
