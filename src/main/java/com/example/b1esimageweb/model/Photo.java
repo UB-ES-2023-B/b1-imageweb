@@ -15,7 +15,6 @@ public class Photo {
 
     @ManyToOne
     @JoinColumn(name = "album_id")
-    @JsonBackReference
     private Album album;
     private String photoName;
 

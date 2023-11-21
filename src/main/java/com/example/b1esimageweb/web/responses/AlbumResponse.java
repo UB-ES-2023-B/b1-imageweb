@@ -1,11 +1,12 @@
 package com.example.b1esimageweb.web.responses;
 
 import com.example.b1esimageweb.model.Album;
+import com.example.b1esimageweb.web.dto.PhotoDto;
 
 public class AlbumResponse {
-    private Iterable<Album> albums;
+    private Iterable<PhotoDto> albums;
     private int lenAlbums;
-    public void setAlbums(Iterable<Album> albums) {
+    public void setAlbums(Iterable<PhotoDto> albums) {
         this.albums = albums;
     }
 
@@ -17,7 +18,7 @@ public class AlbumResponse {
         this.lenAlbums = lenAlbums;
     }
 
-    public Iterable<Album> getAlbums() {
+    public Iterable<PhotoDto> getAlbums() {
         return albums;
     }
 }
