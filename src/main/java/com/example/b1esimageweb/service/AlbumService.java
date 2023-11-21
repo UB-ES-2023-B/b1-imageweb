@@ -102,10 +102,11 @@ public class AlbumService {
         String extension = fileName.substring(lastDotIndex + 1);
         newPhoto.setPhotoName(fileName);
         newPhoto.setPhotoExtension(extension);
+        photoRepository.save(newPhoto);
 
         CloudBlob blob;
         try {
-            blob = container.getBlockBlobReference(fileName);
+            blob = container.getBlockBlobReference(newPhoto.getPhotoId().toString());
             byte[] decodedBytes = photo.getBytes();
             blob.uploadFromByteArray(decodedBytes, 0, decodedBytes.length);
         } catch (URISyntaxException | StorageException e) {
@@ -115,7 +116,7 @@ public class AlbumService {
             e.printStackTrace();
             return null;
         }
-        photoRepository.save(newPhoto);
+        
         return newPhoto;
     }
 
