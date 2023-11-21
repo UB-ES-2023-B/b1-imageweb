@@ -44,7 +44,7 @@ export class UploadPhotosComponent {
     //   description
     // );
     this.loading=false;
-    this.toastr.success('Imagen cargada satisfactoriamente');
+    this.toastr.success('Fotos cargadas satisfactoriamente');
 
 
   }
@@ -52,7 +52,7 @@ export class UploadPhotosComponent {
 
 
   private onError(message: string) {
-    if (message === '') message = 'Error al subir la imagen';
+    if (message === '') message = 'Error al subir fotos';
     this.selectedFiles.forEach((file) => {
       file.pending = false;
       file.status = 'fail';
@@ -79,7 +79,6 @@ export class UploadPhotosComponent {
               (response) => {
                 console.log('mira response:',response)
                 this.onSuccess(response)
-          // this.onSuccess(response);
           },
           (error) => {
           let message=""
