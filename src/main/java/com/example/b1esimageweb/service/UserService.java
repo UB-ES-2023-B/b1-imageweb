@@ -1,6 +1,7 @@
 package com.example.b1esimageweb.service;
 
 import com.example.b1esimageweb.Exceptions.InvalidPasswordException;
+import com.example.b1esimageweb.Exceptions.PhotoNotFoundException;
 import com.example.b1esimageweb.Exceptions.UserNotFoundException;
 import com.example.b1esimageweb.model.Gallery;
 import com.example.b1esimageweb.model.Photo;
@@ -14,6 +15,7 @@ import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlob;
 import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
+import com.microsoft.azure.storage.blob.CloudBlockBlob;
 
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Value;
@@ -97,19 +99,6 @@ public class UserService implements UserDetailsService {
             profilePhoto.setPhotoName(fileName);
             profilePhoto.setPhotoExtension(extension);
 
-            CloudBlob blob;
-            try {
-                blob = container.getBlockBlobReference(fileName);
-                byte[] decodedBytes = photo.getBytes();
-                blob.uploadFromByteArray(decodedBytes, 0, decodedBytes.length); 
-            } catch (URISyntaxException | StorageException e) {
-                e.printStackTrace();
-                return null;
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-
             Photo oldPhoto = currentUser.getProfilePicture();
             if(oldPhoto != null){
                 int oldPhotoId  = oldPhoto.getPhotoId();
@@ -121,7 +110,30 @@ public class UserService implements UserDetailsService {
 
             if(oldPhoto != null){
                 photoRepository.delete(oldPhoto);
+                CloudBlockBlob blockBlob;
+                Photo photoToDelete =  photoRepository.findById(oldPhoto.getPhotoId()).orElseThrow(()-> new PhotoNotFoundException("Photo with id " + oldPhoto.getPhotoId() + "not found"));
+                try {
+                    blockBlob = container.getBlockBlobReference(photoToDelete.getPhotoId().toString());
+                    blockBlob.deleteIfExists();
+                } catch (URISyntaxException | StorageException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+
             }
+            CloudBlob blob;
+            try {
+                blob = container.getBlockBlobReference(profilePhoto.getPhotoId().toString());
+                byte[] decodedBytes = photo.getBytes();
+                blob.uploadFromByteArray(decodedBytes, 0, decodedBytes.length); 
+            } catch (URISyntaxException | StorageException e) {
+                e.printStackTrace();
+                return null;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+
             return photoRepository.save(profilePhoto);
         }else{
             throw new UserNotFoundException("User does not exists");
@@ -140,6 +152,13 @@ public class UserService implements UserDetailsService {
             currentUser.setProfilePicture(null);
             userRepository.save(currentUser);
             photoRepository.delete(profilePhoto);
+            CloudBlockBlob blockBlob;
+             try {
+                blockBlob = container.getBlockBlobReference(profilePhoto.getPhotoId().toString());
+                blockBlob.deleteIfExists();
+            } catch (URISyntaxException | StorageException e) {
+                e.printStackTrace();
+            }
         }else{
             throw new UserNotFoundException("User does not exists");
         }
@@ -169,11 +188,11 @@ public class UserService implements UserDetailsService {
         if(photo!=null){
             CloudBlob blob;
             try {
-                blob = container.getBlockBlobReference(photo.getPhotoName());
+                blob = container.getBlockBlobReference(photo.getPhotoId().toString());
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 blob.download(outputStream);
                 byte[] photoContent = outputStream.toByteArray();
-                return new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getPhotoExtension());
+                return new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getPhotoExtension(), photo.getPhotoDescription());
             } catch (URISyntaxException | StorageException e) {
                 e.printStackTrace();
                 

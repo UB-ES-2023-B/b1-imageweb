@@ -8,14 +8,16 @@ public class PhotoDto {
     private Gallery gallery;
     private String photoName;
     private String photoExtension;
+    private String photoDescription;
     private byte[] data; // Datos binarios de la imagen
 
-    public PhotoDto(byte[] data, Integer photoId, Gallery gallery, String photoName, String photoExtension) {
+    public PhotoDto(byte[] data, Integer photoId, Gallery gallery, String photoName, String photoExtension, String photoDescription) {
         this.photoId = photoId;
         this.data = data;
         this.gallery = gallery;
         this.photoName = photoName;
         this.photoExtension = photoExtension;
+        this.photoDescription = photoDescription;
     }
 
     public Integer getPhotoId() {
@@ -37,5 +39,12 @@ public class PhotoDto {
     public byte[] getData() {
         return data;
     }
-    
+
+    public String getPhotoDescription() {
+        return photoDescription;
+    }
+
+    public void setPhotoDescription(String photoDescription) {
+        this.photoDescription = photoDescription;
+    }
 }
