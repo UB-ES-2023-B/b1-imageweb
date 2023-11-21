@@ -1,19 +1,41 @@
 package com.example.b1esimageweb.web.dto;
 
-import java.util.List;
+import com.example.b1esimageweb.model.Gallery;
 
 public class PhotoDto {
 
-    private List<Integer> photoIds;
+    private Integer photoId;
+    private Gallery gallery;
+    private String photoName;
+    private String photoExtension;
+    private byte[] data; // Datos binarios de la imagen
 
-    public PhotoDto() {
+    public PhotoDto(byte[] data, Integer photoId, Gallery gallery, String photoName, String photoExtension) {
+        this.photoId = photoId;
+        this.data = data;
+        this.gallery = gallery;
+        this.photoName = photoName;
+        this.photoExtension = photoExtension;
     }
 
-    public List<Integer> getPhotoIds() {
-        return photoIds;
+    public Integer getPhotoId() {
+        return photoId;
     }
 
-    public void setPhotoIds(List<Integer> photoIds) {
-        this.photoIds = photoIds;
+    public Gallery getGallery() {
+        return gallery;
     }
+
+    public String getPhotoName() {
+        return photoName;
+    }
+
+    public String getPhotoExtension() {
+        return photoExtension;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+    
 }

@@ -29,9 +29,12 @@ export class UploadPhotoComponent {
   private onSuccess(response: any) {
     this.selectedFile.pending = false;
     this.selectedFile.status = 'ok';
+    console.log('RESPUESTA DANIELA',response.photoName);
+    console.log('RESPUESTA DANIELA',response.body.photoId)
+
     //falta enviarle, el id , el nombre y la descripcion.
-    let id=1563;
-    let name='Name photo';
+    let id=response.body.photoId;
+    let name=response.body.photoName;
     let description='Description photo';
     this.gallleryService.addImage(this.selectedFile.src,id,name,description)
     this.toastr.success('Imagen cargada satisfactoriamente');
@@ -54,13 +57,14 @@ export class UploadPhotoComponent {
       this.selectedFile = new ImageSnippet(event.target.result, file);
       this.selectedFile.pending = true;
       if(this.globalDataService.getGalleryId()==''){
+        this.selectedFile.pending = false;
+        this.toastr.error('Recarga galería','No ID');
         console.log('No hay id gallery!!')
         return
-      }
+      }else{
       this.gallleryService.uploadImage(this.globalDataService.getGalleryId(),this.selectedFile.file)
       .subscribe(
         (response) => {
-          console.log(response)
             this.onSuccess(response);
         },
         (error) => {
@@ -71,6 +75,7 @@ export class UploadPhotoComponent {
             this.onError(message);
       }
      );
+     }
     });
     reader.readAsDataURL(file);
   }

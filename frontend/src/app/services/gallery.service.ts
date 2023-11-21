@@ -21,11 +21,11 @@ export class GalleryService {
     return this.http.get(this.domain + `/gallery/getAll`, {  observe: 'response' });
   }
 
-  uploadImage(idGallery: string, photo_file: File):  Observable<string> {
+  uploadImage(idGallery: string, photo_file: File): Observable<any> {
     const formData = new FormData();
-    console.log('mira el photo file', photo_file)
+    // console.log('mira el photo file', photo_file)
     formData.append('photo', photo_file);
-    return this.http.post(this.domain + `/gallery/uploadPhotoGalery/${idGallery}`, formData,{  responseType: 'text'});
+    return this.http.post(this.domain + `/gallery/uploadPhotoGalery/${idGallery}`, formData,{  observe: 'response'});
   }
   getGalleryUser(userName:string): Observable<any> {
     return this.http.get(this.domain + `/gallery/viewGalleryFromUser/${userName}`, {  observe: 'response' });
@@ -40,8 +40,6 @@ export class GalleryService {
       observe: 'response'
     });
   }
-
-
 
   setImages(images: any[]): void {
     this.images = images;

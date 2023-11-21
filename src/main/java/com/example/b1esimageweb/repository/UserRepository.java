@@ -20,4 +20,5 @@ public interface UserRepository extends CrudRepository<User, Integer> {
     Gallery getGalleryByUserId(@Param("userId") Integer userId);
     @Query("SELECT u.profilePicture FROM User u WHERE u.userId = :userId")
     Photo getPhotoProfileByUserId(@Param("userId") Integer userId);
+    Iterable<User> findByUsernameContaining(String searchCriteria);
 }

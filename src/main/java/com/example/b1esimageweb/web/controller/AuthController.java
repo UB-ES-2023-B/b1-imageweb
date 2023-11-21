@@ -4,6 +4,7 @@ package com.example.b1esimageweb.web.controller;
 import com.example.b1esimageweb.service.AuthService;
 import com.example.b1esimageweb.web.dto.UserLoginDto;
 import com.example.b1esimageweb.web.dto.UserRegistrationDto;
+import com.example.b1esimageweb.web.responses.AuthResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

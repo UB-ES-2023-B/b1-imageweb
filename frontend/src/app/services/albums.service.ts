@@ -15,18 +15,18 @@ export class AlbumsService {
     this.domain = environment.domain;
   }
 
-  createAlbum(name: string, description: string, defaultImage:File):  Observable<any> {
-    const formData = {
-      name: name,
-      description: description,
-      coverPhoto: defaultImage
-    };
-    return this.http.post(this.domain + `/newAlbum`, formData,{  observe: 'response' });
+  createAlbum(name: string, description: string, defaultImage: File): Observable<any> {
+    const formData = new FormData();
+    const data = { name: name, description: description };
+    formData.append('coverPhoto', defaultImage);
+    formData.append('album', JSON.stringify(data));
+
+    return this.http.post(this.domain + `/newAlbum`, formData, { observe: 'response' });
   }
 
   //Aún no esta terminado
   getAlbumsForUser(): Observable<any> {
-    return this.http.get(this.domain + `/albums`, {  observe: 'response' });
+    return this.http.get(this.domain + `/getAlbums`, {  observe: 'response' });
   }
 
   addPhotosToAlbum(){
