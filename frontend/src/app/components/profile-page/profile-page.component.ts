@@ -16,12 +16,12 @@ export class ProfilePageComponent implements OnInit {
   mostrarIconoLapiz: boolean = false;
 
   user: any = {
+    id: 0,
+    name: this.globalDataService.getUsername(),
+    email: this.globalDataService.getEmail(),
     profilePicture: null,
     profilePictureUrl: '',
     coverPhoto: "../assets/images/mountainSea.jpg",
-    name: this.globalDataService.getUsername(),
-    email: this.globalDataService.getEmail(),
-    id: 0,
     description: this.globalDataService.getDescription(),
     followers: [],
     following: []
@@ -45,9 +45,9 @@ export class ProfilePageComponent implements OnInit {
 
   handleChangePassword(event: any): void {
     // Aquí puedes agregar la lógica para manejar el cambio de contraseña
-    console.log('Contraseña actual:', event.currentPassword);
-    console.log('Nueva contraseña:', event.newPassword);
-    console.log('Confirmar contraseña:', event.confirmPassword);
+    console.log('Contraseña actual:', event.currentPassword,
+      'Nueva contraseña:', event.newPassword,
+      'Confirmar contraseña:', event.confirmPassword);
   }
 
 
@@ -65,7 +65,7 @@ export class ProfilePageComponent implements OnInit {
   getUserData(): void {
     this.userService.getUser(this.user.name).subscribe(
       (response) => {
-        this.user.email = response.body.userEmail;
+        this.user.email = response.body.email;
         this.user.id = response.body.userId;
         if (response.body.profilePicture) { // Configura la foto de perfil y su URL
           this.user.profilePicture = response.body.profilePicture;

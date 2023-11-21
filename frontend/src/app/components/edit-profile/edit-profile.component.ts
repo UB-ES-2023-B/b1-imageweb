@@ -39,7 +39,7 @@ export class EditProfileComponent implements OnInit {
   private getUserData(): void {
     this.userService.getUser(this.user.name).subscribe(
       (response) => {
-        this.user.email = response.body.userEmail;
+        this.user.email = response.body.email;
         this.user.id = response.body.userId;
         this.user.description = response.body.description;
         if(response.body.profilePicture !== null) {
