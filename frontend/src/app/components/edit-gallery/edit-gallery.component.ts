@@ -81,7 +81,7 @@ export class EditGalleryComponent {
             if (element.data) {
               this.images.unshift({
             "src":`data:image/${element.photoExtensio};base64,${element.data}`,
-             "id": element.photoId, "name":element.photoName, "description": 'Cambiar descripción'});
+             "id": element.photoId, "name":element.photoName, "description": element.photoDescription});
             }
           });
         }
