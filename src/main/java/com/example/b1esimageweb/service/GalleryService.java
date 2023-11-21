@@ -70,7 +70,7 @@ public class GalleryService {
             byte[] decodedBytes = photo.getBytes();
             blob.uploadFromByteArray(decodedBytes, 0, decodedBytes.length); 
             photoRepository.save(newPhoto);
-            PhotoDto newPhotoDto = new PhotoDto(decodedBytes, newPhoto.getPhotoId(), gallery, fileName, extension);
+            PhotoDto newPhotoDto = new PhotoDto(decodedBytes, newPhoto.getPhotoId(), gallery, fileName, extension, "");
             return newPhotoDto;
         } catch (URISyntaxException | StorageException e) {
             e.printStackTrace();
@@ -89,7 +89,7 @@ public class GalleryService {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 blob.download(outputStream);
                 byte[] photoContent = outputStream.toByteArray();
-                photos.add(new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getPhotoExtension()));
+                photos.add(new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getPhotoExtension(), photo.getPhotoDescription()));
             } catch (URISyntaxException | StorageException e) {
                 e.printStackTrace();
                 return null;
@@ -106,7 +106,7 @@ public class GalleryService {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             blob.download(outputStream);
             byte[] photoContent = outputStream.toByteArray();
-            return new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getPhotoExtension());
+            return new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getPhotoExtension(), photo.getPhotoDescription());
         } catch (URISyntaxException | StorageException e) {
             e.printStackTrace();
             
@@ -128,7 +128,7 @@ public class GalleryService {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 blob.download(outputStream);
                 byte[] photoContent = outputStream.toByteArray();
-                photos.add(new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getPhotoExtension()));
+                photos.add(new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getPhotoExtension(), photo.getPhotoDescription()));
             } catch (URISyntaxException | StorageException e) {
                 e.printStackTrace();
                 return null;

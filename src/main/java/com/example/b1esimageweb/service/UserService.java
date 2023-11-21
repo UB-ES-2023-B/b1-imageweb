@@ -173,7 +173,7 @@ public class UserService implements UserDetailsService {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 blob.download(outputStream);
                 byte[] photoContent = outputStream.toByteArray();
-                return new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getPhotoExtension());
+                return new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getPhotoExtension(), photo.getPhotoDescription());
             } catch (URISyntaxException | StorageException e) {
                 e.printStackTrace();
                 
