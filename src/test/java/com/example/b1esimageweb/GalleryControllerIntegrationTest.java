@@ -64,7 +64,7 @@ public class GalleryControllerIntegrationTest {
     @WithMockUser (username = "adminUser", password = "admin", roles = "ADMIN")
     public void setUp() {
         // Create a test user
-        User user=userRepository.findByUsername("testing23Marc").orElseThrow();
+        User user=userRepository.findByUsername("adminUser").orElseThrow();
         userToken = tokenProvider.createToken(user);
     }
 
@@ -81,7 +81,7 @@ public class GalleryControllerIntegrationTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
         */
-        MvcResult result = mockMvc.perform(get("/user/getByUserName/{userName}", "testing23Marc"))  // Replace "username" with an actual username
+        MvcResult result = mockMvc.perform(get("/user/getByUserName/{userName}", "adminUser"))  // Replace "username" with an actual username
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -116,7 +116,7 @@ public class GalleryControllerIntegrationTest {
                 .andExpect(status().isOk());
 
 
-        MvcResult jsonPhotos = mockMvc.perform(get("/gallery/viewGalleryFromUser/{userName}", "testing23Marc")
+        MvcResult jsonPhotos = mockMvc.perform(get("/gallery/viewGalleryFromUser/{userName}", "adminUser")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + userToken))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
