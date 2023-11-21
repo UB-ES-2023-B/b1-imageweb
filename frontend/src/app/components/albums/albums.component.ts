@@ -20,7 +20,7 @@ export class AlbumsComponent {
   name:string='';
   description:string='';
   remainingWords: number = 25;
-  loading:boolean=false;
+  loading:boolean=true;
   albums:any[]=[];
   defaultImage!: ImageSnippet;
 
@@ -36,30 +36,35 @@ export class AlbumsComponent {
       this.albums = albums;
     });
 
-    // this.getAlbums();
+     this.getAlbums();
 
   }
 
   getAlbums(){
+    console.log('Hace el get de albums')
     this.albums=[]
     this.albumsService.getAlbumsForUser().subscribe(
       (response)=>{
-        if (response.body && Array.isArray(response.body)) {
-          response.body.forEach((element: any) => {
-            if (element.data) {
-
+        if (response.body && Array.isArray(response.body.albums)) {
+          response.body.albums.forEach((element: any) => {
+            //if (element.data) {
+              if (element.albumId) {
               // SACAR EL LEN DE LAS FOTOS
+              //"src":`data:image/${element.photoExtensio};base64,${element.data}`,
+              let len= element.photos.length
               this.albums.unshift({
-            "src":`data:image/${element.photoExtensio};base64,${element.data}`,
-             "id": element.photoId, "name":element.photoName, "description": 'Cambiar descripción'});
+                "src":'../../../assets/images/defaultImageAlbum.jpg',
+             "id": element.albumId, "name":element.albumName, "description": element.description, "photoLength":len});
             }
           });
         }
         this.albumsService.setAlbums(this.albums);
+        console.log(this.albums)
         this.loading=false;
       },
       (error)=>{
         console.log('error al obtener all gallery', error)
+        this.loading=false;
       }
     )
   }
@@ -124,30 +129,29 @@ export class AlbumsComponent {
 
   save(){
 
-    console.log('miralo:::', this.defaultImage)
-
-    this.albums.unshift({
-      "src":this.defaultImage.src,
-      "id": 5, "name":this.name, "description": this.description, "photoLength":0});
-      this.name='';
-      this.description='';
-      this.albumsService.setAlbums(this.albums);
-      this.loading=false;
     //Hacer llamada del back
-    // this.albumsService.createAlbum(this.name, this.description, this.defaultImage).subscribe(
-    //   (response)=>{
+    this.albumsService.createAlbum(this.name, this.description, this.defaultImage.file).subscribe(
+      (response)=>{
+        console.log('esto es lo que responde ', response)
+        this.albums.unshift({
+        "src":'../../../assets/images/defaultImageAlbum.jpg',
+        "id": response.body.albumId, "name":this.name, "description": this.description, "photoLength": 0});
+        this.albumsService.setAlbums(this.albums);
+        this.toastr.success("Álbum creado");
+        this.name='';
+        this.description='';
+        this.loading=false;
 
-    //     this.albums.unshift({
-    //     "src":'../../assets/img/defalultImageAlbum.jpg',
-    //     "id": 5, "name":this.name, "description": this.description});
 
-    //     this.albumsService.setAlbums(this.albums);
-    //     this.loading=false;
-    //   },
-    //   (error)=>{
-    //     console.log('error al obtener all gallery', error)
-    //   }
-    // )
+      },
+      (error)=>{
+        console.log('error al crear album', error)
+        this.loading=false;
+        this.toastr.error('Error al crear álbum, inténtalo de nuevo','Error');
+
+
+      }
+    )
 
   }
 
