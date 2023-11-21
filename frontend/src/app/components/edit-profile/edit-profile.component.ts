@@ -39,7 +39,7 @@ export class EditProfileComponent implements OnInit {
   private getUserData(): void {
     this.userService.getUser(this.user.name).subscribe(
       (response) => {
-        this.user.email = response.body.userEmail;
+        this.user.email = response.body.email;
         this.user.id = response.body.userId;
         this.user.description = response.body.description;
         if(response.body.profilePicture !== null) {
@@ -91,7 +91,7 @@ export class EditProfileComponent implements OnInit {
       },
       (error) => {
         console.error('Error al eliminar la foto de perfil', error);
-        this.toastr.success('Error al eliminar la foto de perfil');
+        this.toastr.error('Error al eliminar la foto de perfil');
       }
     );
   }
@@ -108,6 +108,9 @@ export class EditProfileComponent implements OnInit {
   }
 
   actualizarPerfil() {
+    if (this.newEmail === '') this.newEmail = this.user.email;
+    if (this.newUsername === '') this.newUsername = this.user.name;
+
     const updatedUser = {
       username: this.newUsername,
       email: this.newEmail,
@@ -159,7 +162,6 @@ export class EditProfileComponent implements OnInit {
   onEmailBlur() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     this.showEmailError = !emailRegex.test(this.newEmail);
-    console.log(this.showEmailError);
   }
 
   onUserChange() { this.showUserError = false; }  // Reset error message on username change
