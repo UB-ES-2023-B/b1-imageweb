@@ -25,6 +25,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -74,7 +78,7 @@ public class UserControllerIntegrationTest {
     }
     */
     @Test
-    @WithMockUser (username = "adminUser", password = "admin", roles = "ADMIN")
+    @WithMockUser (username = "testing23Marc", password = "1234Asd.")
     public void testLoginUser() throws Exception {
 
 
@@ -85,14 +89,6 @@ public class UserControllerIntegrationTest {
                         .content(jsonRegister))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
-
-        String jsonRequest = "{ \"username\": \"adminUser\", \"password\": \"password\"}";
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/login")
-                        .contentType("application/json")
-                        .content(jsonRequest))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andDo(MockMvcResultHandlers.print()); // This prints the response for debugging
 
         MvcResult result = mockMvc.perform(get("/user/getByUserName/{userName}", "testUser5"))  // Replace "username" with an actual username
                 .andExpect(status().isOk())
@@ -114,7 +110,15 @@ public class UserControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
-        MockMultipartFile file = new MockMultipartFile("profilePhoto", "../../images/sample.jpg", MediaType.IMAGE_JPEG_VALUE, "Some Content".getBytes());
+        String imagePath = "images/sample.jpg";
+
+        // Resolve the absolute path to the image file
+        Path absolutePath = Paths.get("src/test", imagePath);
+
+        // Read image file into a byte array
+        byte[] imageBytes = Files.readAllBytes(absolutePath);
+
+        MockMultipartFile file = new MockMultipartFile("profilePhoto", "profileSample.jpg", MediaType.IMAGE_JPEG_VALUE, imageBytes);
 
         mockMvc.perform(multipart("/user/uploadPhotoProfile")
                         .file(file)
