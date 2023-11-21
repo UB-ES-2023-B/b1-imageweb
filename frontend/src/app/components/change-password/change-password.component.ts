@@ -1,4 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
+import { UserService } from "../../services/user.service";
+import {pass} from "ngx-bootstrap-icons";
 
 @Component({
   selector: 'app-change-password',
@@ -15,39 +18,54 @@ export class ChangePasswordComponent {
   showOldPassword: boolean = false;
   showNewPassword: boolean = false;
   showConPassword: boolean = false;
+  loading: boolean = false
 
   @Output() passwordChanged = new EventEmitter<any>();
   @Output() modalClosed = new EventEmitter<void>();
 
-  constructor() {}
+  constructor(private userService: UserService,
+              private toastr: ToastrService) {}
 
   changePassword(): void {
-    if (this.showNewPasswordError && this.showConPasswordError) {
-      // ERROR
-    }
+    if (this.currentPassword === '' || this.newPassword === '' || this.confirmPassword === '')
+      this.toastr.error("Rellene todos los campos")
+    else if (this.showNewPasswordError || this.showConPasswordError)
+      this.toastr.error("Comprueba que las contraseñas no tengan errores o que ambas coincidan");
+    else if (this.currentPassword === this.newPassword)
+      this.toastr.error("La nueva contraseña debe ser diferente a la anterior");
     else {
-      // COMPARAR CONTRASENYES ANTIGUES
-      // SPINNER DE CARREGANT
-      // CANVIAR DADES A BD
-      // CONFIRMACIÓ
-      // Lógica para cambiar la contraseña
-      this.passwordChanged.emit({
+      this.loading = true;
+      const passwords = {
         currentPassword: this.currentPassword,
-        newPassword: this.newPassword,
-        confirmPassword: this.confirmPassword
-      });
-      // Cierra el modal después de cambiar la contraseña
-      this.modalClosed.emit();
+        newPassword: this.newPassword
+      };
+      this.userService.changeUserPassword(passwords).subscribe(
+        (response) => {
+          console.log(Object.values(response)[0]);
+          if (Object.values(response)[0] === 'Your password was changed successfully') {
+            this.toastr.success("Contraseña cambiada correctamente");
+            console.log('Contraseña actualizada', response, passwords);
+            this.modalClosed.emit(); // Cierra el modal después de cambiar la contraseña
+          }
+        },
+        (error) => {
+          this.loading = false;
+          console.error('Error al actualizar la contraseña', error);
+          if (error.error) this.toastr.error("Contraseña actual errónea");
+          else this.toastr.error("Error al actualizar la cotraseña");
+        });
     }
   }
 
   onNewPasswordChange() {
     this.showNewPasswordError = false;
+    if (this.newPassword == this.confirmPassword && this.confirmPassword !== '') this.showConPasswordError = false;
   }
 
   onNewPasswordBlur() {
     const passRegex = /^(?=.*[!@#$%^&*,.])((?=.*[A-Z])(?=.*[a-z])(?=.*\d)).{6,}$/;
     if (this.newPassword.length > 0) this.showNewPasswordError = !passRegex.test(this.newPassword);
+    if (this.newPassword !== this.confirmPassword && this.confirmPassword !== '') this.showConPasswordError = true;
   }
 
   onConPasswordChange() {
