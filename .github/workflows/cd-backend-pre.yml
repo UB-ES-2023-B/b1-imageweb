@@ -24,7 +24,7 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: b1imageweb-backend
+          name: b1imageweb-backend-pre
           path: '${{ github.workspace }}/target/*.jar'
 
   deploy:
@@ -44,6 +44,6 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@85270a1854658d167ab239bce43949edb336fa7c
         with:
-          app-name: "b1imageweb-backend-pre"
+          app-name: "b1backendPRE"
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_PRE }}
           package: '*.jar'
