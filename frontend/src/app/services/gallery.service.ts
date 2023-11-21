@@ -25,9 +25,6 @@ export class GalleryService {
     const formData = new FormData();
     // console.log('mira el photo file', photo_file)
     formData.append('photo', photo_file);
-    if(idGallery == null){
-      console.log("gallery is null");
-    }
     return this.http.post(this.domain + `/gallery/uploadPhotoGalery/${idGallery}`, formData,{  observe: 'response'});
   }
   getGalleryUser(userName:string): Observable<any> {
