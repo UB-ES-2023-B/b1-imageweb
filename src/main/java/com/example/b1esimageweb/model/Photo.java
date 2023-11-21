@@ -1,4 +1,5 @@
 package com.example.b1esimageweb.model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
@@ -14,8 +15,18 @@ public class Photo {
 
     @ManyToOne
     @JoinColumn(name = "album_id")
+    @JsonBackReference
     private Album album;
     private String photoName;
+
+    public Album getAlbum() {
+        return album;
+    }
+
+    public void setAlbum(Album album) {
+        this.album = album;
+    }
+
     private String photoExtension;
     @Size(max = 25, message = "Description must not exceed 25 words")
     private String photoDescription;
