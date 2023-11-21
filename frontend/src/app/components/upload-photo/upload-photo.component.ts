@@ -18,13 +18,8 @@ class ImageSnippet {
 })
 export class UploadPhotoComponent {
 
-  @ViewChild('imageInput') imageInput!: ElementRef;
-
-
   selectedFile!: ImageSnippet;
   imageChangedEvent: any;
-
-
 
   constructor(private toastr: ToastrService,
     private gallleryService: GalleryService,private globalDataService:GlobalDataService) {
@@ -43,14 +38,9 @@ export class UploadPhotoComponent {
     let description='Description photo';
     this.gallleryService.addImage(this.selectedFile.src,id,name,description)
     this.toastr.success('Imagen cargada satisfactoriamente');
-    this.resetImageInput(); // Llamamos a la función para restablecer el campo de entrada de archivos
 
   }
-  private resetImageInput() {
-    if (this.imageInput && this.imageInput.nativeElement) {
-      this.imageInput.nativeElement.value = ''; // Reiniciamos el valor del campo de entrada de archivos
-    }
-  }
+
   private onError(message:string) {
     if(message=="") message="Error al subir la imagen"
     this.selectedFile.pending = false;
@@ -76,7 +66,6 @@ export class UploadPhotoComponent {
       .subscribe(
         (response) => {
             this.onSuccess(response);
-
         },
         (error) => {
             let message=""
@@ -90,6 +79,4 @@ export class UploadPhotoComponent {
     });
     reader.readAsDataURL(file);
   }
-
-
 }
