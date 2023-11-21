@@ -16,17 +16,8 @@ export class GalleryComponent {
   loading:boolean=true;
   images:any[]=[];
   showUploadHint: boolean = true;
-  isEditMode = false;
-  selectedImageIds: number[] = [];
-  editImageId:number=-1;
-
-  modalResponse: string = '';
-
-  classModal:string='text-center mb-4'
-
 
   private imagesSubscription: Subscription = new Subscription();
-
 
   constructor(private galleryService:GalleryService, private router: Router, private globalDataService:GlobalDataService, private _lightbox: Lightbox, private toastr: ToastrService){
   }

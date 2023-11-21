@@ -39,7 +39,6 @@ export class EditProfileComponent implements OnInit {
   private getUserData(): void {
     this.userService.getUser(this.user.name).subscribe(
       (response) => {
-        console.log('GET DATA EDITAR PERFIL ', response.body)
         this.user.email = response.body.userEmail;
         this.user.id = response.body.userId;
         this.user.description = response.body.description;
@@ -121,11 +120,11 @@ export class EditProfileComponent implements OnInit {
       this.userService.updateUser(this.user.name, updatedUser).subscribe(
         (response) => {
           console.log('Response:', response);
-          if (response) { // CANVIAR AIXO PERQUE NOMES DETECTI RESPONSES CORRECTES (CAS DE LA DEMO DEL SPRINT 1)
+          if (Object.keys(response)[0] === 'User details updated') {
             this.globalDataService.setUsername(this.newUsername);
             this.globalDataService.setEmail(this.newEmail);
             this.globalDataService.setDescription(this.newDescription);
-            console.log('Usuario actualizado');
+            console.log('Usuario actualizado', updatedUser);
             this.toastr.success("Usuario actualizado con éxito")
             this.router.navigate(["/profile"]);
           }

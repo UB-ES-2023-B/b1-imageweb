@@ -43,7 +43,7 @@
 <div *ngIf="activeItem=='info'">
   <div class="user-description" >
     <h4>Descripción</h4>
-    <p *ngIf="user.description">{{ user.description }}</p>
+    <p *ngIf="user.description" style="white-space: pre;">{{ user.description }}</p>
     <p *ngIf="!user.description">Nada por aqui... Ves al apartado "Editar Perfil" para editar tu descripcion.</p>
     <div class="separator-line"></div>
   </div>
@@ -53,4 +53,6 @@
   <app-gallery></app-gallery>
 </div>
 
-
+<div *ngIf="activeItem=='albumes'">
+  <app-albums></app-albums>
+</div>

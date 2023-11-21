@@ -27,7 +27,11 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.util.ResourceUtils;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,7 +98,15 @@ public class GalleryControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
-        MockMultipartFile file = new MockMultipartFile("photo", "../../images/sample.jpg", MediaType.IMAGE_JPEG_VALUE, "Some Content".getBytes());
+        String imagePath = "images/sample.jpg";
+
+        // Resolve the absolute path to the image file
+        Path absolutePath = Paths.get("src/test", imagePath);
+
+        // Read image file into a byte array
+        byte[] imageBytes = Files.readAllBytes(absolutePath);
+
+        MockMultipartFile file = new MockMultipartFile("photo", "sample.jpg", MediaType.IMAGE_JPEG_VALUE, imageBytes);
 
         
         mockMvc.perform(multipart("/gallery/uploadPhotoGalery/{galleryId}", id)
