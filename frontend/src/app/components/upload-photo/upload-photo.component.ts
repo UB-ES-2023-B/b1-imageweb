@@ -62,6 +62,7 @@ export class UploadPhotoComponent {
         console.log('No hay id gallery!!')
         return
       }else{
+      console.log('esto es lo que es file:::::::: Galeria', this.selectedFile.file)
       this.gallleryService.uploadImage(this.globalDataService.getGalleryId(),this.selectedFile.file)
       .subscribe(
         (response) => {
