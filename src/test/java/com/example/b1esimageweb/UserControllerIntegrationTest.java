@@ -64,19 +64,6 @@ public class UserControllerIntegrationTest {
         userToken = tokenProvider.createToken(user);
     }
 
-    /*
-    @Test
-    @WithMockUser (username = "adminUser", password = "password", roles = "ADMIN")
-    public void testRegisterUser() throws Exception {
-        String jsonRequest = "{ \"username\": \"testUser\", \"password\": \"testPassword\", \"email\": \"test@example.com\" }";
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
-                        .contentType("application/json")
-                        .content(jsonRequest))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andDo(MockMvcResultHandlers.print()); // This prints the response for debugging
-    }
-    */
     @Test
     @WithMockUser (username = "testing23Marc", password = "1234Asd.")
     public void testLoginUser() throws Exception {
@@ -141,13 +128,5 @@ public class UserControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
-
-    /*
-    @Test
-    public void testDeleteUser() throws Exception {
-        mockMvc.perform(delete("/user/delete/{id}", 1))  // Replace 1 with an actual user ID
-                .andExpect(status().isOk());
-    }
-     */
 
 }
