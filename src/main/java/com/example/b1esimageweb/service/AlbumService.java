@@ -96,7 +96,7 @@ public class AlbumService {
                 try {
                     for (Album album : allAlbums){
                         if ((currentUser.getUserId() == album.getUser().getUserId()) && (album.getAlbumId() == photo.getAlbum().getAlbumId())){
-                            blob = container.getBlockBlobReference(photo.getPhotoName());
+                            blob = container.getBlockBlobReference(photo.getPhotoId().toString());
                             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                             blob.download(outputStream);
                             byte[] photoContent = outputStream.toByteArray();
@@ -122,7 +122,7 @@ public class AlbumService {
         for (Photo photo : photoRepository.findByAlbum(album)) {
             CloudBlob blob;
             try {
-                blob = container.getBlockBlobReference(photo.getPhotoName());
+                blob = container.getBlockBlobReference(photo.getPhotoId().toString());
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 blob.download(outputStream);
                 byte[] photoContent = outputStream.toByteArray();
