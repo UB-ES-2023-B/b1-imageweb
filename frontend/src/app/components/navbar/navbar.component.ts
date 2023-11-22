@@ -1,7 +1,8 @@
 import { Component  } from '@angular/core';
 import { GlobalDataService } from '../../services/global-data.service'
-import { Subscription } from 'rxjs';
+import {map, observeOn, Subscription} from 'rxjs';
 import { Router } from '@angular/router';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-navbar',
@@ -15,21 +16,34 @@ export class NavbarComponent {
   profilePicUrl = this.globalDataService.getProfilePicture().previousUrl;
 
 
-  constructor(private globalDataService:GlobalDataService, private router: Router) { }
+  constructor(private globalDataService:GlobalDataService, private router: Router, private userService: UserService) {}
 
   ngOnInit(): void {
-    console.log(this.globalDataService.getProfilePicture().previousUrl);
     this.usernameSubscription = this.globalDataService.username$.subscribe(username => {
       this.username = username;
     });
     this.profilePicSubscription = this.globalDataService.profilePicture$.subscribe(profilePhoto => {
       this.profilePicUrl = profilePhoto.previousUrl || '../assets/images/perfil.jpg';
     });
+    this.getUserData();
   }
 
   ngOnDestroy() {
     this.usernameSubscription.unsubscribe();
     this.profilePicSubscription.unsubscribe();
+  }
+
+  private getUserData(): void {
+    this.userService.getUser(this.globalDataService.getUsername()).subscribe(
+      (response) => {
+        if(response.body.profilePicture !== null) {
+          this.profilePicUrl = `data:image/${response.body.profilePicture.photoName};base64,${response.body.profilePicture.data}`;
+        }
+      },
+      (error) => {
+        console.error('Error al obtener la foto de perfil', error);
+      }
+    );
   }
 
   goToProfile(itemActive:string): void {
