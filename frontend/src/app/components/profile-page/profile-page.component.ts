@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {GlobalDataService} from '../../services/global-data.service';
-import {UserService} from '../../services/user.service';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { GlobalDataService } from '../../services/global-data.service';
+import { UserService } from '../../services/user.service';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -12,15 +12,17 @@ import { ToastrService } from 'ngx-toastr';
 
 export class ProfilePageComponent implements OnInit {
   activeItem: string = 'info';
+  changePwdModal: boolean = false;
   mostrarIconoLapiz: boolean = false;
 
   user: any = {
+    id: 0,
+    name: this.globalDataService.getUsername(),
+    email: this.globalDataService.getEmail(),
     profilePicture: null,
     profilePictureUrl: '',
     coverPhoto: "../assets/images/mountainSea.jpg",
-    name: this.globalDataService.getUsername(),
-    email: '',
-    id: 0,
+    description: this.globalDataService.getDescription(),
     followers: [],
     following: []
   }
@@ -36,6 +38,19 @@ export class ProfilePageComponent implements OnInit {
     this.router.navigate(['/profile/edit']);
   }
 
+  changePwd(){
+    // Redirige al usuario al modal de edición de contraseña
+    this.changePwdModal = true;
+  }
+
+  handleChangePassword(event: any): void {
+    // Aquí puedes agregar la lógica para manejar el cambio de contraseña
+    console.log('Contraseña actual:', event.currentPassword,
+      'Nueva contraseña:', event.newPassword,
+      'Confirmar contraseña:', event.confirmPassword);
+  }
+
+
   ngOnInit(): void {
     this.globalDataService.activeItem$.subscribe(newItem => {
       this.activeItem = newItem;
@@ -50,13 +65,13 @@ export class ProfilePageComponent implements OnInit {
   getUserData(): void {
     this.userService.getUser(this.user.name).subscribe(
       (response) => {
-        this.user.email = response.body.userEmail;
+        this.user.email = response.body.email;
         this.user.id = response.body.userId;
         if (response.body.profilePicture) { // Configura la foto de perfil y su URL
           this.user.profilePicture = response.body.profilePicture;
           this.user.profilePictureUrl = `data:image/${response.body.profilePicture.photoName};base64,${response.body.profilePicture.data}`;
         }
-        console.log('Datos del usuario:', response.body);
+        console.log('GET DATA VER PERFIL', response.body);
       },
       (error) => {
         console.error('Error al obtener los datos del usuario', error);

@@ -13,6 +13,7 @@ export class SecondaryNavbarComponent {
   navItems = [
     { label: 'Información', id: 'info' },
     { label: 'Galería', id: 'gallery' },
+    { label: 'Álbumes', id: 'albumes' },
    ]
 
   constructor() { }

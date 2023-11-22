@@ -4,8 +4,12 @@ import com.example.b1esimageweb.Exceptions.UserNotFoundException;
 import com.example.b1esimageweb.model.Photo;
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.UserService;
+import com.example.b1esimageweb.web.dto.PhotoDto;
+import com.example.b1esimageweb.web.dto.UserInfoDto;
 //import com.example.b1esimageweb.web.Security.CurrentUserDetails;
+import com.example.b1esimageweb.web.dto.PasswordResetDto;
 import com.example.b1esimageweb.web.dto.UserRegistrationDto;
+import com.example.b1esimageweb.web.dto.UserUpdateDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -45,13 +49,15 @@ public class UserController {
     }
 
     @GetMapping(value = "/getByUserName/{userName}")
-    public ResponseEntity<User> getUserByUserName(@PathVariable("userName") String userName) {
+    public ResponseEntity<UserInfoDto> getUserByUserName(@PathVariable("userName") String userName) {
         User user = service.getUserByUserName(userName);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        PhotoDto profilePhoto = service.getPhotoProfileByUser(user);
+        UserInfoDto userInfoDto = new UserInfoDto(user.getUserId(), user.getUsername(), user.getUserEmail(), user.getPassword(), user.getDescription(), user.getGallery(), profilePhoto, user.isAccountNonExpired(), user.isAccountNonExpired(), user.isAccountNonLocked(), user.isEnabled(), user.getAuthorities());
+        return new ResponseEntity<>(userInfoDto, HttpStatus.OK);
     }
 
     @PutMapping(value = "/update/{username}")
-    public ResponseEntity<Map<String, User>> updateUser(@RequestBody UserRegistrationDto updated_user, @PathVariable("username") String username) {
+    public ResponseEntity<Map<String, User>> updateUser(@RequestBody UserUpdateDto updated_user, @PathVariable("username") String username) {
         User userExisting = service.getUserByUserName(username);
         Map<String, User> response = new HashMap<>();
         if (userExisting != null) {
@@ -65,6 +71,7 @@ public class UserController {
             }
             userExisting.setUsername(updated_user.getUsername());
             userExisting.setUserEmail(updated_user.getEmail());
+            userExisting.setDescription(updated_user.getUserDescription());
             service.updateUser(userExisting);
             response.put("User details updated", userExisting);
             return new ResponseEntity<>(response, HttpStatus.OK);
@@ -93,9 +100,22 @@ public class UserController {
     }
 
     @GetMapping(path = "/viewPhotoProfile/{username}")
-    public ResponseEntity<Photo> viewUserProfilePhoto (@PathVariable("username") String username){
+    public ResponseEntity<PhotoDto> viewUserProfilePhoto (@PathVariable("username") String username){
         User user = service.getUserByUserName(username);
-        Photo photo = service.getPhotoProfileByUser(user);
+        PhotoDto photo = service.getPhotoProfileByUser(user);
         return new ResponseEntity<>(photo, HttpStatus.OK);
+    }
+
+    @PutMapping(path = "/resetPassword")
+    public ResponseEntity<Map<String, String>> updatePassword(@RequestBody PasswordResetDto passwordResetDto){
+        Map<String, String> response = new HashMap<>();
+        try {
+            String msg = service.resetPassword(passwordResetDto, passwordEncoder);
+            response.put("Message", msg);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (Exception e){
+            response.put("Message", "Invalid current password");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

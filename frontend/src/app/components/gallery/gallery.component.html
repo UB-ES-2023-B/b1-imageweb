@@ -1,5 +1,8 @@
-
-
+<div class="container py-2 d-md-flex justify-content-md-end"  *ngIf="!loading && images.length!=0" >
+<button type="button" class="btn button-color" (click)="goEditGallery()" >
+  <i class="fas fa-pencil-alt"></i> Editar
+</button>
+</div>
 
 <div *ngIf="loading" class="d-flex justify-content-center align-items-center flex-column mt-5">
   <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;animation-duration: 3s" role="status"></div>
@@ -14,19 +17,23 @@
   </div>
 </div>
 
-<div class="album py-5 bg-light">
-  <div class="container">
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-      <div class="col" *ngFor="let image of images; let i = index ">
-        <a class="image-button" style="cursor:pointer" (click)="open(i)">
-        <div class="card shadow-sm photo">
-          <img class="bd-placeholder-img card-img-top custom-image"  [src]="image.src" alt="Image">
-          <div class="card-body">
+<div class="album py-2 pb-5 bg-light" >
+  <div class="container pb-1"  >
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" >
+      <div class="col" *ngFor="let image of images; let i = index"  >
+        <div class="image-button" style="cursor:pointer" >
+          <div class="card shadow-sm photo" >
+            <img class="bd-placeholder-img card-img-top custom-image" [src]="image.src" alt="Image"  (click)="open(i)">
+            <div class="card-body">
+              <p><b>{{ image.name }}</b> </p>
+              <p>{{ image.description }}</p>
+            </div>
           </div>
         </div>
-      </a>
       </div>
     </div>
   </div>
 </div>
+
+
 

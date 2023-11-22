@@ -66,8 +66,13 @@ export class RegisterFormComponent implements OnInit {
   }
 
   onPasswordBlur() {
-    const passRegex = /^(?=.*[!@#$%^&*,.])((?=.*[A-Z])(?=.*[a-z])(?=.*\d)).{6,}$/;
+    const passRegex = /^(?=.*[!@#$%^&_*,.])((?=.*[A-Z])(?=.*[a-z])(?=.*\d)).{6,}$/;
     this.showPasswordError = !passRegex.test(this.password);
+    if(this.password != this.conPassword && this.conPassword.length > 0){
+      this.showConPasswordError = true;
+    }else{
+      this.showConPasswordError = false;
+    }
   }
 
   onConPasswordChange() {
@@ -93,7 +98,7 @@ export class RegisterFormComponent implements OnInit {
     this.usernameError= false;
     this.emailExisting= false;
 
-    if(this.password == this.conPassword && this.password.length >= 6 && !this.showEmailError){
+    if(this.password == this.conPassword && this.password.length >= 6 && !this.showEmailError && !this.showUserError && !this.showPasswordError){
       console.log('Submitted!', this.email, this.password);
       this.authService.register(this.username, this.email, this.password)
         .subscribe(

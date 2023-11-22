@@ -1,8 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, AfterViewInit  } from '@angular/core';
 import { GalleryService } from 'src/app/services/gallery.service';
 import { GlobalDataService } from 'src/app/services/global-data.service';
 import { Subscription } from 'rxjs';
 import { Lightbox } from 'ngx-lightbox';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
+import { R3SelectorScopeMode } from '@angular/compiler';
+
 
 @Component({
   selector: 'app-gallery',
@@ -16,9 +20,14 @@ export class GalleryComponent {
 
   private imagesSubscription: Subscription = new Subscription();
 
-
-  constructor(private galleryService:GalleryService, private globalDataService:GlobalDataService, private _lightbox: Lightbox){
+  constructor(private galleryService:GalleryService, private router: Router, private globalDataService:GlobalDataService, private _lightbox: Lightbox, private toastr: ToastrService){
   }
+
+
+  goEditGallery(){
+    this.router.navigate(['/profile/editGallery']);
+  }
+
   getGallery():void{
     this.images=[]
     this.galleryService.getGalleryUser(this.globalDataService.getUsername()).subscribe(
@@ -27,7 +36,8 @@ export class GalleryComponent {
           response.body.forEach((element: any) => {
             if (element.data) {
               this.images.unshift({
-            "src":`data:image/${element.photoName.slice(-3)};base64,${element.data}`});
+            "src":`data:image/${element.photoExtensio};base64,${element.data}`,
+             "id": element.photoId, "name":element.photoName, "description": element.photoDescription});
             }
           });
         }
@@ -44,11 +54,11 @@ export class GalleryComponent {
     this.imagesSubscription = this.galleryService.getImagesObservable().subscribe((images) => {
       this.images = images;
     });
+
     this.getGallery();
 
-
-
   }
+
 
   open(index: number): void {
     // open lightbox
@@ -62,6 +72,7 @@ export class GalleryComponent {
   ngOnDestroy(): void {
     this.imagesSubscription.unsubscribe();
   }
+
 
 
 }

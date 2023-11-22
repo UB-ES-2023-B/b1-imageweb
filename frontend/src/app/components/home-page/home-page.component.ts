@@ -19,8 +19,6 @@ export class HomePageComponent {
   ngOnInit(): void {
     this.username = this.globalDataService.getUsername();
     this.getUserData()
-
-
   }
 
   goToProfile(itemActive: string): void {
@@ -32,7 +30,11 @@ export class HomePageComponent {
   getUserData(): void {
     this.userService.getUser(this.username).subscribe(
       (response) => {
+        console.log('GET DATA HOME ', response.body);
+        this.globalDataService.setEmail(response.body.email);
+        this.globalDataService.setDescription(response.body.description);
         this.globalDataService.setGalleryId(response.body.gallery.galleryrId);
+        console.log('Este es el id de la galeria: (back) ',response.body.gallery.galleryrId)
         let url: string;
         if (response.body.profilePicture) url = `data:image/${response.body.profilePicture.photoName};base64,${response.body.profilePicture.data}`;
         else url = "../assets/images/perfil.jpg";

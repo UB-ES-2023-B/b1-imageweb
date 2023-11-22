@@ -32,4 +32,8 @@ export class UserService {
   deleteUserProfilePhoto(): Observable<string> {
     return this.http.delete(this.domain + '/user/deleteProfilePhoto', { responseType: 'text' });
   }
+
+  changeUserPassword(passwords: any): Observable<any> {
+    return this.http.put(this.domain + '/user/resetPassword', passwords);
+  }
 }

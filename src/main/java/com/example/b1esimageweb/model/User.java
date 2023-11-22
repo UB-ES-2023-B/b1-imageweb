@@ -3,7 +3,7 @@ package com.example.b1esimageweb.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import net.minidev.json.annotate.JsonIgnore;
+import lombok.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,9 +20,13 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
+    @NonNull
     private String username;
+    @NonNull
     private String email;
+    @NonNull
     private String password;
+    private String description;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "gallery_id")
@@ -69,6 +73,14 @@ public class User implements UserDetails {
 
     public void setProfilePicture(Photo profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override

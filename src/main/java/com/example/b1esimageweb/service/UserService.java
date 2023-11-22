@@ -1,5 +1,7 @@
 package com.example.b1esimageweb.service;
 
+import com.example.b1esimageweb.Exceptions.InvalidPasswordException;
+import com.example.b1esimageweb.Exceptions.PhotoNotFoundException;
 import com.example.b1esimageweb.Exceptions.UserNotFoundException;
 import com.example.b1esimageweb.model.Gallery;
 import com.example.b1esimageweb.model.Photo;
@@ -7,24 +9,54 @@ import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.repository.GalleryRepository;
 import com.example.b1esimageweb.repository.PhotoRepository;
 import com.example.b1esimageweb.repository.UserRepository;
+import com.example.b1esimageweb.web.dto.PhotoDto;
+import com.microsoft.azure.storage.CloudStorageAccount;
+import com.microsoft.azure.storage.StorageException;
+import com.microsoft.azure.storage.blob.CloudBlob;
+import com.microsoft.azure.storage.blob.CloudBlobClient;
+import com.microsoft.azure.storage.blob.CloudBlobContainer;
+import com.microsoft.azure.storage.blob.CloudBlockBlob;
+
+import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
+import org.springframework.beans.factory.annotation.Value;
+import com.example.b1esimageweb.web.dto.PasswordResetDto;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Optional;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final GalleryRepository galleryRepository;
     private final PhotoRepository photoRepository;
 
-    public UserService(UserRepository userRepository, GalleryRepository galleryRepository, PhotoRepository photoRepository) {
+    private CloudStorageAccount account;
+    private CloudBlobClient serviceClient;
+    private CloudBlobContainer container;
+
+    public UserService(UserRepository userRepository, GalleryRepository galleryRepository, PhotoRepository photoRepository, @Value("${azure.storage.conection.string}") String storageConnectionAzure,  @Value("${azure.storage.container.name}") String nameContainer) {
         this.userRepository = userRepository;
         this.galleryRepository = galleryRepository;
         this.photoRepository = photoRepository;
+
+        try {
+            account = CloudStorageAccount.parse(storageConnectionAzure);
+            serviceClient = account.createCloudBlobClient();
+            container = serviceClient.getContainerReference(nameContainer);
+        } catch (InvalidKeyException | URISyntaxException e) {
+            e.printStackTrace();
+        } catch (StorageException e) {
+            e.printStackTrace();
+        }
     }
 
     // Now we add(register) new user in the AuthService class
@@ -57,11 +89,7 @@ public class UserService {
         }
         if(currentUser != null) {
             Photo profilePhoto = new Photo();
-            try {
-                profilePhoto.setData(photo.getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
             String fileName = photo.getOriginalFilename();
             int lastDotIndex = fileName.lastIndexOf(".");
             String extension = fileName.substring(lastDotIndex + 1);
@@ -79,7 +107,30 @@ public class UserService {
 
             if(oldPhoto != null){
                 photoRepository.delete(oldPhoto);
+                CloudBlockBlob blockBlob;
+                Photo photoToDelete =  photoRepository.findById(oldPhoto.getPhotoId()).orElseThrow(()-> new PhotoNotFoundException("Photo with id " + oldPhoto.getPhotoId() + "not found"));
+                try {
+                    blockBlob = container.getBlockBlobReference(photoToDelete.getPhotoId().toString());
+                    blockBlob.deleteIfExists();
+                } catch (URISyntaxException | StorageException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+
             }
+            CloudBlob blob;
+            try {
+                blob = container.getBlockBlobReference(profilePhoto.getPhotoId().toString());
+                byte[] decodedBytes = photo.getBytes();
+                blob.uploadFromByteArray(decodedBytes, 0, decodedBytes.length); 
+            } catch (URISyntaxException | StorageException e) {
+                e.printStackTrace();
+                return null;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+
             return photoRepository.save(profilePhoto);
         }else{
             throw new UserNotFoundException("User does not exists");
@@ -98,6 +149,13 @@ public class UserService {
             currentUser.setProfilePicture(null);
             userRepository.save(currentUser);
             photoRepository.delete(profilePhoto);
+            CloudBlockBlob blockBlob;
+             try {
+                blockBlob = container.getBlockBlobReference(profilePhoto.getPhotoId().toString());
+                blockBlob.deleteIfExists();
+            } catch (URISyntaxException | StorageException e) {
+                e.printStackTrace();
+            }
         }else{
             throw new UserNotFoundException("User does not exists");
         }
@@ -107,16 +165,12 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public User getUserByUserEmail(String email){
-        return userRepository.findUserByEmail(email);
-    }
-
-    public User getUserByUsername(String username){
-        return userRepository.findByUsername(username).get();
-    }
-
     public User getUserByUserName(String username){
         return userRepository.findByUsername(username).get();
+    }
+
+    public User getUserByUserEmail(String email){
+        return userRepository.findUserByEmail(email);
     }
     public boolean emailExists(String email){
         return userRepository.existsUserByEmail(email);
@@ -126,11 +180,49 @@ public class UserService {
         return userRepository.existsUserByUsername(username);
     }
 
-    public Photo getPhotoProfileByUser(User user){
-        return userRepository.getPhotoProfileByUserId(user.getUserId());
+    public PhotoDto getPhotoProfileByUser(User user){
+        Photo photo = userRepository.getPhotoProfileByUserId(user.getUserId());
+        if(photo!=null){
+            CloudBlob blob;
+            try {
+                blob = container.getBlockBlobReference(photo.getPhotoId().toString());
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                blob.download(outputStream);
+                byte[] photoContent = outputStream.toByteArray();
+                return new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getAlbum(), photo.getPhotoExtension(), photo.getPhotoDescription());
+            } catch (URISyntaxException | StorageException e) {
+                e.printStackTrace();
+                
+            }
+        }
+        return null;
     }
     
     public Gallery getGalleryByUser(User user){
         return userRepository.getGalleryByUserId(user.getUserId());
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username).get();
+    }
+
+    public String resetPassword (PasswordResetDto passwordResetDto, PasswordEncoder passwordEncoder){
+        Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User currentUser = null;
+        if(obj instanceof User){
+            currentUser = (User) obj;
+        }
+        if(currentUser != null) {
+           if(passwordEncoder.matches(passwordResetDto.getCurrentPassword(), currentUser.getPassword())){
+               currentUser.setUserPassword(passwordEncoder.encode(passwordResetDto.getNewPassword()));
+               userRepository.save(currentUser);
+           }else{
+               throw new InvalidPasswordException("Invalid current password");
+           }
+        }else{
+            throw new UserNotFoundException("User does not exists");
+        }
+        return "Your password was changed successfully";
     }
 }

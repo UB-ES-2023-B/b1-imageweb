@@ -3,6 +3,7 @@ package com.example.b1esimageweb.web.Jwt;
 import com.example.b1esimageweb.service.UserService;
 import jakarta.persistence.Column;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +23,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter{
 
-    private final UserDetailsService userDetailsService;
+    private final UserService service;
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -39,8 +41,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter{
                 JwtTokenProvider tokenProvider = new JwtTokenProvider();
                 if (tokenProvider.validateToken(token)) {
                     // Si el token es válido, establece la autenticación en el contexto de seguridad
-                    String username = tokenProvider.getUsernameFromToken(token);
-                    UserDetails details = userDetailsService.loadUserByUsername(username);
+                    String userid = tokenProvider.getUserIdFromToken(token);
+                    UserDetails details = service.getUserById(Integer.parseInt(userid));
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(details, null, details.getAuthorities());
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);

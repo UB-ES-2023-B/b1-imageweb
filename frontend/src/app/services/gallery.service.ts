@@ -11,6 +11,7 @@ export class GalleryService {
   private domain: string |undefined
   private images: any[] = [];
   private imagesSubject: BehaviorSubject<any[]> = new BehaviorSubject(this.images);
+
   constructor(private http: HttpClient) {
     this.domain = environment.domain;
   }
@@ -20,16 +21,33 @@ export class GalleryService {
     return this.http.get(this.domain + `/gallery/getAll`, {  observe: 'response' });
   }
 
-  uploadImage(idGallery: string, photo_file: File):  Observable<string> {
+  uploadImage(idGallery: string, photo_file: File): Observable<any> {
     const formData = new FormData();
-
     formData.append('photo', photo_file);
-    return this.http.post(this.domain + `/gallery/uploadPhotoGalery/${idGallery}`, formData,{  responseType: 'text'});
+    return this.http.post(this.domain + `/gallery/uploadPhotoGalery/${idGallery}`, formData,{  observe: 'response'});
   }
   getGalleryUser(userName:string): Observable<any> {
     return this.http.get(this.domain + `/gallery/viewGalleryFromUser/${userName}`, {  observe: 'response' });
   }
 
+  deletePhotoGallery(id: number[]): Observable<any> {
+    const formData = {
+      photoIds: id
+    };
+    return this.http.delete(this.domain + '/gallery/deletephotos', {
+      body: formData,
+      observe: 'response'
+    });
+  }
+
+  editInfoPhoto(idPhoto:number, name:string, description:string): Observable<any>{
+    const formData = {
+      "photoName": name,
+      "photoDescription": description
+    };
+
+    return this.http.put(this.domain + `/gallery/editInfoPhoto/${idPhoto}`, formData,{  observe: 'response'});
+  }
 
   setImages(images: any[]): void {
     this.images = images;
@@ -40,13 +58,16 @@ export class GalleryService {
     return this.images;
   }
 
-  addImage(image: any): void {
-    this.images.unshift({"src":image});
+  addImage(image: any, id:number, name:string, description:string): void {
+
+    this.images.unshift({"src":image, "id": id, "name":name, "description": description});
     this.imagesSubject.next(this.images);
   }
 
   getImagesObservable(): Observable<any[]> {
     return this.imagesSubject.asObservable();
   }
+
+
 
 }

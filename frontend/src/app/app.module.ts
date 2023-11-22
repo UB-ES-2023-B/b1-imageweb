@@ -26,6 +26,12 @@ import { SecondaryNavbarComponent } from './components/secondary-navbar/secondar
 import { GalleryComponent } from './components/gallery/gallery.component';
 import { UploadPhotoComponent } from './components/upload-photo/upload-photo.component';
 import { EditProfileComponent } from './components/edit-profile/edit-profile.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { ModalComponent } from './components/modal/modal.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { EditGalleryComponent } from './components/edit-gallery/edit-gallery.component';
+import { AlbumsComponent } from './components/albums/albums.component';
+import { UploadPhotosComponent } from './components/upload-photos/upload-photos.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +47,12 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
     SecondaryNavbarComponent,
     GalleryComponent,
     UploadPhotoComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    ChangePasswordComponent,
+    ModalComponent,
+    EditGalleryComponent,
+    AlbumsComponent,
+    UploadPhotosComponent
   ],
   imports: [
     BrowserModule,
@@ -54,8 +65,8 @@ import { EditProfileComponent } from './components/edit-profile/edit-profile.com
     ToastrModule.forRoot(),
     ImageCropperModule,
     LightboxModule,
-    FileSaverModule
-
+    FileSaverModule,
+    NgbModule
   ],
   providers: [
 

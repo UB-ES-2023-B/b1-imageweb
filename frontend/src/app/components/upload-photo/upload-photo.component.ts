@@ -18,35 +18,28 @@ class ImageSnippet {
 })
 export class UploadPhotoComponent {
 
-  @ViewChild('imageInput') imageInput!: ElementRef;
-
-
   selectedFile!: ImageSnippet;
   imageChangedEvent: any;
-
-
 
   constructor(private toastr: ToastrService,
     private gallleryService: GalleryService,private globalDataService:GlobalDataService) {
 
   }
 
-  private onSuccess() {
+  private onSuccess(response: any) {
     this.selectedFile.pending = false;
     this.selectedFile.status = 'ok';
-    this.gallleryService.addImage(this.selectedFile.src)
-    console.log('este es el src ', this.selectedFile.src)
+
+
+    //falta enviarle, el id , el nombre y la descripcion.
+    let id=response.body.photoId;
+    let name=response.body.photoName;
+    let description=response.body.photoDescription;
+    this.gallleryService.addImage(this.selectedFile.src,id,name,description)
     this.toastr.success('Imagen cargada satisfactoriamente');
-    this.resetImageInput(); // Llamamos a la función para restablecer el campo de entrada de archivos
-
-
 
   }
-  private resetImageInput() {
-    if (this.imageInput && this.imageInput.nativeElement) {
-      this.imageInput.nativeElement.value = ''; // Reiniciamos el valor del campo de entrada de archivos
-    }
-  }
+
   private onError(message:string) {
     if(message=="") message="Error al subir la imagen"
     this.selectedFile.pending = false;
@@ -60,24 +53,19 @@ export class UploadPhotoComponent {
     const reader = new FileReader();
 
     reader.addEventListener('load', (event: any) => {
-
-
       this.selectedFile = new ImageSnippet(event.target.result, file);
-
       this.selectedFile.pending = true;
-
-
-
       if(this.globalDataService.getGalleryId()==''){
+        this.selectedFile.pending = false;
+        this.toastr.error('Recarga galería','No ID');
         console.log('No hay id gallery!!')
         return
-      }
+      }else{
+      console.log('esto es lo que es file:::::::: Galeria', this.selectedFile.file)
       this.gallleryService.uploadImage(this.globalDataService.getGalleryId(),this.selectedFile.file)
       .subscribe(
         (response) => {
-          console.log(response)
-            this.onSuccess();
-
+            this.onSuccess(response);
         },
         (error) => {
             let message=""
@@ -85,17 +73,10 @@ export class UploadPhotoComponent {
               message="Ha superado el tamaño de 2 MB"
             }
             this.onError(message);
-
       }
-
      );
-
-
-
+     }
     });
-
     reader.readAsDataURL(file);
   }
-
-
 }

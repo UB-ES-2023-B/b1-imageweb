@@ -27,31 +27,32 @@
   </div>
   <!-- End Update Avatar Form -->
 
-  <!-- Personal Info Form NO BORRAR COMMENTS-->
+  <!-- Personal Info Form -->
   <form class="js-validate" novalidate="novalidate">
     <div class="row">
       <!-- Input -->
-<!--      <div class="col-sm-6 mb-6">-->
-<!--        <div class="js-form-message">-->
-<!--          <label id="usernameLabel" class="form-label">-->
-<!--            <h5>Nombre de usuario<span class="text-danger">*</span></h5>-->
-<!--          </label>-->
+      <div class="col-sm-6 mb-6">
+        <div class="js-form-message">
+          <label id="usernameLabel" class="form-label" [class]="{'text-danger': showUserError}">
+            <h5>Nombre de usuario<span class="text-danger">*</span></h5>
+          </label>
 
-<!--          <div class="form-group">-->
-<!--            <input type="text" class="form-control" name="username" [(ngModel)]="newUsername"-->
-<!--                   placeholder="Entra tu nombre de usuario" aria-label="Entra tu nombre de usuario"-->
-<!--                   required="true" aria-describedby="usernameLabel" data-msg="Entra tu nombre de usuario."-->
-<!--                   data-error-class="u-has-error" data-success-class="u-has-success" [value]="newUsername">-->
-
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
+          <div class="form-group">
+            <input type="text" class="form-control" name="username" [(ngModel)]="newUsername"
+                   placeholder="Entra tu nombre de usuario" aria-label="Entra tu nombre de usuario"
+                   required="true" aria-describedby="usernameLabel" data-msg="Entra tu nombre de usuario."
+                   data-error-class="u-has-error" data-success-class="u-has-success" [value]="newUsername"
+                   (ngModelChange)="onUserChange()" (blur)="onUserBlur()">
+          </div>
+          <div *ngIf="showUserError" class="text-danger">El nombre de usuario no puede estar vacío.</div>
+        </div>
+      </div>
       <!-- End Input -->
 
       <!-- Input -->
       <div class="col-sm-6 mb-6">
         <div class="js-form-message">
-          <label id="emailLabel" class="form-label">
+          <label id="emailLabel" class="form-label" [class]="{'text-danger': showEmailError}">
             <h5>Correo electrónico<span class="text-danger">*</span></h5>
           </label>
 
@@ -60,8 +61,12 @@
                    placeholder="Entra tu correo electrónico" aria-label="Entra tu correo electrónico"
                    required="true" aria-describedby="emailLabel"
                    data-msg="Entra una dirección de correo electrónico válida."
-                   data-error-class="u-has-error" data-success-class="u-has-success" [value]="user.email">
+                   data-error-class="u-has-error" data-success-class="u-has-success" [value]="user.email"
+                   (ngModelChange)="onEmailChange()" (blur)="onEmailBlur()">
             <small class="form-text text-muted">No compartiremos tu correo con nadie más.</small>
+          </div>
+          <div *ngIf="showEmailError" class="text-danger">
+            Invalid email format. Please enter a valid email.
           </div>
         </div>
       </div>
@@ -69,15 +74,15 @@
     </div>
 
     <!-- Description Form -->
-<!--    <div class="mb-3">-->
-<!--      <h2 class="h5 mb-0" style="margin-top: 20px">Descripción</h2>-->
-<!--      <small class="form-text text-muted">Cuéntame algo sobre ti en un par de frases.</small>-->
-<!--    </div>-->
-<!--    <div class="mb-6">-->
-<!--      <label class="form-label">-->
-<!--        <textarea name="texto" id="texto" rows="4" cols="70"></textarea>-->
-<!--      </label>-->
-<!--    </div>-->
+    <div class="mb-3">
+      <h2 class="h5 mb-0" style="margin-top: 20px">Descripción</h2>
+      <small class="form-text text-muted">Cuéntame algo sobre ti en un par de frases.</small>
+    </div>
+    <div class="mb-6">
+      <label class="form-label">
+        <textarea name="texto" id="texto" rows="4" cols="70" [value]="user.description" [(ngModel)]="newDescription"></textarea>
+      </label>
+    </div>
     <!-- End Description Form -->
 
     <button type="submit" class="btn btn-sm btn-primary transition-3d-hover mr-1"

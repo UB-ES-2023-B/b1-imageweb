@@ -6,13 +6,12 @@ import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.repository.GalleryRepository;
 import com.example.b1esimageweb.repository.UserRepository;
 import com.example.b1esimageweb.web.Jwt.JwtTokenProvider;
-import com.example.b1esimageweb.web.controller.AuthResponse;
+import com.example.b1esimageweb.web.responses.AuthResponse;
 import com.example.b1esimageweb.web.dto.UserLoginDto;
 import com.example.b1esimageweb.web.dto.UserRegistrationDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +28,7 @@ public class AuthService {
 
     public AuthResponse login(UserLoginDto userDto) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword()));
-        UserDetails user=userRepository.findByUsername(userDto.getUsername()).orElseThrow();
+        User user=userRepository.findByUsername(userDto.getUsername()).orElseThrow();
         String token=jwtService.createToken(user);
         return AuthResponse.builder()
                 .token(token)
