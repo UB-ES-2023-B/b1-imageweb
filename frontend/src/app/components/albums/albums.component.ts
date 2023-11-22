@@ -45,21 +45,23 @@ export class AlbumsComponent {
     this.albums=[]
     this.albumsService.getAlbumsForUser().subscribe(
       (response)=>{
+        console.log('esta es la respuesta de albums', response)
+
         if (response.body && Array.isArray(response.body.albums)) {
           response.body.albums.forEach((element: any) => {
+            console.log('este es element::', element)
             //if (element.data) {
-              if (element.albumId) {
               // SACAR EL LEN DE LAS FOTOS
               //"src":`data:image/${element.photoExtensio};base64,${element.data}`,
-              let len= element.photos.length
-              this.albums.unshift({
-                "src":'../../../assets/images/defaultImageAlbum.jpg',
-             "id": element.albumId, "name":element.albumName, "description": element.description, "photoLength":len});
-            }
+            //   let len= element.photos.length
+            //   this.albums.unshift({
+            //     "src":'../../../assets/images/defaultImageAlbum.jpg',
+            //  "id": element.albumId, "name":element.albumName, "description": element.description, "photoLength":len});
+
           });
         }
         this.albumsService.setAlbums(this.albums);
-        console.log(this.albums)
+        console.log('esto se supone que es albums',this.albums)
         this.loading=false;
       },
       (error)=>{

@@ -41,6 +41,19 @@ export class GalleryService {
     });
   }
 
+  editInfoPhoto(idPhoto:number, name:string, description:string): Observable<any>{
+    const formData = {
+      "photoName": name,
+      "photoDescription": description
+    };
+    //new FormData();
+    // console.log('mira el photo file', photo_file)
+    // formData.append('photoName', name);
+    // formData.append('photoDescription', description);
+
+    return this.http.put(this.domain + `/gallery/editInfoPhoto/${idPhoto}`, formData,{  observe: 'response'});
+  }
+
   setImages(images: any[]): void {
     this.images = images;
     this.imagesSubject.next(this.images);
