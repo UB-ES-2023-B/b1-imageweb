@@ -76,10 +76,8 @@ public class AlbumService {
         return albumRepository.save(album);
     }
 
-    public Map<Iterable<PhotoDto>,Integer> getAllAlbumsForUser(){
-        List<PhotoDto> photos = new ArrayList<>();
-        Map<Iterable<PhotoDto>,Integer> hMap = new HashMap<>();
-        Set<Integer> albumIds = new HashSet<>();
+    public Map<Integer, List<PhotoDto>> getAllAlbumsForUser(){
+        Map<Integer, List<PhotoDto>> albumPhotos = new HashMap<>();
         Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User currentUser = null;
         if(obj instanceof User){
@@ -100,8 +98,8 @@ public class AlbumService {
                             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                             blob.download(outputStream);
                             byte[] photoContent = outputStream.toByteArray();
-                            photos.add(new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getAlbum(), photo.getPhotoExtension(), photo.getPhotoDescription()));
-                            albumIds.add(album.getAlbumId());
+                            PhotoDto photoDto = new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getAlbum(), photo.getPhotoExtension(), photo.getPhotoDescription());
+                            albumPhotos.computeIfAbsent(album.getAlbumId(), k -> new ArrayList<>()).add(photoDto);
                         }
                     }
                 } catch (URISyntaxException | StorageException e) {
@@ -112,8 +110,7 @@ public class AlbumService {
 
 
         }
-        hMap.put(photos,albumIds.size());
-        return hMap;
+        return albumPhotos;
     }
 
     public Iterable<PhotoDto> getPhotosByAlbum(Album album) {

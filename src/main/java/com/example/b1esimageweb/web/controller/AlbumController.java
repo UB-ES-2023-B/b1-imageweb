@@ -41,19 +41,13 @@ public class AlbumController {
     @GetMapping("/getAlbums")
     public ResponseEntity<Object> getUserAlbums() {
         try {
-            Iterable<PhotoDto> photos = null;
-            int lenght = 0;
-            Map<Iterable<PhotoDto>,Integer> map = albumService.getAllAlbumsForUser();
-            for (Iterable<PhotoDto> p : map.keySet()){
-                photos = p;
-                lenght = map.get(p);
-            }
-            if (photos == null) {
+            Map<Integer, List<PhotoDto>> map = albumService.getAllAlbumsForUser();
+            if (map.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             AlbumResponse response = new AlbumResponse();
-            response.setAlbums(photos);
-            response.setLength(lenght);
+            response.setAlbums(map.values());
+            response.setLength(map.keySet().size());
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
