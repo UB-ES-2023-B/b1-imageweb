@@ -32,7 +32,6 @@ export class GalleryComponent {
     this.images=[]
     this.galleryService.getGalleryUser(this.globalDataService.getUsername()).subscribe(
       (response)=>{
-        console.log('soy response de galleria::', response)
         if (response.body && Array.isArray(response.body)) {
           response.body.forEach((element: any) => {
             if (element.data) {
