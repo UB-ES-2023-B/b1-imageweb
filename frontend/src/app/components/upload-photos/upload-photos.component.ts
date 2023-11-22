@@ -1,4 +1,4 @@
-import { Component ,ViewChild, ElementRef } from '@angular/core';
+import { Component ,Input, ElementRef } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { HttpErrorResponse } from '@angular/common/http';
 import { GlobalDataService } from 'src/app/services/global-data.service';
@@ -20,9 +20,11 @@ export class UploadPhotosComponent {
 
   selectedFiles: ImageSnippet[] = [];
   imageChangedEvent: any;
-  idAlbumActual:number= 1;
+  idAlbumActual:number= 13;
   file:File[]=[];
   loading=false;
+  @Input() idAlbum!: number
+
 
   constructor(
     private toastr: ToastrService,
@@ -45,6 +47,7 @@ export class UploadPhotosComponent {
     // );
     this.loading=false;
     this.toastr.success('Fotos cargadas satisfactoriamente');
+    this.selectedFiles = [];
 
 
   }
@@ -64,8 +67,14 @@ export class UploadPhotosComponent {
 
   processFile(imageInput: any) {
     this.loading=true
+    if(!this.idAlbum){
+        console.log('Hay un error con el id del albúm')
+    }
     const files: File[] = imageInput.files;
     for (let i = 0; i < files.length; i++) {
+      // Limpiar estados antes de procesar nuevos archivos
+      this.selectedFiles = [];
+      this.file = [];
       const file: File = files[i];
       const reader = new FileReader();
       reader.addEventListener('load', (event: any) => {
@@ -74,12 +83,26 @@ export class UploadPhotosComponent {
         this.selectedFiles.push(imageSnippet);
         this.file.push(file);
         if( i==files.length-1){
-          this.albumsService.addPhotosToAlbum(this.idAlbumActual,this.file)
+          this.albumsService.addPhotosToAlbum(this.idAlbum,this.file)
           .subscribe(
-              (response) => {
-                console.log('mira response:',response)
-                this.onSuccess(response)
-          },
+              (response: any) => {
+                console.log('mira response del upload:', response);
+                if (response.body) {
+                  if (response.body.length>0) {
+                    this.albumsService.modifylen(response.body[0].album.albumId, response.body.length-1);
+                    if(response.body.length>1){
+                      var src= `data:image/${response.body[1].photoExtension};base64,${response.body[1].data}`
+                      this.albumsService.modifyCoverPhoto(response.body[0].album.albumId, src)
+
+                    }
+                  }
+
+                }
+                imageInput.value = null;
+                this.onSuccess(response);
+
+
+              },
           (error) => {
           let message=""
           if (error.status==400){
@@ -91,11 +114,11 @@ export class UploadPhotosComponent {
         }
 
       });
+      // imageInput.value = null;
 
       reader.readAsDataURL(file);
     }
-    console.log('esto es select NO SE LLENO?', this.selectedFiles)
-    console.log('Este es el que esta pasandoooooo', this.file)
+
 
 
   }

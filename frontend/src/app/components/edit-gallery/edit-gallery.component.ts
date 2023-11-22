@@ -68,10 +68,8 @@ export class EditGalleryComponent {
     this.editImageId=-1;
   }
   saveEditInfo(id:number, name:string, description:string){
-    console.log('id foto::', id, 'este es el name:', name,'este es el description:: ', description )
     this.galleryService.editInfoPhoto(id,name, description).subscribe(
       (response)=>{
-        console.log('mira la respuesta de editar',response)
         this.toastr.success('Se ha editado correctamente');
         this.editImageId=-1;
 

@@ -53,9 +53,9 @@
             <div class="card-body">
               <p class="custom-paragraph"><b>{{ album.name }}</b></p>
               <p class="custom-paragraph">&nbsp;{{ album.description }}</p>
-              <div class="d-flex align-items-center justify-content-between mt-3"> <!-- Aplicar d-flex al contenedor principal y justify-content-between -->
+              <div class="d-flex align-items-center justify-content-between">
                 <p class="custom-paragraph">&nbsp;Fotos: {{ album.photoLength }}</p>
-                <app-upload-photos></app-upload-photos>
+                <app-upload-photos  [idAlbum]=album.id></app-upload-photos>
               </div>
             </div>
 

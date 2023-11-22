@@ -49,11 +49,30 @@ export class AlbumsService {
     return this.albums;
   }
 
-  addAlbums(imageFirst: any, id:number, name:string, description:string): void {
+  addAlbums(imageFirst: any, id:number, name:string, description:string, len:number): void {
 
-    this.albums.unshift({"src":imageFirst, "id": id, "name":name, "description": description});
+    this.albums.unshift({"src":imageFirst, "id": id, "name":name, "description": description, "photoLength":len});
     this.albumsSubject.next(this.albums);
   }
+
+  modifylen(id:number, len:number): void {
+    const index = this.albums.findIndex((item) => item.id === id);
+    if (index !== -1) {
+        // Si se encuentra el elemento, actualiza el campo photoLength
+        this.albums[index].photoLength = len;
+    }
+    this.albumsSubject.next(this.albums);
+  }
+
+  modifyCoverPhoto(id:number, imageFirst: any): void {
+    const index = this.albums.findIndex((item) => item.id === id);
+    if (index !== -1) {
+        // Si se encuentra el elemento, actualiza el campo photoLength
+        this.albums[index].src = imageFirst;
+    }
+    this.albumsSubject.next(this.albums);
+  }
+
 
   getAlbumsObservable(): Observable<any[]> {
     return this.albumsSubject.asObservable();
