@@ -5,8 +5,8 @@ import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
+import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +24,6 @@ import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlob;
 import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
-import com.microsoft.azure.storage.blob.CloudBlockBlob;
 
 @org.springframework.stereotype.Service
 public class GalleryService {
@@ -63,14 +62,14 @@ public class GalleryService {
         newPhoto.setPhotoName(fileName);
         newPhoto.setPhotoExtension(extension);
         newPhoto.setGallery(gallery);
-        
+        photoRepository.save(newPhoto);
+
         CloudBlob blob;
         try {
-            blob = container.getBlockBlobReference(fileName);
+            blob = container.getBlockBlobReference(newPhoto.getPhotoId().toString());
             byte[] decodedBytes = photo.getBytes();
-            blob.uploadFromByteArray(decodedBytes, 0, decodedBytes.length); 
-            photoRepository.save(newPhoto);
-            PhotoDto newPhotoDto = new PhotoDto(decodedBytes, newPhoto.getPhotoId(), gallery, fileName, extension);
+            blob.uploadFromByteArray(decodedBytes, 0, decodedBytes.length);
+            PhotoDto newPhotoDto = new PhotoDto(decodedBytes, newPhoto.getPhotoId(), gallery, fileName,null, extension, "");
             return newPhotoDto;
         } catch (URISyntaxException | StorageException e) {
             e.printStackTrace();
@@ -85,11 +84,11 @@ public class GalleryService {
         for (Photo photo : photoRepository.findAll()) {
             CloudBlob blob;
             try {
-                blob = container.getBlockBlobReference(photo.getPhotoName());
+                blob = container.getBlockBlobReference(photo.getPhotoId().toString());
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 blob.download(outputStream);
                 byte[] photoContent = outputStream.toByteArray();
-                photos.add(new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getPhotoExtension()));
+                photos.add(new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(),photo.getAlbum(), photo.getPhotoExtension(), photo.getPhotoDescription()));
             } catch (URISyntaxException | StorageException e) {
                 e.printStackTrace();
                 return null;
@@ -102,11 +101,11 @@ public class GalleryService {
         Photo photo =  photoRepository.findById(photoId).orElseThrow(()-> new PhotoNotFoundException("Photo with id " + photoId + "not found"));
         CloudBlob blob;
         try {
-            blob = container.getBlockBlobReference(photo.getPhotoName());
+            blob = container.getBlockBlobReference(photo.getPhotoId().toString());
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             blob.download(outputStream);
             byte[] photoContent = outputStream.toByteArray();
-            return new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getPhotoExtension());
+            return new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(),photo.getAlbum(), photo.getPhotoExtension(), photo.getPhotoDescription());
         } catch (URISyntaxException | StorageException e) {
             e.printStackTrace();
             
@@ -124,11 +123,11 @@ public class GalleryService {
         for (Photo photo : photoRepository.findByGallery(gallery)) {
         CloudBlob blob;
             try {
-                blob = container.getBlockBlobReference(photo.getPhotoName());
+                blob = container.getBlockBlobReference(photo.getPhotoId().toString());
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 blob.download(outputStream);
                 byte[] photoContent = outputStream.toByteArray();
-                photos.add(new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getPhotoExtension()));
+                photos.add(new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(),photo.getAlbum(), photo.getPhotoExtension(), photo.getPhotoDescription()));
             } catch (URISyntaxException | StorageException e) {
                 e.printStackTrace();
                 return null;
@@ -140,7 +139,18 @@ public class GalleryService {
     public String deleteGalleryPhotos(List<Integer> photosId){
         for (int photoId : photosId){
             if(photoRepository.findById(photoId).get() != null){
+                Photo photo =  photoRepository.findById(photoId).orElseThrow(()-> new PhotoNotFoundException("Photo with id " + photoId + "not found"));
                 photoRepository.deleteById(photoId);
+                CloudBlockBlob blockBlob;
+                try {
+                    blockBlob = container.getBlockBlobReference(photo.getPhotoId().toString());
+                    blockBlob.deleteIfExists();
+                } catch (URISyntaxException | StorageException e) {
+                    
+                    e.printStackTrace();
+                    return "An error ocurred while deleting photo from gallery";
+                }
+                    
             }
         }
         return "Photos successfully deleted from gallery";

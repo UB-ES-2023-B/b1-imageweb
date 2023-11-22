@@ -29,13 +29,12 @@ export class UploadPhotoComponent {
   private onSuccess(response: any) {
     this.selectedFile.pending = false;
     this.selectedFile.status = 'ok';
-    console.log('RESPUESTA DANIELA',response.photoName);
-    console.log('RESPUESTA DANIELA',response.body.photoId)
+
 
     //falta enviarle, el id , el nombre y la descripcion.
     let id=response.body.photoId;
     let name=response.body.photoName;
-    let description='Description photo';
+    let description=response.body.photoDescription;
     this.gallleryService.addImage(this.selectedFile.src,id,name,description)
     this.toastr.success('Imagen cargada satisfactoriamente');
 
