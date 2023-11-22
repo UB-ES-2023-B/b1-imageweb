@@ -8,6 +8,7 @@ import { ProfilePageComponent } from './components/profile-page/profile-page.com
 import { AuthGuard  } from './guards/auth.guard';
 import {EditProfileComponent} from "./components/edit-profile/edit-profile.component";
 import { EditGalleryComponent } from './components/edit-gallery/edit-gallery.component';
+import {AlbumViewComponent} from "./components/album-view/album-view.component";
 const routes: Routes = [
    //Initial route
    {
@@ -45,6 +46,11 @@ const routes: Routes = [
   {
     path: 'profile/editGallery',
     component: EditGalleryComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'album',
+    component: AlbumViewComponent,
     canActivate: [AuthGuard]
   },
   {

@@ -3,6 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { AlbumsService } from '../../services/albums.service';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 class ImageSnippet {
   pending: boolean = false;
@@ -27,7 +28,7 @@ export class AlbumsComponent {
   private albumsSubscription: Subscription = new Subscription();
 
 
-  constructor(  private modalService: NgbModal, private albumsService:AlbumsService, private toastr: ToastrService) {}
+  constructor(  private modalService: NgbModal, private albumsService:AlbumsService, private toastr: ToastrService, private router: Router) {}
 
 
   ngOnInit(): void {
@@ -179,4 +180,7 @@ export class AlbumsComponent {
     this.albumsSubscription.unsubscribe();
   }
 
+  onAlbumClick(album: AlbumsComponent) {
+    this.router.navigate(["/album"])
+  }
 }

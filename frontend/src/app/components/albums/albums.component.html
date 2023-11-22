@@ -47,7 +47,7 @@
   <div class="container pb-1"  >
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4" >
       <div class="col" *ngFor="let album of albums; let i = index"  >
-        <div class="image-button" style="cursor:pointer" >
+        <div class="image-button" (click)="onAlbumClick(album)" style="cursor:pointer" >
           <div class="card shadow-sm photo" >
             <img class="bd-placeholder-img custom-image" [src]="album.src" alt="Image" >
             <div class="card-body">
