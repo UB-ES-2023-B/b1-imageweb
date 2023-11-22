@@ -58,6 +58,9 @@
 .photo:hover {
   outline: 3px solid #16273c4d;
 }
+p{
+  margin:0px
+}
 
 .texto {
   font-family: 'Roboto', sans-serif;

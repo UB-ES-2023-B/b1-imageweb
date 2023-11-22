@@ -18,11 +18,13 @@ export class EditProfileComponent implements OnInit {
   showEmailError: boolean = false;
   showUserError: boolean = false;
 
+  private profilePicSubscription: Subscription = new Subscription();
+
   user: any = {
     id: 0,
     name: this.globalDataService.getUsername(),
-    profilePicture: this.globalDataService.getProfilePicture().file,
-    profilePictureUrl: this.globalDataService.getProfilePicture().previousUrl,
+    profilePicture: '',
+    profilePictureUrl: '',
     email: this.globalDataService.getEmail(),
     description: this.globalDataService.getDescription()
   }
@@ -33,7 +35,15 @@ export class EditProfileComponent implements OnInit {
               private toastr: ToastrService) {}
 
   ngOnInit(): void {
+    this.profilePicSubscription = this.globalDataService.profilePicture$.subscribe(profilePhoto => {
+      this.user.profilePicture = profilePhoto.file;
+      this.user.profilePictureUrl = profilePhoto.previousUrl || '../assets/images/perfil.jpg';
+    });
     this.getUserData();
+  }
+
+  ngOnDestroy() {
+    this.profilePicSubscription.unsubscribe();
   }
 
   private getUserData(): void {
