@@ -139,9 +139,9 @@ public class GalleryService {
     public String deleteGalleryPhotos(List<Integer> photosId){
         for (int photoId : photosId){
             if(photoRepository.findById(photoId).get() != null){
+                Photo photo =  photoRepository.findById(photoId).orElseThrow(()-> new PhotoNotFoundException("Photo with id " + photoId + "not found"));
                 photoRepository.deleteById(photoId);
                 CloudBlockBlob blockBlob;
-                Photo photo =  photoRepository.findById(photoId).orElseThrow(()-> new PhotoNotFoundException("Photo with id " + photoId + "not found"));
                 try {
                     blockBlob = container.getBlockBlobReference(photo.getPhotoId().toString());
                     blockBlob.deleteIfExists();
