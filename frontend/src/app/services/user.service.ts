@@ -36,4 +36,8 @@ export class UserService {
   changeUserPassword(passwords: any): Observable<any> {
     return this.http.put(this.domain + '/user/resetPassword', passwords);
   }
+
+  getSearchResults(query: string){
+    return this.http.get(this.domain + `/search/getSearchResults/${query}`, {  observe: 'response' });
+  }
 }

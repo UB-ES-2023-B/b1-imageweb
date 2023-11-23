@@ -1,4 +1,4 @@
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <nav class="navbar navbar-expand-lg navbar-dark mainColor fixed-top">
   <div class="container-fluid">
@@ -11,35 +11,83 @@
       </a>
     </ng-template>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
-        class="navbar-toggler-icon"></span></button>
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav d-flex align-items-center ms-auto mb-2 mb-lg-0">
-          <li *ngIf="username == ''" class="nav-item"><a class="nav-link" [routerLink]="['/login']">Iniciar sesión</a></li>
-          <li *ngIf="username == ''" class="nav-item"><a class="nav-link" [routerLink]="['/register']">Regístrate</a></li>
-          <li class="nav-link btn btn-secondary" *ngIf="username !== ''"  style="cursor: pointer;">
-            <a class="nav-link" (click)="goToProfile('gallery') ">Galería</a></li>
-          <li class="nav-item" *ngIf="username !== ''">
-            <a class="nav-link btn btn-secondary" (click)="uploadImage()">
-
-              <!-- <img src="../../../assets/images/upload-icon.svg"  width="40" height="40" alt="Icono"> -->
-              <app-upload-photo></app-upload-photo>
-            </a>
-          </li>
-
-        <li class="nav-item" *ngIf="username !== ''">
-          <div class="btn-group">
-          <a class="nav-link btn btn-secondary dropdown-toggle"  role="button" data-bs-toggle="dropdown" aria-expanded="false" >
-            <img [src]="profilePicUrl" width="40" height="40" alt="Perfil" class="rounded-circle">
-          </a>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li class="dropdown-item" (click)="goToProfile('info') " style="cursor: pointer;">Mi Perfil</li>
-
-            <li class="dropdown-item" (click)="logout() " style="cursor: pointer;">Cerrar sesión</li>
-          </ul>
-          </div>
+        <!-- Botón login -->
+        <li *ngIf="username == ''" class="nav-item">
+          <a class="nav-link" [routerLink]="['/login']">Iniciar sesión</a>
         </li>
 
+        <!-- Botón registrarse -->
+        <li *ngIf="username == ''" class="nav-item">
+          <a class="nav-link" [routerLink]="['/register']">Regístrate</a>
+        </li>
+
+        <!-- Botón buscar -->
+        <li class="nav-link btn btn-secondary" *ngIf="username !== ''" style="cursor: pointer;">
+          <a class="nav-link" (click)="toggleSearchBar() "><i class="fas fa-search"></i></a>
+        </li>
+
+        <!-- Barra de búsqueda -->
+        <div *ngIf="isSearchBarOpen" class="search-bar">
+          <input type="text" placeholder="Buscar..." [(ngModel)]="searchQuery">
+          <button (click)="search()">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            <span *ngIf="!loading">Buscar</span>
+          </button>
+          <button (click)="closeSearchBar()"><i class="fa fa-close"></i></button>
+        </div>
+
+        <!-- Resultados de búsqueda -->
+        <div *ngIf="resultsAvailable" class="search-results">
+          <!-- Mostrar mensaje cuando no hay resultados -->
+          <div *ngIf="searchResults.length <= 0" class="no-results-message">
+            No hay resultados coincidentes con la búsqueda.
+          </div>
+
+          <!-- Mostrar tarjetas de resultados cuando hay resultados -->
+          <div *ngIf="searchResults.length > 0" class="user-cards">
+            <div *ngFor="let user of searchResults" class="user-card">
+              <img [src]="user.profilePicture" alt="Foto del usuario">
+              <div class="user-info">
+                <p>{{ user.username }}</p>
+<!--                <button (click)="goToUserProfile(user.id)">Ir al perfil</button>-->
+                <button>Ir al perfil</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botón galeria -->
+        <li class="nav-link btn btn-secondary" *ngIf="username !== ''" style="cursor: pointer;">
+          <a class="nav-link" (click)="goToProfile('gallery') ">Galería</a>
+        </li>
+
+        <!-- Botón subir foto -->
+        <li class="nav-item" *ngIf="username !== ''">
+          <a class="nav-link btn btn-secondary" (click)="uploadImage()">
+            <app-upload-photo></app-upload-photo>
+          </a>
+        </li>
+
+        <!-- Icono perfil -->
+        <li class="nav-item" *ngIf="username !== ''">
+          <div class="btn-group">
+            <a class="nav-link btn btn-secondary dropdown-toggle" role="button" data-bs-toggle="dropdown"
+               aria-expanded="false">
+              <img [src]="profilePicUrl" width="40" height="40" alt="Perfil" class="rounded-circle">
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li class="dropdown-item" (click)="goToProfile('info') " style="cursor: pointer;">Mi Perfil</li>
+
+              <li class="dropdown-item" (click)="logout() " style="cursor: pointer;">Cerrar sesión</li>
+            </ul>
+          </div>
+        </li>
       </ul>
     </div>
   </div>
