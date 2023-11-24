@@ -49,7 +49,7 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'album',
+    path: 'profile/album/:id',
     component: AlbumViewComponent,
     canActivate: [AuthGuard]
   },

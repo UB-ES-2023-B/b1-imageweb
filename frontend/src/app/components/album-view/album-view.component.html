@@ -1,1 +1,34 @@
-<p style="margin-top: 100px">album-view works!</p>
+<div class="container  py-5" >
+    <div *ngIf="loading" class="d-flex justify-content-center align-items-center flex-column mt-5">
+      <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;animation-duration: 3s" role="status"></div>
+      <h4 style="margin-top: 20px;">Cargando...</h4>
+    </div>
+    <div *ngIf="!loading && images.length===0"class="d-flex justify-content-center align-items-center flex-column mt-5"
+    (mouseover)="showUploadHint = true" (mouseout)="showUploadHint = false">
+      <h4>Aún no has subido ninguna imagen</h4>
+      <app-upload-photo></app-upload-photo>
+      <div class="upload-hint" *ngIf="showUploadHint">
+        Subir imagen
+      </div>
+    </div>
+</div > 
+
+<div class="album py-2 bg-light" >
+    <div class="container" >
+        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="goToAlbumsView()"> <i class="fas fa-arrow-left"></i>&nbsp; Regresar a Albumes</button>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" >
+            <div class="col" *ngFor="let image of images; let i = index"  >
+                <div class="image-button" style="cursor:pointer" >
+                    <div class="card shadow-sm photo" >
+                        <img class="bd-placeholder-img card-img-top custom-image" [src]="image.src" alt="Image"  (click)="open(i)">
+             
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

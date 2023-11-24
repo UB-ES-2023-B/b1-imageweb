@@ -183,7 +183,7 @@ export class AlbumsComponent {
     this.albumsSubscription.unsubscribe();
   }
 
-  onAlbumClick(album: AlbumsComponent) {
-    this.router.navigate(["/album"])
+  onAlbumClick(albumId: number) {
+    this.router.navigate(["/profile/album", albumId]);
   }
 }
