@@ -45,7 +45,6 @@ export class UserProfileComponent implements OnInit {
   private getVisitedUserData(): void {
     this.userService.getVisitedUser(this.visited_user.id).subscribe( //MODIFICAR
         (response) => {
-          console.log(response);
           if (response.status === 200) {
             this.visited_user.name = response.body.username;
             this.visited_user.description = response.body.description;

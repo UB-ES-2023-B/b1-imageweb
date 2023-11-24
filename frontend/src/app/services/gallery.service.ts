@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable, Input} from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import {environment} from "../../environments/environment";
@@ -67,9 +67,4 @@ export class GalleryService {
   getImagesObservable(): Observable<any[]> {
     return this.imagesSubject.asObservable();
   }
-
-  getVisitedUserGallery(userName:string): Observable<any> {
-    return this.http.get(this.domain + `/gallery/viewGalleryFromUser/${userName}`, { observe: 'response' });
-  }
-
 }

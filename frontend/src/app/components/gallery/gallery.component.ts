@@ -1,4 +1,4 @@
-import {Component, ViewChild, AfterViewInit} from '@angular/core';
+import {Component, ViewChild, AfterViewInit, Input} from '@angular/core';
 import {GalleryService} from 'src/app/services/gallery.service';
 import {GlobalDataService} from 'src/app/services/global-data.service';
 import {Subscription} from 'rxjs';
@@ -14,6 +14,10 @@ import {R3SelectorScopeMode} from '@angular/compiler';
     styleUrls: ['./gallery.component.css']
 })
 export class GalleryComponent {
+    @Input() username: string = '';
+
+    original_username: string = this.globalDataService.getUsername();
+
     loading: boolean = true;
     images: any[] = [];
     showUploadHint: boolean = true;
@@ -34,7 +38,7 @@ export class GalleryComponent {
 
     getGallery(): void {
         this.images = []
-        this.galleryService.getGalleryUser(this.globalDataService.getUsername()).subscribe(
+        this.galleryService.getGalleryUser(this.username).subscribe(
             (response) => {
                 if (response.body && Array.isArray(response.body)) {
                     response.body.forEach((element: any) => {

@@ -50,7 +50,7 @@
 </div>
 
 <div *ngIf="activeItem=='gallery'">
-  <app-gallery></app-gallery>
+  <app-gallery [username]="user.name"></app-gallery>
 </div>
 
 <div *ngIf="activeItem=='albumes'">
