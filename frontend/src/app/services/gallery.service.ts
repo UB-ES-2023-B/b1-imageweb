@@ -23,7 +23,6 @@ export class GalleryService {
 
   uploadImage(idGallery: string, photo_file: File): Observable<any> {
     const formData = new FormData();
-    // console.log('mira el photo file', photo_file)
     formData.append('photo', photo_file);
     return this.http.post(this.domain + `/gallery/uploadPhotoGalery/${idGallery}`, formData,{  observe: 'response'});
   }
@@ -39,6 +38,15 @@ export class GalleryService {
       body: formData,
       observe: 'response'
     });
+  }
+
+  editInfoPhoto(idPhoto:number, name:string, description:string): Observable<any>{
+    const formData = {
+      "photoName": name,
+      "photoDescription": description
+    };
+
+    return this.http.put(this.domain + `/gallery/editInfoPhoto/${idPhoto}`, formData,{  observe: 'response'});
   }
 
   setImages(images: any[]): void {

@@ -3,7 +3,9 @@ name: CI
 on:
   push:
     branches:
-      - "demo"
+      - "dev"
+      - "main"
+      - "pre"
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -1,5 +1,6 @@
 package com.example.b1esimageweb.model;
 
+import com.example.b1esimageweb.web.dto.PhotoDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -21,14 +22,6 @@ public class Album {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
-
-    @OneToMany(mappedBy = "album")
-    @JsonManagedReference
-    private List<Photo> photos;
-
-    @ManyToOne
-    @JoinColumn(name = "cover_photo_id")
-    private Photo coverPhoto;
 
     public Album(){}
     public User getUser() {
@@ -54,17 +47,5 @@ public class Album {
     }
     public void setDescription(String description) {
         this.description = description;
-    }
-    public List<Photo> getPhotos() {
-        return photos;
-    }
-    public void setPhotos(List<Photo> photos) {
-        this.photos = photos;
-    }
-    public Photo getCoverPhoto() {
-        return coverPhoto;
-    }
-    public void setCoverPhoto(Photo coverPhoto) {
-        this.coverPhoto = coverPhoto;
     }
 }

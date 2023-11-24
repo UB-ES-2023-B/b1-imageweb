@@ -1,15 +1,20 @@
-<div>
+<div style="display: flex; align-items: center;" >
+  <label class="image-upload-container btn btn-bwm">
+    <!-- <img src="../../../assets/images/upload-icon.svg"  width="40" height="40" alt="Icono" > -->
+  <i class="fas fa-upload"></i>
   <input #imageInput
          type="file"
          accept="image/*"
          (change)="processFile(imageInput)"
          multiple
          >
+  </label>
 </div>
 
 <div *ngIf="selectedFiles!=[]">
   <div *ngFor="let file of selectedFiles; let i = index">
-      <div *ngIf="file.pending"  class="img-spinning-circle"></div>
+      <div *ngIf="loading"  class="img-spinning-circle"></div>
   </div>
 </div>
+
 

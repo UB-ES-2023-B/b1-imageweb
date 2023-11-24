@@ -1,5 +1,6 @@
 package com.example.b1esimageweb.repository;
 
+import com.example.b1esimageweb.model.Album;
 import com.example.b1esimageweb.model.Gallery;
 import com.example.b1esimageweb.model.Photo;
 import com.example.b1esimageweb.model.User;
@@ -21,4 +22,5 @@ public interface UserRepository extends CrudRepository<User, Integer> {
     @Query("SELECT u.profilePicture FROM User u WHERE u.userId = :userId")
     Photo getPhotoProfileByUserId(@Param("userId") Integer userId);
     Iterable<User> findByUsernameContaining(String searchCriteria);
+
 }

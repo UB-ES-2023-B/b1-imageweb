@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { Lightbox } from 'ngx-lightbox';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { R3SelectorScopeMode } from '@angular/compiler';
 
 
 @Component({
@@ -36,7 +37,7 @@ export class GalleryComponent {
             if (element.data) {
               this.images.unshift({
             "src":`data:image/${element.photoExtensio};base64,${element.data}`,
-             "id": element.photoId, "name":element.photoName, "description": 'Cambiar descripción'});
+             "id": element.photoId, "name":element.photoName, "description": element.photoDescription});
             }
           });
         }
