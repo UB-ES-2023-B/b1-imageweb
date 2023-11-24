@@ -68,6 +68,8 @@ export class GalleryService {
     return this.imagesSubject.asObservable();
   }
 
-
+  getVisitedUserGallery(userName:string): Observable<any> {
+    return this.http.get(this.domain + `/gallery/viewGalleryFromUser/${userName}`, { observe: 'response' });
+  }
 
 }

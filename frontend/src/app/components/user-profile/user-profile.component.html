@@ -1,0 +1,35 @@
+<div class="header-wrapper" [style.background-image]="'url(' + visited_user.coverPhoto + ')'">
+    <header></header>
+
+    <div class="column">
+        <div class="profile-picture">
+            <ng-container>
+                <img [src]="visited_user.profilePictureUrl" alt="Profile Picture">
+            </ng-container>
+        </div>
+
+        <div class="user-titles">
+            <h1>{{ visited_user.name }}</h1>
+            <h6>{{ visited_user.followers.length }} seguidores · {{ visited_user.following.length }} siguiendo</h6>
+        </div>
+    </div>
+</div>
+
+<app-secondary-navbar [activeItem]="activeItem" (itemClicked)="handleItemClicked($event)"></app-secondary-navbar>
+
+<div *ngIf="activeItem=='info'">
+    <div class="user-description" >
+        <h4>Descripción</h4>
+        <p *ngIf="visited_user.description" style="white-space: pre;">{{ visited_user.description }}</p>
+        <p *ngIf="!visited_user.description">Este usuario no ha añadido ninguna descripción.</p>
+        <div class="separator-line"></div>
+    </div>
+</div>
+
+<div *ngIf="activeItem=='gallery'">
+    <app-gallery></app-gallery>
+</div>
+
+<div *ngIf="activeItem=='albumes'">
+    <app-albums></app-albums>
+</div>

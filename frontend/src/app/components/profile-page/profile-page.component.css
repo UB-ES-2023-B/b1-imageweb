@@ -131,6 +131,7 @@ body {
   .header-wrapper .column {
     margin: 0;
     margin-right: auto;
+    max-height: 300px;
   }
 }
 
