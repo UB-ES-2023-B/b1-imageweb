@@ -69,7 +69,7 @@ public class UserControllerIntegrationTest {
     public void testLoginUser() throws Exception {
 
 
-        String jsonRegister = "{ \"username\": \"testUser5\", \"password\": \"testPassword\", \"email\": \"test25657@example.com\" }";
+        String jsonRegister = "{ \"username\": \"testUser777\", \"password\": \"testPassword\", \"email\": \"test25@example.com\" }";
 
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                         .contentType("application/json")
@@ -77,7 +77,7 @@ public class UserControllerIntegrationTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
-        MvcResult result = mockMvc.perform(get("/user/getByUserName/{userName}", "testUser5"))  // Replace "username" with an actual username
+        MvcResult result = mockMvc.perform(get("/user/getByUserName/{userName}", "testUser777"))  // Replace "username" with an actual username
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -89,9 +89,9 @@ public class UserControllerIntegrationTest {
         int id = jsonNode.get("userId").asInt();
         System.out.println(id);
 
-        String requestBody = "{\"username\":\"testUser5\",\"email\":\"newEmail22@example.com\"}";
+        String requestBody = "{\"username\":\"testUser777\",\"email\":\"newEmaigugil22@example.com\"}";
 
-        mockMvc.perform(put("/user/update/{username}", "testUser5")  // Replace "existingUsername" with an actual username
+        mockMvc.perform(put("/user/update/{username}", "testUser777")  // Replace "existingUsername" with an actual username
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody))
                 .andExpect(status().isOk())
@@ -114,7 +114,7 @@ public class UserControllerIntegrationTest {
                 .andExpect(status().isOk());
 
         mockMvc.perform(delete("/user/delete/{id}", id)
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + userToken))  // Replace 1 with an actual user ID
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + userToken))  // Replace 1 with an actual user ID
                 .andExpect(status().isOk());
 
     }
