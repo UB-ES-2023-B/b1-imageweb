@@ -35,7 +35,7 @@ export class NavbarComponent {
     this.profilePicSubscription = this.globalDataService.profilePicture$.subscribe(profilePhoto => {
       this.profilePicUrl = profilePhoto.previousUrl || '../assets/images/perfil.jpg';
     });
-    this.getUserData();
+    if (this.username !== '') this.getUserData();
   }
 
   ngOnDestroy() {
