@@ -104,6 +104,9 @@ body {
 }
 
 @media (min-width: 868px) {
+  .header-wrapper {
+    max-height: 300px;
+  }
   .header-wrapper .column {
     max-width: 1200px;
     margin: 0 auto;
