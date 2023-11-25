@@ -113,6 +113,10 @@ public class AlbumService {
         return albumPhotos;
     }
 
+    public Album getAlbumById(int albumId){
+        return albumRepository.findById(albumId).orElseThrow(() -> new UserNotFoundException("Album with id " + albumId + " not found"));
+    }
+
     public Iterable<PhotoDto> getPhotosByAlbum(Album album) {
         List<PhotoDto> photos = new ArrayList<>();
 
