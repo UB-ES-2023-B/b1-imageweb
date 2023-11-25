@@ -54,6 +54,13 @@ public class AlbumController {
         }
     }
 
+    @GetMapping("/getAlbum/{albumId}")
+    public Iterable<PhotoDto> getAlbumById(@PathVariable int albumId) {
+        Album album = albumService.getAlbumById(albumId);
+        Iterable<PhotoDto> photos = albumService.getPhotosByAlbum(album);
+        return photos;
+    }
+
     @PostMapping("/addPhotosAlbum/{albumId}")
     public ResponseEntity<?> addPhotosToAlbum(@PathVariable int albumId, @RequestParam("photos") List<MultipartFile> photosList) {
         try {
