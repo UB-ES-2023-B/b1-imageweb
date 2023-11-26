@@ -37,6 +37,7 @@ export class UserProfileComponent implements OnInit {
     this.globalDataService.activeItem$.subscribe(newItem => { this.activeItem = newItem; });
     this.route.params.subscribe(params => {
       this.visited_user.id = params['id'];
+      this.activeItem = 'info';
       this.getVisitedUserData();
     });
 
@@ -69,7 +70,6 @@ export class UserProfileComponent implements OnInit {
   private getVisitedUserProfilePicture(){
     this.userService.getVisitedUserProfilePhoto(this.visited_user.name).subscribe(
         (response) => {
-          console.log("Profile pic:", response.body);
           if (response.status === 200) {
               if (response.body != null) {
                   this.visited_user.profilePicture = response.body;

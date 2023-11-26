@@ -127,6 +127,10 @@ body {
     position: relative;
     transform: translate(275px, -100px);
     margin-left: auto;
+    z-index: 2;
+  }
+  .dropdown-menu {
+    z-index: 3;
   }
 }
 
