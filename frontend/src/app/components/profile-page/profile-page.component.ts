@@ -43,14 +43,6 @@ export class ProfilePageComponent implements OnInit {
     this.changePwdModal = true;
   }
 
-  handleChangePassword(event: any): void {
-    // Aquí puedes agregar la lógica para manejar el cambio de contraseña
-    console.log('Contraseña actual:', event.currentPassword,
-      'Nueva contraseña:', event.newPassword,
-      'Confirmar contraseña:', event.confirmPassword);
-  }
-
-
   ngOnInit(): void {
     this.globalDataService.activeItem$.subscribe(newItem => {
       this.activeItem = newItem;

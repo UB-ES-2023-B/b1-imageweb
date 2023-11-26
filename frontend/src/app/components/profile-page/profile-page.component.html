@@ -31,7 +31,6 @@
 
     <app-change-password
       *ngIf="changePwdModal"
-      (passwordChanged)="handleChangePassword($event)"
       (modalClosed)="changePwdModal = false"
     ></app-change-password>
 
