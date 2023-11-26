@@ -90,10 +90,10 @@ export class NavbarComponent {
           if (response.status === 200) {
             this.resultsAvailable = true;
             this.searchResults = response.body;
+            this.deleteOwnUser(); // Borra al propio user
             console.log('Resultados de búsqueda:', response.body);
           }
           else this.toastr.error("Error en la búsqueda, inténtelo de nuevo más tarde.");
-
           this.loading = false;
         },
         (error) => {
@@ -117,5 +117,15 @@ export class NavbarComponent {
       // Devolver una URL predeterminada o una URL de imagen de marcador de posición
       return 'path/de/imagen/por/defecto.jpg';
     }
+  }
+
+  goToUserProfile(id: number) {
+    console.log("ID USER", id);
+    this.closeSearchBar();
+    this.router.navigate([`/user-profile/${id}`]);
+  }
+
+  private deleteOwnUser() {
+    this.searchResults = this.searchResults.filter(item => item.username != this.globalDataService.getUsername());
   }
 }

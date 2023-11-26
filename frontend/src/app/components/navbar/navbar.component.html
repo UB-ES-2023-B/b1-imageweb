@@ -56,8 +56,7 @@
               <img *ngIf="user.profilePicture === null" src="../../assets/images/perfil.jpg" alt="Foto del usuario">
               <div class="user-info">
                 <p>{{ user.username }}</p>
-                <!--                <button (click)="goToUserProfile(user.id)">Ir al perfil</button>-->
-                <button>Ir al perfil</button>
+                <button (click)="goToUserProfile(user.userId)">Ir al perfil</button>
               </div>
             </div>
           </div>
@@ -84,7 +83,6 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end">
               <li class="dropdown-item" (click)="goToProfile('info') " style="cursor: pointer;">Mi Perfil</li>
-
               <li class="dropdown-item" (click)="logout() " style="cursor: pointer;">Cerrar sesión</li>
             </ul>
           </div>
