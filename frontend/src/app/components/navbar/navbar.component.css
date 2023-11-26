@@ -1,6 +1,11 @@
+.navbar {
+  position: relative;
+}
+
 .dropdown-menu {
   background-color: rgba(189,224,212, 0.6);
   border: none;
+  position: absolute;
 }
 
 .dropdown-item {
