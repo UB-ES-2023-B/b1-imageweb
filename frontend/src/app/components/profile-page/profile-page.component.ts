@@ -57,8 +57,9 @@ export class ProfilePageComponent implements OnInit {
   getUserData(): void {
     this.userService.getUser(this.user.name).subscribe(
       (response) => {
-        this.user.email = response.body.email;
         this.user.id = response.body.userId;
+        this.user.email = response.body.email;
+        this.user.description = response.body.description;
         if (response.body.profilePicture) { // Configura la foto de perfil y su URL
           this.user.profilePicture = response.body.profilePicture;
           this.user.profilePictureUrl = `data:image/${response.body.profilePicture.photoName};base64,${response.body.profilePicture.data}`;
