@@ -68,7 +68,28 @@ export class EditGalleryComponent {
     this.editImageId=-1;
   }
   saveEditInfo(id:number, name:string, description:string){
-    console.log('id foto::', id, 'este es el name:', name,'este es el description:: ', description )
+    this.galleryService.editInfoPhoto(id,name, description).subscribe(
+      (response)=>{
+        this.toastr.success('Se ha editado correctamente');
+        this.editImageId=-1;
+
+      },
+      (error)=>{
+        console.log('error editar campos de fotos', error)
+        this.toastr.error('No se ha editado correctamente','Error');
+        let index = this.images.findIndex(imagen => imagen.id === id);
+
+        if (index !== -1) {
+          this.images[index].name = this.editImageOriginalValues.name;
+          this.images[index].description = this.editImageOriginalValues.description;
+
+        } else {
+          console.log('Error en cancelar');
+        }
+        this.editImageId=-1;
+
+      }
+    )
     //Hacer la llamada al back
     //this.editImageId=-1;
   }
@@ -81,7 +102,7 @@ export class EditGalleryComponent {
             if (element.data) {
               this.images.unshift({
             "src":`data:image/${element.photoExtensio};base64,${element.data}`,
-             "id": element.photoId, "name":element.photoName, "description": 'Cambiar descripción'});
+             "id": element.photoId, "name":element.photoName, "description": element.photoDescription});
             }
           });
         }

@@ -18,11 +18,13 @@ export class EditProfileComponent implements OnInit {
   showEmailError: boolean = false;
   showUserError: boolean = false;
 
+  private profilePicSubscription: Subscription = new Subscription();
+
   user: any = {
     id: 0,
     name: this.globalDataService.getUsername(),
-    profilePicture: this.globalDataService.getProfilePicture().file,
-    profilePictureUrl: this.globalDataService.getProfilePicture().previousUrl,
+    profilePicture: '',
+    profilePictureUrl: '',
     email: this.globalDataService.getEmail(),
     description: this.globalDataService.getDescription()
   }
@@ -33,13 +35,21 @@ export class EditProfileComponent implements OnInit {
               private toastr: ToastrService) {}
 
   ngOnInit(): void {
+    this.profilePicSubscription = this.globalDataService.profilePicture$.subscribe(profilePhoto => {
+      this.user.profilePicture = profilePhoto.file;
+      this.user.profilePictureUrl = profilePhoto.previousUrl || '../assets/images/perfil.jpg';
+    });
     this.getUserData();
+  }
+
+  ngOnDestroy() {
+    this.profilePicSubscription.unsubscribe();
   }
 
   private getUserData(): void {
     this.userService.getUser(this.user.name).subscribe(
       (response) => {
-        this.user.email = response.body.userEmail;
+        this.user.email = response.body.email;
         this.user.id = response.body.userId;
         this.user.description = response.body.description;
         if(response.body.profilePicture !== null) {
@@ -91,7 +101,7 @@ export class EditProfileComponent implements OnInit {
       },
       (error) => {
         console.error('Error al eliminar la foto de perfil', error);
-        this.toastr.success('Error al eliminar la foto de perfil');
+        this.toastr.error('Error al eliminar la foto de perfil');
       }
     );
   }
@@ -108,6 +118,9 @@ export class EditProfileComponent implements OnInit {
   }
 
   actualizarPerfil() {
+    if (this.newEmail === '') this.newEmail = this.user.email;
+    if (this.newUsername === '') this.newUsername = this.user.name;
+
     const updatedUser = {
       username: this.newUsername,
       email: this.newEmail,
@@ -159,7 +172,6 @@ export class EditProfileComponent implements OnInit {
   onEmailBlur() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     this.showEmailError = !emailRegex.test(this.newEmail);
-    console.log(this.showEmailError);
   }
 
   onUserChange() { this.showUserError = false; }  // Reset error message on username change

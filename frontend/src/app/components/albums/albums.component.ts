@@ -41,25 +41,26 @@ export class AlbumsComponent {
   }
 
   getAlbums(){
-    console.log('Hace el get de albums')
     this.albums=[]
     this.albumsService.getAlbumsForUser().subscribe(
       (response)=>{
+
         if (response.body && Array.isArray(response.body.albums)) {
           response.body.albums.forEach((element: any) => {
-            //if (element.data) {
-              if (element.albumId) {
-              // SACAR EL LEN DE LAS FOTOS
-              //"src":`data:image/${element.photoExtensio};base64,${element.data}`,
-              let len= element.photos.length
+            if(element.length>0){
+              if(element.length>1){
+                var src= `data:image/${element[1].photoExtension};base64,${element[1].data}`
+              }else{
+                var src='../../../assets/images/defaultImageAlbum.jpg'
+              }
               this.albums.unshift({
-                "src":'../../../assets/images/defaultImageAlbum.jpg',
-             "id": element.albumId, "name":element.albumName, "description": element.description, "photoLength":len});
+                "src":src,
+                "id": element[0].album.albumId, "name":element[0].album.albumName, "description": element[0].album.description, "photoLength":  element.length-1});
             }
+
           });
         }
         this.albumsService.setAlbums(this.albums);
-        console.log(this.albums)
         this.loading=false;
       },
       (error)=>{
@@ -132,17 +133,19 @@ export class AlbumsComponent {
     //Hacer llamada del back
     this.albumsService.createAlbum(this.name, this.description, this.defaultImage.file).subscribe(
       (response)=>{
-        console.log('esto es lo que responde ', response)
+        if(response.body.length>0){
+          var idAlbum=response.body[0].album.albumId
+        }else{
+          console.log('error con el id del álbum')
+        }
         this.albums.unshift({
         "src":'../../../assets/images/defaultImageAlbum.jpg',
-        "id": response.body.albumId, "name":this.name, "description": this.description, "photoLength": 0});
+        "id": idAlbum, "name":this.name, "description": this.description, "photoLength": 0});
         this.albumsService.setAlbums(this.albums);
         this.toastr.success("Álbum creado");
         this.name='';
         this.description='';
         this.loading=false;
-
-
       },
       (error)=>{
         console.log('error al crear album', error)

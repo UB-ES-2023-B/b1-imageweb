@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {key} from "ngx-bootstrap-icons";
 
 interface ProfilePictureInfo {
@@ -79,6 +79,8 @@ export class GlobalDataService {
   }
 
   getProfilePicture(): ProfilePictureInfo { return this.profilePictureSubject.getValue(); }
+  //getProfilePicture(): Observable<ProfilePictureInfo> { return this.profilePicture$; }
+
 
   get activeItem$() { return this._activeItem.asObservable(); }
 
