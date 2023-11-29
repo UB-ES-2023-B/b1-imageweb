@@ -11,5 +11,4 @@ public interface PhotoRepository extends CrudRepository<Photo, Integer> {
 
     Iterable<Photo> findByGallery(Gallery gallery);
     Iterable<Photo> findByAlbum(Album album);
-    
 }
