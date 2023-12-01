@@ -33,6 +33,7 @@ import { EditGalleryComponent } from './components/edit-gallery/edit-gallery.com
 import { AlbumsComponent } from './components/albums/albums.component';
 import { UploadPhotosComponent } from './components/upload-photos/upload-photos.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { EditAlbumsComponent } from './components/edit-albums/edit-albums.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
     EditGalleryComponent,
     AlbumsComponent,
     UploadPhotosComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    EditAlbumsComponent
   ],
   imports: [
     BrowserModule,

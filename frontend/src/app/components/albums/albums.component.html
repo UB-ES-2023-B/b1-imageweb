@@ -1,7 +1,15 @@
+<div class="container py-2 d-md-flex justify-content-md-end"
+     *ngIf="!loading && username === original_username">
+    <button *ngIf="!loading && albums.length!=0" type="button" class="btn button-color" (click)="goEditAlbum()" style="margin-right: 1%;">
+        <i class="fas fa-pencil-alt"></i> Editar
+    </button>
+    <button *ngIf="username === original_username" type="button" class="btn button-color" (click)="openModal(modalContent)">
+      <i class="fas fa-plus-circle"></i>&nbsp; Crear álbum
+    </button>
+</div>
+
 <div class="container py-2 d-md-flex justify-content-md-end">
-  <button *ngIf="username === original_username" type="button" class="btn button-color" (click)="openModal(modalContent)">
-    <i class="fas fa-plus-circle"></i>&nbsp; Crear álbum
-  </button>
+
   <!--MODAL-->
   <ng-template #modalContent let-modal>
     <div class="modal-header">
