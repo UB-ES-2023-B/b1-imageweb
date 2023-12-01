@@ -14,14 +14,12 @@ import {Router} from '@angular/router';
 })
 export class EditAlbumsComponent {
   original_username: string = this.globalDataService.getUsername();
-
-
-  modalTitle: string = 'Nuevo álbum'
-  name: string = '';
-  description: string = '';
-  remainingWords: number = 25;
   loading: boolean = true;
   albums: any[] = [];
+  editAlbumId:number=-1;
+  editAlbumsOriginalValues:any= {};
+  remainingWords: number = 25;
+
 
   private albumsSubscription: Subscription = new Subscription();
 
@@ -38,6 +36,69 @@ export class EditAlbumsComponent {
           this.albums = albums;
       });
       this.getAlbums();
+  }
+
+  startEditInfo(id:number, name:string, description:string){
+    this.editAlbumId=id;
+    this.editAlbumsOriginalValues={name:name,description:description}
+  }
+
+  cancelEditInfo(id:number){
+    let index = this.albums.findIndex(imagen => imagen.id === id);
+
+    if (index !== -1) {
+      this.albums[index].name = this.editAlbumsOriginalValues.name;
+      this.albums[index].description = this.editAlbumsOriginalValues.description;
+
+    } else {
+      console.log('Error en cancelar');
+    }
+    this.editAlbumId=-1;
+  }
+
+  countWords(description:string, index:number) {
+    const words = description.split(/\s+/).filter((word) => word.length > 0);
+    const remainingWords = 25 - words.length;
+
+    if (remainingWords >= 0) {
+        this.remainingWords = remainingWords;
+    } else {
+        // Limitar el número de palabras en el textarea
+        const limit = words.slice(0, 25).join(' ');
+        this.albums[index]
+        this.albums[index].description = limit;
+        this.remainingWords = 0;
+    }
+    }
+
+  saveEditInfo(id:number, name:string, description:string){
+    // this.galleryService.editInfoPhoto(id,name, description).subscribe(
+    //   (response)=>{
+    //     this.toastr.success('Se ha editado correctamente');
+    //     this.editImageId=-1;
+
+    //   },
+    //   (error)=>{
+    //     console.log('error editar campos de fotos', error)
+    //     this.toastr.error('No se ha editado correctamente','Error');
+    //     let index = this.images.findIndex(imagen => imagen.id === id);
+
+    //     if (index !== -1) {
+    //       this.images[index].name = this.editImageOriginalValues.name;
+    //       this.images[index].description = this.editImageOriginalValues.description;
+
+    //     } else {
+    //       console.log('Error en cancelar');
+    //     }
+    //     this.editImageId=-1;
+
+    //   }
+    // )
+  }
+
+  goGallery(){
+    this.globalDataService.setActiveItem('albumes');
+    this.router.navigate(['/profile/']);
   }
 
   getAlbums() {
