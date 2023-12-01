@@ -1,25 +1,27 @@
-<div class="container py-2 d-md-flex justify-content-md-end" *ngIf="!loading && images.length!=0 && username === original_username">
+<div class="container py-2 d-md-flex justify-content-md-end"
+     *ngIf="!loading && images.length!=0 && username === original_username">
     <button type="button" class="btn button-color" (click)="goEditGallery()">
         <i class="fas fa-pencil-alt"></i> Editar
     </button>
 </div>
 
 <div *ngIf="loading" class="d-flex justify-content-center align-items-center flex-column mt-5">
-    <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;animation-duration: 3s"
-         role="status"></div>
+    <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;animation-duration: 3s" role="status"></div>
     <h4 style="margin-top: 20px;">Cargando...</h4>
 </div>
 
-<div *ngIf="!loading && images.length===0 && username === original_username" class="d-flex justify-content-center align-items-center flex-column mt-5"
+<div *ngIf="!loading && images.length===0 && username === original_username"
+     class="d-flex justify-content-center align-items-center flex-column mt-5"
      (mouseover)="showUploadHint = true" (mouseout)="showUploadHint = false">
     <h4>Aún no has subido ninguna imagen.</h4>
-    <app-upload-photo></app-upload-photo>
-    <div class="upload-hint" *ngIf="showUploadHint">
-        Subir imagen
+    <div class="upload-hint">
+        <app-upload-photo></app-upload-photo>
+        <span class="tooltiptext">Subir imagen</span>
     </div>
 </div>
 
-<div *ngIf="!loading && images.length===0" class="d-flex justify-content-center align-items-center flex-column mt-5"
+<div *ngIf="!loading && images.length===0 && username != original_username"
+     class="d-flex justify-content-center align-items-center flex-column mt-5"
      (mouseover)="showUploadHint = true" (mouseout)="showUploadHint = false">
     <h4>Este usuario aún no ha subido ninguna imagen.</h4>
 </div>

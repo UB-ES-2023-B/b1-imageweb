@@ -1,5 +1,5 @@
 <div class="container py-2 d-md-flex justify-content-md-end">
-  <button type="button" class="btn button-color" (click)="openModal(modalContent)">
+  <button *ngIf="username === original_username" type="button" class="btn button-color" (click)="openModal(modalContent)">
     <i class="fas fa-plus-circle"></i>&nbsp; Crear álbum
   </button>
   <!--MODAL-->
@@ -53,12 +53,11 @@
             <div class="card-body">
               <p class="custom-paragraph"><b>{{ album.name }}</b></p>
               <p class="custom-paragraph">&nbsp;{{ album.description }}</p>
-              <div class="d-flex align-items-center justify-content-between">
+              <div *ngIf="username === original_username" class="d-flex align-items-center justify-content-between">
                 <p class="custom-paragraph">&nbsp;Fotos: {{ album.photoLength }}</p>
                 <app-upload-photos  [idAlbum]=album.id></app-upload-photos>
               </div>
             </div>
-
           </div>
         </div>
       </div>

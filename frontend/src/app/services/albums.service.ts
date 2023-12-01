@@ -25,8 +25,8 @@ export class AlbumsService {
   }
 
   //Aún no esta terminado
-  getAlbumsForUser(): Observable<any> {
-    return this.http.get(this.domain + `/getAlbums`, {  observe: 'response' });
+  getAlbumsForUser(username: string): Observable<any> {
+    return this.http.get(this.domain + `/getAlbums/${username}`, {  observe: 'response' });
   }
 
   addPhotosToAlbum(idAlbum:number, photos:File[]){
