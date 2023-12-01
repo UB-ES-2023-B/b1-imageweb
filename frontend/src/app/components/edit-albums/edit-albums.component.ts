@@ -72,28 +72,27 @@ export class EditAlbumsComponent {
     }
 
   saveEditInfo(id:number, name:string, description:string){
-    // this.galleryService.editInfoPhoto(id,name, description).subscribe(
-    //   (response)=>{
-    //     this.toastr.success('Se ha editado correctamente');
-    //     this.editImageId=-1;
+    this.albumsService.updateInfoAlbum(id,name, description).subscribe(
+      (response)=>{
+        this.toastr.success('Se ha editado correctamente');
+        this.editAlbumId=-1;
+      },
+      (error)=>{
+        console.log('error editar campos de albums', error)
+        this.toastr.error('No se ha editado correctamente','Error');
+        let index = this.albums.findIndex(album => album.id === id);
 
-    //   },
-    //   (error)=>{
-    //     console.log('error editar campos de fotos', error)
-    //     this.toastr.error('No se ha editado correctamente','Error');
-    //     let index = this.images.findIndex(imagen => imagen.id === id);
+        if (index !== -1) {
+          this.albums[index].name = this.editAlbumsOriginalValues.name;
+          this.albums[index].description = this.editAlbumsOriginalValues.description;
 
-    //     if (index !== -1) {
-    //       this.images[index].name = this.editImageOriginalValues.name;
-    //       this.images[index].description = this.editImageOriginalValues.description;
+        } else {
+          console.log('Error en cancelar en albums');
+        }
+        this.editAlbumId=-1;
 
-    //     } else {
-    //       console.log('Error en cancelar');
-    //     }
-    //     this.editImageId=-1;
-
-    //   }
-    // )
+      }
+    )
   }
 
   goGallery(){

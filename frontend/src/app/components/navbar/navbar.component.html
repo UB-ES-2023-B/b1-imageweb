@@ -56,7 +56,9 @@
               <img *ngIf="user.profilePicture === null" src="../../assets/images/perfil.jpg" alt="Foto del usuario">
               <div class="user-info">
                 <p>{{ user.username }}</p>
-                <button (click)="goToUserProfile(user.userId)">Ir al perfil</button>
+                <button type="button" class="btn button-color" (click)="goToUserProfile(user.userId)" style="margin-right: 1%;">
+                  Ir al perfil
+                </button>
               </div>
             </div>
           </div>

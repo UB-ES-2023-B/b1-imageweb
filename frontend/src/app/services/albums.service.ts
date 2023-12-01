@@ -24,6 +24,11 @@ export class AlbumsService {
     return this.http.post(this.domain + `/newAlbum`, formData, { observe: 'response' });
   }
 
+  updateInfoAlbum(id:number, name:string, description:string): Observable<any> {
+    const data = { name: name, description: description };
+    return this.http.put(this.domain + `/album/updateInfo/${id}`, data, { observe: 'response', responseType: 'text' });
+  }
+
   //Aún no esta terminado
   getAlbumsForUser(username: string): Observable<any> {
     return this.http.get(this.domain + `/getAlbums/${username}`, {  observe: 'response' });
