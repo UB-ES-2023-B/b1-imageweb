@@ -1,49 +1,5 @@
-<div class="container py-2 d-md-flex justify-content-md-end"
-     *ngIf="!loading && albums.length!=0 && username === original_username">
-    <button type="button" class="btn button-color" (click)="openModal(modalContent)" style="margin-right: 1%;">
-        <i class="fas fa-pencil-alt"></i> Editar
-    </button>
-    <button *ngIf="username === original_username" type="button" class="btn button-color" (click)="openModal(modalContent)">
-      <i class="fas fa-plus-circle"></i>&nbsp; Crear álbum
-    </button>
-</div>
 
-<div class="container py-2 d-md-flex justify-content-md-end">
-
-  <!--MODAL-->
-  <ng-template #modalContent let-modal>
-    <div class="modal-header">
-      <h5 class="modal-title" id="modal-basic-title">{{modalTitle}}</h5>
-      <button type="button" class="btn-close" (click)="modal.dismiss('close')">
-      </button>
-    </div>
-    <div class="modal-body">
-      <div class="mb-3">
-        <label for="nombre" class="form-label">Nombre:</label>
-        <input type="text" class="form-control" id="nombre" [(ngModel)]="name" placeholder="Escribe el nombre" required [ngClass]="{'is-invalid': name && name.length > 50}">
-        <div class="invalid-feedback" *ngIf="name && name.length > 50">
-          El nombre no puede tener más de 50 caracteres.
-        </div>
-      </div>
-      <div class="mb-3">
-        <div class="form-floating">
-          <textarea class="form-control" [(ngModel)]="description" (input)="countWords()" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
-          <label for="floatingTextarea">Descripción:</label>
-        </div>
-        <p class="remaining-words">Palabras restantes: {{ remainingWords }}</p>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" (click)="modal.close('close')">Cancelar</button>
-      <button type="button" class="btn btn-primary" [disabled]="!name || name.length > 50 || remainingWords < 0" (click)="modal.close('save')">Crear</button>
-    </div>
-  </ng-template>
-</div>
-
-<div class="container">
-  <!-- <app-upload-photos></app-upload-photos> -->
-  <!-- <img src="../../../assets/images/defaultImageAlbum.jpg"> -->
-</div>
+<h1>HOLAAAAAAAAAAAAAAAAAAAAAAA</h1>
 
 <div *ngIf="loading" class="d-flex justify-content-center align-items-center flex-column mt-5">
   <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;animation-duration: 3s" role="status"></div>
@@ -61,7 +17,7 @@
             <div class="card-body">
               <p class="custom-paragraph"><b>{{ album.name }}</b></p>
               <p class="custom-paragraph">&nbsp;{{ album.description }}</p>
-              <div *ngIf="username === original_username" class="d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center justify-content-between">
                 <p class="custom-paragraph">&nbsp;Fotos: {{ album.photoLength }}</p>
                 <app-upload-photos  [idAlbum]=album.id></app-upload-photos>
               </div>

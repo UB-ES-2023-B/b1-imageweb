@@ -4,6 +4,7 @@ import {Subscription} from 'rxjs';
 import {AlbumsService} from '../../services/albums.service';
 import {GlobalDataService} from 'src/app/services/global-data.service';
 import {ToastrService} from 'ngx-toastr';
+import {Router} from '@angular/router';
 
 class ImageSnippet {
     pending: boolean = false;
@@ -38,6 +39,7 @@ export class AlbumsComponent {
     constructor(private modalService: NgbModal,
                 private albumsService: AlbumsService,
                 private toastr: ToastrService,
+                private router: Router,
                 private globalDataService: GlobalDataService) {
     }
 
@@ -81,6 +83,11 @@ export class AlbumsComponent {
                 this.loading = false;
             }
         )
+    }
+
+    goEditAlbum(){
+      this.router.navigate(['/profile/editAlbums']);
+
     }
 
     openModal(content: any) {
