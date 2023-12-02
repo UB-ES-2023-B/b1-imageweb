@@ -1,5 +1,7 @@
 package com.example.b1esimageweb.web.dto;
 
+import java.util.Set;
+
 import com.example.b1esimageweb.model.Album;
 import com.example.b1esimageweb.model.Gallery;
 
@@ -9,17 +11,17 @@ public class PhotoDto {
     private Gallery gallery;
     private String photoName;
 
-    private Album album;
+    private Set<Album> albums;
     private String photoExtension;
     private String photoDescription;
     private byte[] data; // Datos binarios de la imagen
 
-    public PhotoDto(byte[] data, Integer photoId, Gallery gallery, String photoName,Album album, String photoExtension, String photoDescription) {
+    public PhotoDto(byte[] data, Integer photoId, Gallery gallery, String photoName,Set<Album> albums, String photoExtension, String photoDescription) {
         this.photoId = photoId;
         this.data = data;
         this.gallery = gallery;
         this.photoName = photoName;
-        this.album = album;
+        this.albums = albums;
         this.photoExtension = photoExtension;
         this.photoDescription = photoDescription;
     }
@@ -36,8 +38,8 @@ public class PhotoDto {
         return photoName;
     }
 
-    public Album getAlbum() {
-        return album;
+    public Set<Album> getAlbums() {
+        return albums;
     }
 
     public String getPhotoExtension() {
