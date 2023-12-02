@@ -9,7 +9,7 @@ import { AuthGuard  } from './guards/auth.guard';
 import {EditProfileComponent} from "./components/edit-profile/edit-profile.component";
 import { EditGalleryComponent } from './components/edit-gallery/edit-gallery.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
-
+import { EditAlbumsComponent } from './components/edit-albums/edit-albums.component';
 const routes: Routes = [
    //Initial route
    {
@@ -49,6 +49,12 @@ const routes: Routes = [
     component: EditGalleryComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: 'profile/editAlbums',
+    component: EditAlbumsComponent,
+    canActivate: [AuthGuard]
+  },
+
   {
     path: 'user-profile/:id',
     component: UserProfileComponent,
