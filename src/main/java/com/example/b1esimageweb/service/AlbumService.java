@@ -76,41 +76,34 @@ public class AlbumService {
         return albumRepository.save(album);
     }
 
-    public Map<Integer, List<PhotoDto>> getAllAlbumsForUser(){
+    public Map<Integer, List<PhotoDto>> getAllAlbumsForUser(User user){
         Map<Integer, List<PhotoDto>> albumPhotos = new HashMap<>();
-        Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User currentUser = null;
-        if(obj instanceof User){
-            currentUser = (User) obj;
-        }
-        if(currentUser != null) {
-            Iterable<Photo> allPhotos = photoRepository.findAll();
-            Iterable<Album> allAlbums = albumRepository.findAll();
+        Iterable<Album> allAlbums = albumRepository.findAllByUser(user);
+        for (Album album : allAlbums){
+            List<PhotoDto> photos = new ArrayList<>();
+            Iterable<Photo> allPhotos = photoRepository.findByAlbum(album);
             for(Photo photo : allPhotos){
-                if(photo.getAlbum() == null){
-                    continue;
-                }
                 CloudBlob blob;
                 try {
-                    for (Album album : allAlbums){
-                        if ((currentUser.getUserId() == album.getUser().getUserId()) && (album.getAlbumId() == photo.getAlbum().getAlbumId())){
-                            blob = container.getBlockBlobReference(photo.getPhotoId().toString());
-                            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                            blob.download(outputStream);
-                            byte[] photoContent = outputStream.toByteArray();
-                            PhotoDto photoDto = new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getAlbum(), photo.getPhotoExtension(), photo.getPhotoDescription());
-                            albumPhotos.computeIfAbsent(album.getAlbumId(), k -> new ArrayList<>()).add(photoDto);
-                        }
-                    }
+                    blob = container.getBlockBlobReference(photo.getPhotoId().toString());
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    blob.download(outputStream);
+                    byte[] photoContent = outputStream.toByteArray();
+                    PhotoDto photoDto = new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getAlbum(), photo.getPhotoExtension(), photo.getPhotoDescription());
+                    photos.add(photoDto);
                 } catch (URISyntaxException | StorageException e) {
                     e.printStackTrace();
                     return null;
                 }
             }
-
-
+            albumPhotos.put(album.getAlbumId(), photos);
         }
         return albumPhotos;
+    }
+
+
+    public Album getAlbumById(int albumId){
+        return albumRepository.findById(albumId).orElseThrow(() -> new UserNotFoundException("Album with id " + albumId + " not found"));
     }
 
     public Iterable<PhotoDto> getPhotosByAlbum(Album album) {

@@ -24,12 +24,32 @@ export class AlbumViewComponent {
   constructor(private albumsService:AlbumsService, private router: Router, private globalDataService:GlobalDataService, private _lightbox: Lightbox, private toastr: ToastrService){
   }
 
-  goToAlbumsView(){
+  goGallery(){
+    this.globalDataService.setActiveItem('albumes');
     this.router.navigate(['/profile/']);
   }
 
   getAlbum():void{
     this.images=[]
+    this.albumsService.getAlbumById(this.albumId).subscribe(
+      (response)=>{
+        if (response.body && Array.isArray(response.body)) {
+          response.body.forEach((element: any) => {
+            if (element.data) {
+              this.images.unshift({
+                "src":`data:image/${element.photoExtensio};base64,${element.data}`,
+                "id": element.photoId, "name":element.photoName, "description": element.photoDescription
+              });
+            }
+          });
+        }
+        this.albumsService.setImagesToAlbum(this.images);
+        this.loading=false;
+      },(error)=>{
+        console.log('error al obtener album', error)
+      }
+      
+    )
   }
 
   open(index: number): void {

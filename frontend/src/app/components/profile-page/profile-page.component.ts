@@ -43,14 +43,6 @@ export class ProfilePageComponent implements OnInit {
     this.changePwdModal = true;
   }
 
-  handleChangePassword(event: any): void {
-    // Aquí puedes agregar la lógica para manejar el cambio de contraseña
-    console.log('Contraseña actual:', event.currentPassword,
-      'Nueva contraseña:', event.newPassword,
-      'Confirmar contraseña:', event.confirmPassword);
-  }
-
-
   ngOnInit(): void {
     this.globalDataService.activeItem$.subscribe(newItem => {
       this.activeItem = newItem;
@@ -65,8 +57,9 @@ export class ProfilePageComponent implements OnInit {
   getUserData(): void {
     this.userService.getUser(this.user.name).subscribe(
       (response) => {
-        this.user.email = response.body.email;
         this.user.id = response.body.userId;
+        this.user.email = response.body.email;
+        this.user.description = response.body.description;
         if (response.body.profilePicture) { // Configura la foto de perfil y su URL
           this.user.profilePicture = response.body.profilePicture;
           this.user.profilePictureUrl = `data:image/${response.body.profilePicture.photoName};base64,${response.body.profilePicture.data}`;

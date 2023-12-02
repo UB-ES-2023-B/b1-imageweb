@@ -31,7 +31,6 @@
 
     <app-change-password
       *ngIf="changePwdModal"
-      (passwordChanged)="handleChangePassword($event)"
       (modalClosed)="changePwdModal = false"
     ></app-change-password>
 
@@ -50,9 +49,9 @@
 </div>
 
 <div *ngIf="activeItem=='gallery'">
-  <app-gallery></app-gallery>
+  <app-gallery [username]="user.name"></app-gallery>
 </div>
 
 <div *ngIf="activeItem=='albumes'">
-  <app-albums></app-albums>
+  <app-albums [username]="user.name"></app-albums>
 </div>
