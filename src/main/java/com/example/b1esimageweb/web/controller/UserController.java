@@ -1,27 +1,23 @@
 package com.example.b1esimageweb.web.controller;
 
 import com.example.b1esimageweb.Exceptions.UserNotFoundException;
-import com.example.b1esimageweb.model.Photo;
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.UserService;
 import com.example.b1esimageweb.web.dto.PhotoDto;
 import com.example.b1esimageweb.web.dto.UserInfoDto;
 //import com.example.b1esimageweb.web.Security.CurrentUserDetails;
 import com.example.b1esimageweb.web.dto.PasswordResetDto;
-import com.example.b1esimageweb.web.dto.UserRegistrationDto;
 import com.example.b1esimageweb.web.dto.UserUpdateDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
