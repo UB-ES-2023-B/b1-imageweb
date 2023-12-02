@@ -36,6 +36,7 @@ public class AlbumService {
     private CloudBlobContainer container;
     private CloudStorageAccount account;
     private CloudBlobClient serviceClient;
+
     public AlbumService(AlbumRepository albumRepository, PhotoRepository photoRepository, @Value("${azure.storage.conection.string}") String storageConnectionAzure, @Value("${azure.storage.container.name}") String nameContainer) {
         this.albumRepository = albumRepository;
         this.photoRepository = photoRepository;
@@ -58,7 +59,7 @@ public class AlbumService {
             album.setAlbumName(albumName);
             album.setDescription(albumDescription != null ? albumDescription : "");
             Photo pho = createPhoto(albumDto.getCoverPhoto());
-            pho.setAlbum(album);
+            pho.addAlbum(album);
             Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             User currentUser = null;
             if(obj instanceof User){
@@ -81,7 +82,7 @@ public class AlbumService {
         Iterable<Album> allAlbums = albumRepository.findAllByUser(user);
         for (Album album : allAlbums){
             List<PhotoDto> photos = new ArrayList<>();
-            Iterable<Photo> allPhotos = photoRepository.findByAlbum(album);
+            Iterable<Photo> allPhotos = photoRepository.findByAlbumsContaining(album);
             for(Photo photo : allPhotos){
                 CloudBlob blob;
                 try {
@@ -89,7 +90,7 @@ public class AlbumService {
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     blob.download(outputStream);
                     byte[] photoContent = outputStream.toByteArray();
-                    PhotoDto photoDto = new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getAlbum(), photo.getPhotoExtension(), photo.getPhotoDescription());
+                    PhotoDto photoDto = new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getAlbums(), photo.getPhotoExtension(), photo.getPhotoDescription());
                     photos.add(photoDto);
                 } catch (URISyntaxException | StorageException e) {
                     e.printStackTrace();
@@ -109,14 +110,14 @@ public class AlbumService {
     public Iterable<PhotoDto> getPhotosByAlbum(Album album) {
         List<PhotoDto> photos = new ArrayList<>();
 
-        for (Photo photo : photoRepository.findByAlbum(album)) {
+        for (Photo photo : photoRepository.findByAlbumsContaining(album)) {
             CloudBlob blob;
             try {
                 blob = container.getBlockBlobReference(photo.getPhotoId().toString());
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 blob.download(outputStream);
                 byte[] photoContent = outputStream.toByteArray();
-                photos.add(new PhotoDto(photoContent, photo.getPhotoId(), null, photo.getPhotoName(), photo.getAlbum(), photo.getPhotoExtension(), photo.getPhotoDescription()));
+                photos.add(new PhotoDto(photoContent, photo.getPhotoId(), null, photo.getPhotoName(), photo.getAlbums(), photo.getPhotoExtension(), photo.getPhotoDescription()));
             } catch (URISyntaxException | StorageException e) {
                 e.printStackTrace();
                 return null;
@@ -125,14 +126,16 @@ public class AlbumService {
         return photos;
     }
 
-    public Album addPhotosToAlbum(int albumId,List<MultipartFile> photos){
+    public Album addPhotosToAlbum(int albumId, List<MultipartFile> photos){
         Album album = albumRepository.findById(albumId)
                 .orElseThrow(() -> new AlbumNotFoundException("Album not found"));
+        Gallery gallery = album.getUser().getGallery();
 
         for (MultipartFile photoFile : photos) {
             try {
                 Photo p = createPhoto(photoFile);
-                p.setAlbum(album);
+                p.addAlbum(album);
+                p.setGallery(gallery);
                 photoRepository.save(p);
             } catch (Exception e) {
                 throw new PhotoStorageException("Could not store photo");

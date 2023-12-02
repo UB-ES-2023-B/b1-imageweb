@@ -1,9 +1,7 @@
 package com.example.b1esimageweb.web.dto;
 
-import com.example.b1esimageweb.model.Photo;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 
 public class AlbumDto {
 

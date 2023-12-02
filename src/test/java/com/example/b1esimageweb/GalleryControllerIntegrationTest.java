@@ -1,13 +1,8 @@
 package com.example.b1esimageweb;
 
-import com.example.b1esimageweb.model.Gallery;
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.repository.UserRepository;
-import com.example.b1esimageweb.service.GalleryService;
-import com.example.b1esimageweb.service.UserService;
 import com.example.b1esimageweb.web.Jwt.JwtTokenProvider;
-import com.example.b1esimageweb.web.dto.PhotoDto;
-import com.example.b1esimageweb.web.dto.UserRegistrationDto;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
@@ -16,18 +11,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.util.ResourceUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
