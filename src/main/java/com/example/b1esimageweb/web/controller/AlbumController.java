@@ -113,4 +113,17 @@ public class AlbumController {
             return new ResponseEntity<>("Album could not be updated", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping(path="/uploadPhotoGaleryToAlbum")
+    public ResponseEntity<?> uploadPhotoGalleryToAlbum(@RequestBody Map<String, Object> requestBody) {
+        int albumId = (int) requestBody.get("albumId");
+        Iterable<Integer> photoIds = (Iterable<Integer>) requestBody.get("photoIds");
+        Album album = albumService.addPhotosToAlbumFromGallery(albumId, photoIds);
+        if(album == null){
+            return new ResponseEntity<>("Album already contains a photo you are trying to upload", HttpStatus.BAD_REQUEST);
+        }
+        Iterable<PhotoDto> photos = albumService.getPhotosByAlbum(album);
+        return new ResponseEntity<>(photos, HttpStatus.OK);
+    }
+
 }
