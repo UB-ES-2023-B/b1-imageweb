@@ -106,20 +106,23 @@ export class EditAlbumsComponent {
           (response) => {
               if (response.body && Array.isArray(response.body.albums)) {
                   response.body.albums.forEach((element: any) => {
-                      let src;
+                      let src: string;
                       if (element.length > 0) {
                           if (element.length > 1) {
                               src = `data:image/${element[1].photoExtension};base64,${element[1].data}`;
                           } else {
                               src = '../../../assets/images/defaultImageAlbum.jpg';
                           }
-                          this.albums.unshift({
+                          element[0].albums.forEach((album: any) => {
+                            this.albums.unshift({
                               "src": src,
-                              "id": element[0].album.albumId,
-                              "name": element[0].album.albumName,
-                              "description": element[0].album.description,
+                              "id": album.albumId,
+                              "name": album.albumName,
+                              "description": album.description,
                               "photoLength": element.length - 1
-                          });
+                            });
+                          });  
+                          
                       }
                   });
               }
