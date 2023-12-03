@@ -13,6 +13,7 @@ import com.example.b1esimageweb.web.responses.AlbumResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -95,6 +96,9 @@ public class AlbumController {
 
     @PostMapping("/addPhotosAlbum/{albumId}")
     public ResponseEntity<?> addPhotosToAlbum(@PathVariable int albumId, @RequestParam("photos") List<MultipartFile> photosList) {
+        if(!albumService.isAlbumOwner(albumId)){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         try {
             Album album = albumService.addPhotosToAlbum(albumId, photosList);
             Iterable<PhotoDto> photos = albumService.getPhotosByAlbum(album);
@@ -107,6 +111,9 @@ public class AlbumController {
 
     @PutMapping(value = "/album/updateInfo/{albumId}")
     public ResponseEntity<?> updateAlbum(@PathVariable int albumId, @RequestBody AlbumDto dto){
+        if(!albumService.isAlbumOwner(albumId)){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         try {
             albumService.updateAlbum(albumId,dto);
             return new ResponseEntity<>("Album successfully updated", HttpStatus.OK);
