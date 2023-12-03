@@ -3,6 +3,7 @@ package com.example.b1esimageweb.web.controller;
 
 import com.example.b1esimageweb.Exceptions.UserNotFoundException;
 import com.example.b1esimageweb.model.Album;
+import com.example.b1esimageweb.model.Photo;
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.AlbumService;
 import com.example.b1esimageweb.service.UserService;
@@ -120,4 +121,21 @@ public class AlbumController {
             return new ResponseEntity<>("Album could not be updated", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping(path="/uploadPhotoGaleryToAlbum")
+    public ResponseEntity<?> uploadPhotoGalleryToAlbum(@RequestBody Map<String, Object> requestBody) {
+        int albumId = (int) requestBody.get("albumId");
+        Album album = albumService.getAlbumById(albumId);
+
+        Iterable<Integer> photoIds = (Iterable<Integer>) requestBody.get("photoIds");
+
+        Photo photo = albumService.checkAlbumForPhotos(album, photoIds);
+        if (photo != null) {
+            return new ResponseEntity<>("This Album already contains Photo with name " + photo.getPhotoName() , HttpStatus.BAD_REQUEST);
+        }
+        album = albumService.addPhotosToAlbumFromGallery(albumId, photoIds);
+        Iterable<PhotoDto> photos = albumService.getPhotosByAlbum(album);
+        return new ResponseEntity<>(photos, HttpStatus.OK);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.b1esimageweb.service;
 
 import com.example.b1esimageweb.Exceptions.AlbumNotFoundException;
+import com.example.b1esimageweb.Exceptions.PhotoNotFoundException;
 import com.example.b1esimageweb.Exceptions.PhotoStorageException;
 import com.example.b1esimageweb.Exceptions.UserNotFoundException;
 import com.example.b1esimageweb.model.Album;
@@ -143,6 +144,29 @@ public class AlbumService {
             }
         }
         return album;
+    }
+
+    public Album addPhotosToAlbumFromGallery(int albumId, Iterable<Integer> photoIds){
+        Album album = albumRepository.findById(albumId).orElseThrow(() -> new UserNotFoundException("Album with id " + albumId + " not found"));
+        
+        for (int photoId : photoIds) {
+            Photo photo =  photoRepository.findById(photoId).orElseThrow(()-> new PhotoNotFoundException("Photo with id " + photoId + "not found"));  
+            photo.addAlbum(album);
+            photoRepository.save(photo);
+        }
+
+        return album;
+    }
+
+    public Photo checkAlbumForPhotos(Album album, Iterable<Integer> photoIds) {
+        
+        for (int photoId : photoIds) {
+            Photo photo = photoRepository.findById(photoId).orElseThrow(() -> new PhotoNotFoundException("Photo with id " + photoId + " not found"));
+            if (photo.getAlbums().contains(album)) {
+                return photo; 
+            }
+        }
+        return null; 
     }
 
     private Photo createPhoto(MultipartFile photo){
