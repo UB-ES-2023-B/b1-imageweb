@@ -18,6 +18,7 @@ import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -181,4 +182,11 @@ public class AlbumService {
         }
         albumRepository.save(album);
     }
+
+    public boolean isAlbumOwner(int albumId) {
+        User currentUser = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Map<Integer, List<PhotoDto>> albums = getAllAlbumsForUser(currentUser);
+        return albums.containsKey(albumId);
+    }
+
 }
