@@ -9,6 +9,7 @@ import com.example.b1esimageweb.web.dto.PhotosDto;
 import com.example.b1esimageweb.web.dto.PhotoUpdateDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +31,8 @@ public class GalleryController {
 
     @PostMapping(path="/uploadPhotoGalery/{galleryId}")
     public ResponseEntity<?> uploadPhotoGallery(@PathVariable("galleryId") Integer galleryId, @RequestParam("photo") MultipartFile photo) {
+        if(!galleryService.isGalleryOwner(galleryId))
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         // Verificar el tamaño del archivo
         if (photo.getSize() > 2 * 1024 * 1024) { // 3MB en bytes
             return new ResponseEntity<>("Photo size exceeds the maximum allowed size of 2MB", HttpStatus.BAD_REQUEST);
@@ -88,6 +91,8 @@ public class GalleryController {
 
     @PutMapping(path = "/editInfoPhoto/{photoId}")
     public ResponseEntity<Map<String, String>> updatePhotoById(@PathVariable("photoId") int photoId, @RequestBody PhotoUpdateDto photoUpdateDto) {
+        if(!galleryService.isPhotoOwner(photoId))
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         Map<String, String> response = new HashMap<>();
         try {
             Photo photo = galleryService.updateInfoPhotoById(photoId, photoUpdateDto.getPhotoName(), photoUpdateDto.getPhotoDescription());
