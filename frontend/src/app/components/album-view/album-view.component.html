@@ -1,5 +1,6 @@
-<div class="container py-2 ">
+<div class="container py-2 d-flex align-items-center justify-content-between">
     <button type="button" class="btn btn-outline-secondary btn-sm" (click)="goGallery()"> <i class="fas fa-arrow-left"></i>&nbsp; Regresar a Álbumes</button>
+    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="goEditMode()"> <i class="fas fa-pencil-alt"></i>&nbsp; Editar</button>
 </div>
 
 <div class="container  py-5"  *ngIf="!loading && images.length===0">

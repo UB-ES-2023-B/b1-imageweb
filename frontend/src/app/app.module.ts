@@ -35,6 +35,7 @@ import { UploadPhotosComponent } from './components/upload-photos/upload-photos.
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { EditAlbumsComponent } from './components/edit-albums/edit-albums.component';
 import { AlbumViewComponent } from './components/album-view/album-view.component';
+import {AlbumViewEditModeComponent} from "./components/album-view-edit-mode/album-view-edit-mode.component";
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { AlbumViewComponent } from './components/album-view/album-view.component
     UserProfileComponent,
     EditAlbumsComponent,
     UploadPhotosComponent,
-    AlbumViewComponent
+    AlbumViewComponent,
+    AlbumViewEditModeComponent
   ],
   imports: [
     BrowserModule,

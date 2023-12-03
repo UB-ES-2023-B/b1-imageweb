@@ -11,6 +11,7 @@ import { EditGalleryComponent } from './components/edit-gallery/edit-gallery.com
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { EditAlbumsComponent } from './components/edit-albums/edit-albums.component';
 import {AlbumViewComponent} from "./components/album-view/album-view.component";
+import {AlbumViewEditModeComponent} from "./components/album-view-edit-mode/album-view-edit-mode.component";
 const routes: Routes = [
    //Initial route
    {
@@ -64,6 +65,11 @@ const routes: Routes = [
   {
     path: 'profile/album/:id',
     component: AlbumViewComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'profile/album/:id/editMode',
+    component: AlbumViewEditModeComponent,
     canActivate: [AuthGuard]
   },
   {

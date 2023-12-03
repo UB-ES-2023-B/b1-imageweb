@@ -33,6 +33,10 @@ export class AlbumViewComponent {
     this.router.navigate(['/profile/']);
   }
 
+  goEditMode(){
+    this.router.navigate(["/profile/album/" + this.albumId + "/editMode"]);
+  }
+
   getAlbum():void{
     this.images=[]
     this.albumsService.getAlbumById(this.albumId).subscribe(
