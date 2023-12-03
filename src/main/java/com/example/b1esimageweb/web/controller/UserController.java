@@ -1,27 +1,25 @@
 package com.example.b1esimageweb.web.controller;
 
 import com.example.b1esimageweb.Exceptions.UserNotFoundException;
-import com.example.b1esimageweb.model.Photo;
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.UserService;
 import com.example.b1esimageweb.web.dto.PhotoDto;
 import com.example.b1esimageweb.web.dto.UserInfoDto;
 //import com.example.b1esimageweb.web.Security.CurrentUserDetails;
 import com.example.b1esimageweb.web.dto.PasswordResetDto;
-import com.example.b1esimageweb.web.dto.UserRegistrationDto;
 import com.example.b1esimageweb.web.dto.UserUpdateDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -57,7 +55,10 @@ public class UserController {
     }
 
     @PutMapping(value = "/update/{username}")
+    @PreAuthorize("#username == authentication.name")
     public ResponseEntity<Map<String, User>> updateUser(@RequestBody UserUpdateDto updated_user, @PathVariable("username") String username) {
+        System.out.println("Test1: " + SecurityContextHolder.getContext().getAuthentication().getName());
+        System.out.println("Aver: " + (username == SecurityContextHolder.getContext().getAuthentication().getName()));
         User userExisting = service.getUserByUserName(username);
         Map<String, User> response = new HashMap<>();
         if (userExisting != null) {
@@ -81,6 +82,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/delete/{id}")
+    @PreAuthorize("#id == authentication.principal.userId")
     public ResponseEntity<?> deleteUser(@PathVariable("id") Integer id) {
         service.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.OK);

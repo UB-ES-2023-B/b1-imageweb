@@ -1,6 +1,7 @@
 package com.example.b1esimageweb.service;
 
 import com.example.b1esimageweb.Exceptions.AlbumNotFoundException;
+import com.example.b1esimageweb.Exceptions.PhotoNotFoundException;
 import com.example.b1esimageweb.Exceptions.PhotoStorageException;
 import com.example.b1esimageweb.Exceptions.UserNotFoundException;
 import com.example.b1esimageweb.model.Album;
@@ -18,6 +19,7 @@ import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +38,7 @@ public class AlbumService {
     private CloudBlobContainer container;
     private CloudStorageAccount account;
     private CloudBlobClient serviceClient;
+
     public AlbumService(AlbumRepository albumRepository, PhotoRepository photoRepository, @Value("${azure.storage.conection.string}") String storageConnectionAzure, @Value("${azure.storage.container.name}") String nameContainer) {
         this.albumRepository = albumRepository;
         this.photoRepository = photoRepository;
@@ -58,7 +61,7 @@ public class AlbumService {
             album.setAlbumName(albumName);
             album.setDescription(albumDescription != null ? albumDescription : "");
             Photo pho = createPhoto(albumDto.getCoverPhoto());
-            pho.setAlbum(album);
+            pho.addAlbum(album);
             Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             User currentUser = null;
             if(obj instanceof User){
@@ -81,7 +84,7 @@ public class AlbumService {
         Iterable<Album> allAlbums = albumRepository.findAllByUser(user);
         for (Album album : allAlbums){
             List<PhotoDto> photos = new ArrayList<>();
-            Iterable<Photo> allPhotos = photoRepository.findByAlbum(album);
+            Iterable<Photo> allPhotos = photoRepository.findByAlbumsContaining(album);
             for(Photo photo : allPhotos){
                 CloudBlob blob;
                 try {
@@ -89,7 +92,7 @@ public class AlbumService {
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     blob.download(outputStream);
                     byte[] photoContent = outputStream.toByteArray();
-                    PhotoDto photoDto = new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getAlbum(), photo.getPhotoExtension(), photo.getPhotoDescription());
+                    PhotoDto photoDto = new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getAlbums(), photo.getPhotoExtension(), photo.getPhotoDescription());
                     photos.add(photoDto);
                 } catch (URISyntaxException | StorageException e) {
                     e.printStackTrace();
@@ -109,14 +112,14 @@ public class AlbumService {
     public Iterable<PhotoDto> getPhotosByAlbum(Album album) {
         List<PhotoDto> photos = new ArrayList<>();
 
-        for (Photo photo : photoRepository.findByAlbum(album)) {
+        for (Photo photo : photoRepository.findByAlbumsContaining(album)) {
             CloudBlob blob;
             try {
                 blob = container.getBlockBlobReference(photo.getPhotoId().toString());
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 blob.download(outputStream);
                 byte[] photoContent = outputStream.toByteArray();
-                photos.add(new PhotoDto(photoContent, photo.getPhotoId(), null, photo.getPhotoName(), photo.getAlbum(), photo.getPhotoExtension(), photo.getPhotoDescription()));
+                photos.add(new PhotoDto(photoContent, photo.getPhotoId(), null, photo.getPhotoName(), photo.getAlbums(), photo.getPhotoExtension(), photo.getPhotoDescription()));
             } catch (URISyntaxException | StorageException e) {
                 e.printStackTrace();
                 return null;
@@ -125,20 +128,45 @@ public class AlbumService {
         return photos;
     }
 
-    public Album addPhotosToAlbum(int albumId,List<MultipartFile> photos){
+    public Album addPhotosToAlbum(int albumId, List<MultipartFile> photos){
         Album album = albumRepository.findById(albumId)
                 .orElseThrow(() -> new AlbumNotFoundException("Album not found"));
+        Gallery gallery = album.getUser().getGallery();
 
         for (MultipartFile photoFile : photos) {
             try {
                 Photo p = createPhoto(photoFile);
-                p.setAlbum(album);
+                p.addAlbum(album);
+                p.setGallery(gallery);
                 photoRepository.save(p);
             } catch (Exception e) {
                 throw new PhotoStorageException("Could not store photo");
             }
         }
         return album;
+    }
+
+    public Album addPhotosToAlbumFromGallery(int albumId, Iterable<Integer> photoIds){
+        Album album = albumRepository.findById(albumId).orElseThrow(() -> new UserNotFoundException("Album with id " + albumId + " not found"));
+        
+        for (int photoId : photoIds) {
+            Photo photo =  photoRepository.findById(photoId).orElseThrow(()-> new PhotoNotFoundException("Photo with id " + photoId + "not found"));  
+            photo.addAlbum(album);
+            photoRepository.save(photo);
+        }
+
+        return album;
+    }
+
+    public Photo checkAlbumForPhotos(Album album, Iterable<Integer> photoIds) {
+        
+        for (int photoId : photoIds) {
+            Photo photo = photoRepository.findById(photoId).orElseThrow(() -> new PhotoNotFoundException("Photo with id " + photoId + " not found"));
+            if (photo.getAlbums().contains(album)) {
+                return photo; 
+            }
+        }
+        return null; 
     }
 
     private Photo createPhoto(MultipartFile photo){
@@ -178,4 +206,11 @@ public class AlbumService {
         }
         albumRepository.save(album);
     }
+
+    public boolean isAlbumOwner(int albumId) {
+        User currentUser = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Map<Integer, List<PhotoDto>> albums = getAllAlbumsForUser(currentUser);
+        return albums.containsKey(albumId);
+    }
+
 }

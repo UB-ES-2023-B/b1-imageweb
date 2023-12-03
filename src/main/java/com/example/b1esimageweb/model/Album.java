@@ -1,12 +1,9 @@
 package com.example.b1esimageweb.model;
 
-import com.example.b1esimageweb.web.dto.PhotoDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
-import java.util.List;
 
 @Entity
 @Table(name = "albums")

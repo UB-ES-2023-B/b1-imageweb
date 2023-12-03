@@ -3,6 +3,7 @@ package com.example.b1esimageweb.web.controller;
 
 import com.example.b1esimageweb.Exceptions.UserNotFoundException;
 import com.example.b1esimageweb.model.Album;
+import com.example.b1esimageweb.model.Photo;
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.AlbumService;
 import com.example.b1esimageweb.service.UserService;
@@ -12,6 +13,7 @@ import com.example.b1esimageweb.web.responses.AlbumResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -94,6 +96,9 @@ public class AlbumController {
 
     @PostMapping("/addPhotosAlbum/{albumId}")
     public ResponseEntity<?> addPhotosToAlbum(@PathVariable int albumId, @RequestParam("photos") List<MultipartFile> photosList) {
+        if(!albumService.isAlbumOwner(albumId)){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         try {
             Album album = albumService.addPhotosToAlbum(albumId, photosList);
             Iterable<PhotoDto> photos = albumService.getPhotosByAlbum(album);
@@ -106,6 +111,9 @@ public class AlbumController {
 
     @PutMapping(value = "/album/updateInfo/{albumId}")
     public ResponseEntity<?> updateAlbum(@PathVariable int albumId, @RequestBody AlbumDto dto){
+        if(!albumService.isAlbumOwner(albumId)){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         try {
             albumService.updateAlbum(albumId,dto);
             return new ResponseEntity<>("Album successfully updated", HttpStatus.OK);
@@ -113,4 +121,21 @@ public class AlbumController {
             return new ResponseEntity<>("Album could not be updated", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PostMapping(path="/uploadPhotoGaleryToAlbum")
+    public ResponseEntity<?> uploadPhotoGalleryToAlbum(@RequestBody Map<String, Object> requestBody) {
+        int albumId = (int) requestBody.get("albumId");
+        Album album = albumService.getAlbumById(albumId);
+
+        Iterable<Integer> photoIds = (Iterable<Integer>) requestBody.get("photoIds");
+
+        Photo photo = albumService.checkAlbumForPhotos(album, photoIds);
+        if (photo != null) {
+            return new ResponseEntity<>("This Album already contains Photo with name " + photo.getPhotoName() , HttpStatus.BAD_REQUEST);
+        }
+        album = albumService.addPhotosToAlbumFromGallery(albumId, photoIds);
+        Iterable<PhotoDto> photos = albumService.getPhotosByAlbum(album);
+        return new ResponseEntity<>(photos, HttpStatus.OK);
+    }
+
 }

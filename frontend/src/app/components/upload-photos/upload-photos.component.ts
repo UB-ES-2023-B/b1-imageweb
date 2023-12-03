@@ -89,10 +89,11 @@ export class UploadPhotosComponent {
                 console.log('mira response del upload:', response);
                 if (response.body) {
                   if (response.body.length>0) {
-                    this.albumsService.modifylen(response.body[0].album.albumId, response.body.length-1);
+                    console.log(response.body[0]);
+                    this.albumsService.modifylen(this.idAlbum, response.body.length-1);
                     if(response.body.length>1){
                       var src= `data:image/${response.body[1].photoExtension};base64,${response.body[1].data}`
-                      this.albumsService.modifyCoverPhoto(response.body[0].album.albumId, src)
+                      this.albumsService.modifyCoverPhoto(this.idAlbum, src)
 
                     }
                   }

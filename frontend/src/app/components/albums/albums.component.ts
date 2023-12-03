@@ -58,20 +58,23 @@ export class AlbumsComponent {
             (response) => {
                 if (response.body && Array.isArray(response.body.albums)) {
                     response.body.albums.forEach((element: any) => {
-                        let src;
+                        let src: string;
                         if (element.length > 0) {
                             if (element.length > 1) {
                                 src = `data:image/${element[1].photoExtension};base64,${element[1].data}`;
                             } else {
                                 src = '../../../assets/images/defaultImageAlbum.jpg';
                             }
-                            this.albums.unshift({
-                                "src": src,
-                                "id": element[0].album.albumId,
-                                "name": element[0].album.albumName,
-                                "description": element[0].album.description,
-                                "photoLength": element.length - 1
+                            element[0].albums.forEach((album: any) => {
+                                this.albums.unshift({
+                                    "src": src,
+                                    "id": album.albumId,
+                                    "name": album.albumName,
+                                    "description": album.description,
+                                    "photoLength": element.length - 1
+                                });
                             });
+                            
                         }
                     });
                 }
@@ -153,7 +156,7 @@ export class AlbumsComponent {
         this.albumsService.createAlbum(this.name, this.description, this.defaultImage.file).subscribe(
             (response) => {
                 if (response.body.length > 0) {
-                    var idAlbum = response.body[0].album.albumId
+                    var idAlbum = response.body[0].albums[0].albumId
                 } else {
                     console.log('error con el id del álbum')
                 }

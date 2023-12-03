@@ -1,5 +1,7 @@
 package com.example.b1esimageweb.model;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
@@ -13,17 +15,22 @@ public class Photo {
     @JoinColumn(name = "gallery_id")
     private Gallery gallery;
 
-    @ManyToOne
-    @JoinColumn(name = "album_id")
-    private Album album;
+    @ManyToMany
+    @JoinTable(
+        name = "photo_album",
+        joinColumns = @JoinColumn(name = "photo_id"),
+        inverseJoinColumns = @JoinColumn(name = "album_id")
+    )
+    private Set<Album> albums = new HashSet<>();
+    
     private String photoName;
 
-    public Album getAlbum() {
-        return album;
+    public Set<Album> getAlbums() {
+        return albums;
     }
 
-    public void setAlbum(Album album) {
-        this.album = album;
+    public void addAlbum(Album album) {
+        this.albums.add(album);
     }
 
     private String photoExtension;
