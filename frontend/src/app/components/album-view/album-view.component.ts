@@ -62,8 +62,9 @@ export class AlbumViewComponent {
         this.albumsService.getAlbumById(this.albumId).subscribe(
           (response)=>{
             if (response.body && Array.isArray(response.body)) {
-              this.albumName = response.body[0].album.albumName;
-              this.albumDescription = response.body[0].album.description;
+              console.log(response.body[0]);
+              this.albumName = response.body[0].albums[0].albumName;
+              this.albumDescription = response.body[0].albums[0].description;
               this.albumLenght = response.body.length-1+ " fotos";
             }
             this.loading=false;
