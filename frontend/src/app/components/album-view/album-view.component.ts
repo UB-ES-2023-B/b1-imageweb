@@ -4,7 +4,7 @@ import { GlobalDataService } from 'src/app/services/global-data.service';
 import { Subscription } from 'rxjs';
 import { Lightbox } from 'ngx-lightbox';
 import { ToastrService } from 'ngx-toastr';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-album-view',
@@ -21,7 +21,7 @@ export class AlbumViewComponent {
 
   private imagesSubscription: Subscription = new Subscription();
 
-  constructor(private albumsService:AlbumsService, private router: Router, private globalDataService:GlobalDataService, private _lightbox: Lightbox, private toastr: ToastrService){
+  constructor(private albumsService:AlbumsService, private router: Router, private globalDataService:GlobalDataService, private _lightbox: Lightbox, private toastr: ToastrService, private route: ActivatedRoute){
   }
 
   goGallery(){
@@ -36,10 +36,12 @@ export class AlbumViewComponent {
         if (response.body && Array.isArray(response.body)) {
           response.body.forEach((element: any) => {
             if (element.data) {
-              this.images.unshift({
-                "src":`data:image/${element.photoExtensio};base64,${element.data}`,
-                "id": element.photoId, "name":element.photoName, "description": element.photoDescription
-              });
+              if(element.photoName != "defaultImage"){
+                this.images.unshift({
+                  "src":`data:image/${element.photoExtensio};base64,${element.data}`,
+                  "id": element.photoId, "name":element.photoName, "description": element.photoDescription
+                });
+              }
             }
           });
         }
@@ -61,8 +63,16 @@ export class AlbumViewComponent {
   }
 
   ngOnInit(): void {
-    const urlTree = this.router.parseUrl(this.router.url);
-    this.albumId = urlTree.queryParams['id'];
+    // Use ActivatedRoute to get the id from the URL path
+    this.route.params.subscribe(params => {
+      this.albumId = params['id'];
+    });  
+
+    this.imagesSubscription = this.albumsService.getImagesObservable().subscribe((images) => {
+      this.images = images;
+    });
+
+    this.getAlbum();
   }
 
   ngOnDestroy(): void {

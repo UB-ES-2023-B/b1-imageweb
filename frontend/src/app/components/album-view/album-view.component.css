@@ -24,6 +24,11 @@
     padding: 5px;
     cursor: pointer;
   }
+  
+  .col-span-3 {
+    grid-column: span 3;
+  }
+
   .hideText{
     visibility:hidden
   }

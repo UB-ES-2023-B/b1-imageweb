@@ -3,8 +3,34 @@
 </div>
 
 <div class="container  py-5"  *ngIf="!loading && images.length===0">
-    <div class="d-flex justify-content-center align-items-center flex-column mt-5"
-    (mouseover)="showUploadHint = true" (mouseout)="showUploadHint = false">
-      <h4>Aún no has subido ninguna imagen</h4>
+    <div class="d-flex justify-content-center align-items-center flex-column mt-5">
+      <h4>Aún no has subido ninguna imagen a este álbum</h4>
     </div>
 </div >
+
+<div class="container  py-5"  *ngIf="loading">
+  <div  class="d-flex justify-content-center align-items-center flex-column mt-5">
+    <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;animation-duration: 3s" role="status"></div>
+    <h4 style="margin-top: 20px;">Cargando...</h4>
+  </div>
+</div>
+
+<div class="album py-2 bg-light">
+  <div class="container">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+      <div class="col" *ngFor="let image of images; let i = index">
+        <div class="image-button" style="cursor:pointer">
+          <div class="card shadow-sm photo" [ngClass]="{'col-span-3': i === 0, 'col': i !== 0}">
+            <img class="bd-placeholder-img card-img-top custom-image" [src]="image.src" alt="Image" (click)="open(i)">
+            <div class="card-body">
+              <ng-container *ngIf="image.id">
+                <p>{{ image.name }}</p>
+                <p>{{ image.description }}</p>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
