@@ -3,7 +3,7 @@
 </div>
 
 <div class="container  py-5"  *ngIf="!loading && images.length===0">
-    <div class="d-flex justify-content-center align-items-center flex-column mt-5">
+    <div class="d-flex justify-content-center align-items-center flex-column mt-5" (mouseover)="showUploadHint = true" (mouseout)="showUploadHint = false">
       <h4>Aún no has subido ninguna imagen a este álbum</h4>
     </div>
 </div >
@@ -15,22 +15,39 @@
   </div>
 </div>
 
-<div class="album py-2 bg-light">
+<div class="album py-2 bg-light"  *ngIf="!loading">
   <div class="container">
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-      <div class="col" *ngFor="let image of images; let i = index">
-        <div class="image-button" style="cursor:pointer">
-          <div class="card shadow-sm photo" [ngClass]="{'col-span-3': i === 0, 'col': i !== 0}">
-            <img class="bd-placeholder-img card-img-top custom-image" [src]="image.src" alt="Image" (click)="open(i)">
-            <div class="card-body">
-              <ng-container *ngIf="image.id">
-                <p>{{ image.name }}</p>
-                <p>{{ image.description }}</p>
-              </ng-container>
+      <div class="row g-3">
+          <div class="col-12" *ngIf="coverImage!==null">
+            <div class="card shadow-sm photo">
+                <img class="card-img-top cover-image cover-image" [src]="coverImage.src" alt="Cover Image" style="object-fit: cover;">
+                <div class="text-overlay">
+                  <div class="text-overlay-name">
+                    <p>{{ albumName }}</p>
+                  </div>
+                  <div class="text-overlay-description">
+                    <p>{{ albumDescription }}</p>
+                  </div>
+                  <div class="text-overlay-length">
+                    <p>{{ albumLenght }}</p>
+                  </div>
+              </div>
             </div>
           </div>
-        </div>
+
+          <div class="col" *ngFor="let image of images; let i = index" [ngClass]="{'col-4': i !== 0}">
+              <div class="image-button" style="cursor:pointer">
+                  <div class="card shadow-sm photo">
+                      <img class="bd-placeholder-img card-img-top custom-image" [src]="image.src" alt="Image" (click)="open(i)">
+                      <div class="card-body">
+                          <ng-container *ngIf="image.id">
+                              <p>{{ image.name }}</p>
+                              <p>{{ image.description }}</p>
+                          </ng-container>
+                      </div>
+                  </div>
+              </div>
+          </div>
       </div>
-    </div>
   </div>
 </div>

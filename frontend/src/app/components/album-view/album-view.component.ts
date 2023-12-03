@@ -16,8 +16,12 @@ export class AlbumViewComponent {
 
   loading:boolean=true;
   images:any[]=[];
+  coverImage:any = null;
   showUploadHint: boolean = true;
   albumId: any;
+  albumName: any;
+  albumDescription: any;
+  albumLenght: any;
 
   private imagesSubscription: Subscription = new Subscription();
 
@@ -33,25 +37,45 @@ export class AlbumViewComponent {
     this.images=[]
     this.albumsService.getAlbumById(this.albumId).subscribe(
       (response)=>{
+
         if (response.body && Array.isArray(response.body)) {
+          let len = response.body.length;
           response.body.forEach((element: any) => {
             if (element.data) {
               if(element.photoName != "defaultImage"){
+                if (response.body.indexOf(element) == 1){
+                  this.coverImage = {
+                    "src":`data:image/${element.photoExtensio};base64,${element.data}`,
+                    "id": element.photoId, "name":element.photoName, "description": element.photoDescription
+                  }
+                }
                 this.images.unshift({
                   "src":`data:image/${element.photoExtensio};base64,${element.data}`,
                   "id": element.photoId, "name":element.photoName, "description": element.photoDescription
                 });
+                      
               }
             }
           });
         }
         this.albumsService.setImagesToAlbum(this.images);
-        this.loading=false;
+        this.albumsService.getAlbumById(this.albumId).subscribe(
+          (response)=>{
+            if (response.body && Array.isArray(response.body)) {
+              this.albumName = response.body[0].album.albumName;
+              this.albumDescription = response.body[0].album.description;
+              this.albumLenght = response.body.length-1+ " fotos";
+            }
+            this.loading=false;
+          }
+          
+        );
       },(error)=>{
         console.log('error al obtener album', error)
       }
       
-    )
+    );
+   
   }
 
   open(index: number): void {
