@@ -8,6 +8,7 @@ import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.AlbumService;
 import com.example.b1esimageweb.service.UserService;
 import com.example.b1esimageweb.web.dto.AlbumDto;
+import com.example.b1esimageweb.web.dto.ErrorResponsePhotoUpload;
 import com.example.b1esimageweb.web.dto.PhotoDto;
 import com.example.b1esimageweb.web.responses.AlbumResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -129,9 +130,10 @@ public class AlbumController {
 
         Iterable<Integer> photoIds = (Iterable<Integer>) requestBody.get("photoIds");
 
-        Photo photo = albumService.checkAlbumForPhotos(album, photoIds);
-        if (photo != null) {
-            return new ResponseEntity<>("This Album already contains Photo with name " + photo.getPhotoName() , HttpStatus.BAD_REQUEST);
+        List<Integer> photoIdsRepited = albumService.checkAlbumForPhotos(album, photoIds);
+        if (!photoIdsRepited.isEmpty()) {
+            ErrorResponsePhotoUpload errorResponsePhotoUpload = new ErrorResponsePhotoUpload("Photos already included", photoIdsRepited);
+            return new ResponseEntity<>(errorResponsePhotoUpload, HttpStatus.BAD_REQUEST);
         }
         album = albumService.addPhotosToAlbumFromGallery(albumId, photoIds);
         Iterable<PhotoDto> photos = albumService.getPhotosByAlbum(album);

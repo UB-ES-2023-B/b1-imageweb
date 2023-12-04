@@ -158,15 +158,15 @@ public class AlbumService {
         return album;
     }
 
-    public Photo checkAlbumForPhotos(Album album, Iterable<Integer> photoIds) {
-        
+    public List<Integer> checkAlbumForPhotos(Album album, Iterable<Integer> photoIds) {
+        List<Integer> photoIdsRepited = new ArrayList<>();
         for (int photoId : photoIds) {
             Photo photo = photoRepository.findById(photoId).orElseThrow(() -> new PhotoNotFoundException("Photo with id " + photoId + " not found"));
             if (photo.getAlbums().contains(album)) {
-                return photo; 
+                photoIdsRepited.add(photo.getPhotoId());
             }
         }
-        return null; 
+        return photoIdsRepited; 
     }
 
     private Photo createPhoto(MultipartFile photo){
