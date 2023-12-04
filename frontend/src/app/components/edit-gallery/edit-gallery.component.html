@@ -16,7 +16,7 @@
   </div>
 </div>
 
-  <div class="album py-2 bg-light" >
+  <div class="album py-2 bg-light" style="margin-bottom: 6%" >
     <div class="container" >
       <button *ngIf="!loading" type="button" class="btn btn-outline-secondary btn-sm" (click)="goGallery()"> <i class="fas fa-arrow-left"></i>&nbsp; Regresar a Galería</button>
       <div   [class]="classModal "  >
@@ -56,6 +56,12 @@
                   </div>
                 </div>
                 </ng-template>
+                <div *ngIf="!addToAlbums" class="container-plus">
+                  <img src="../../../assets/images/square-plus-regular.svg"  width="25" height="25" alt="Icono">
+                </div>
+                <div *ngIf="addToAlbums"  class="icon-container">
+                  <input type="checkbox" [checked]="selectedImageIds.includes(image.id)" (change)="toggleEditMode(image.id)" class="select-checkbox">
+                </div>
               </div>
             </div>
           </div>

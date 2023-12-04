@@ -18,7 +18,7 @@ export class EditGalleryComponent {
   selectedImageIds: number[] = [];
   editImageId:number=-1;
   editImageOriginalValues:any= {};
-
+  addToAlbums:boolean=false;
   modalResponse: string = '';
 
   classModal:string='text-center mb-4'

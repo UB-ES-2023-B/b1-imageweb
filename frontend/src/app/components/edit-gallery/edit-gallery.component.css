@@ -62,6 +62,12 @@ p{
   margin:0px
 }
 
+.container-plus{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
 .texto {
   font-family: 'Roboto', sans-serif;
   font-size: 18px;
