@@ -1,9 +1,6 @@
 package com.example.b1esimageweb.service;
 
-import com.example.b1esimageweb.Exceptions.AlbumNotFoundException;
-import com.example.b1esimageweb.Exceptions.PhotoNotFoundException;
-import com.example.b1esimageweb.Exceptions.PhotoStorageException;
-import com.example.b1esimageweb.Exceptions.UserNotFoundException;
+import com.example.b1esimageweb.Exceptions.*;
 import com.example.b1esimageweb.model.Album;
 import com.example.b1esimageweb.model.Gallery;
 import com.example.b1esimageweb.model.Photo;
@@ -19,7 +16,6 @@ import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -214,6 +210,30 @@ public class AlbumService {
             albumNamesAndIds.put(album.getAlbumId(), album.getAlbumName());
         }
         return albumNamesAndIds;
+    }
+
+    public void deletePhotosFromAlbum(Album album){
+        Iterable<Photo> photos = photoRepository.findByAlbumsContaining(album);
+        for (Photo photo : photos) {
+            photo.getAlbums().remove(album);
+            if(photo.getGallery() != null){
+                photoRepository.save(photo);
+            }else {
+                photoRepository.delete(photo);
+            }
+        }
+    }
+
+    public void deleteAlbumsByIds(List<Integer> albumIds) {
+        for (Integer id : albumIds) {
+            Album album = albumRepository.findById(id).orElseThrow(() -> new AlbumNotFoundException("Album with id " + id + " not found"));
+            if(isAlbumOwner(id)) {
+                deletePhotosFromAlbum(album);
+                albumRepository.deleteById(id);
+            }else{
+                throw new UnauthorizedAlbumDeletionException("Unauthorized attempt to delete album with name: " + album.getAlbumName());
+            }
+        }
     }
 
     public boolean isAlbumOwner(int albumId) {
