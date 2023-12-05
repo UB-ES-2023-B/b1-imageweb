@@ -140,4 +140,16 @@ public class AlbumController {
         return new ResponseEntity<>(photos, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/albumInfo/{username}")
+    public ResponseEntity<?> getUserAlbumInfo(@PathVariable String username){
+        try{
+            User user = userService.getUserByUserName(username);
+            Map<Integer, String> info = albumService.getUserAlbumsNamesAndIds(user);
+            return new ResponseEntity<>(info, HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>("Error getting album info" ,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
 }

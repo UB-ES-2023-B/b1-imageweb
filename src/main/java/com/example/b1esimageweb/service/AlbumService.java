@@ -207,6 +207,15 @@ public class AlbumService {
         albumRepository.save(album);
     }
 
+    public Map<Integer, String> getUserAlbumsNamesAndIds(User user){
+        Map<Integer, String> albumNamesAndIds = new HashMap<>();
+        Iterable<Album> allAlbums = albumRepository.findAllByUser(user);
+        for (Album album : allAlbums) {
+            albumNamesAndIds.put(album.getAlbumId(), album.getAlbumName());
+        }
+        return albumNamesAndIds;
+    }
+
     public boolean isAlbumOwner(int albumId) {
         User currentUser = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Map<Integer, List<PhotoDto>> albums = getAllAlbumsForUser(currentUser);
