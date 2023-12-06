@@ -29,6 +29,16 @@ export class AlbumsService {
     return this.http.put(this.domain + `/album/updateInfo/${id}`, data, { observe: 'response', responseType: 'text' });
   }
 
+  deleteAlbums(ids:number[]): Observable<any> {
+    const formData = {
+      albumIds: ids
+    };
+    return this.http.delete(this.domain + '/album/delete', {
+      body: formData,
+      observe: 'response'
+    });
+  }
+
   //Aún no esta terminado
   getAlbumsForUser(username: string): Observable<any> {
     return this.http.get(this.domain + `/getAlbums/${username}`, {  observe: 'response' });

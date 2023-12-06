@@ -11,6 +11,7 @@ import com.example.b1esimageweb.service.UserService;
 import com.example.b1esimageweb.web.dto.AlbumDto;
 import com.example.b1esimageweb.web.dto.ErrorResponsePhotoUpload;
 import com.example.b1esimageweb.web.dto.PhotoDto;
+import com.example.b1esimageweb.web.dto.PhotosDto;
 import com.example.b1esimageweb.web.responses.AlbumResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -140,6 +142,25 @@ public class AlbumController {
         album = albumService.addPhotosToAlbumFromGallery(albumId, photoIds);
         Iterable<PhotoDto> photos = albumService.getPhotosByAlbum(album);
         return new ResponseEntity<>(photos, HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/deletephotos/{albumId}")
+    public ResponseEntity<Map<String, String>> deletePhotosFromAlbum(@PathVariable int albumId, @RequestBody PhotosDto photoDto) {
+        Map<String, String> response = new HashMap<>();
+        String msg = "";
+        try {
+            List<Integer> photoIds = photoDto.getPhotoIds();
+            if(photoIds.size() == 0){
+                response.put("message", "No photos to delete");
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
+            msg = albumService.deleteAlbumPhotos(albumId, photoIds);
+            response.put("message", msg);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch(Exception e){
+            response.put("message", "Photos not found");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping(path = "/albumInfo/{username}")

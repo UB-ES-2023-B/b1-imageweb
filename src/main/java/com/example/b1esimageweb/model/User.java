@@ -28,6 +28,7 @@ public class User implements UserDetails {
     private String email;
     @NonNull
     private String password;
+    @Column(columnDefinition = "LONGTEXT")
     private String description;
 
     @OneToOne(cascade = CascadeType.ALL)
