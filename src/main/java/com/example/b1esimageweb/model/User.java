@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import lombok.Builder;
-import java.util.Collection;
-import java.util.List;
+
+import java.util.*;
 
 @Builder
 @NoArgsConstructor
@@ -39,6 +41,38 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     Role role;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "user_followers",
+        joinColumns = @JoinColumn(name = "followed_id"),
+        inverseJoinColumns = @JoinColumn(name = "follower_id")
+    )
+    private Set<User> followers = new HashSet<>();
+    @ManyToMany(mappedBy = "followers", fetch = FetchType.EAGER)
+    private Set<User> following = new HashSet<>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects.equals(userId, user.userId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId);
+    }
+
+    public void followUser(User userToFollow) {
+        this.following.add(userToFollow);
+        userToFollow.getFollowers().add(this);
+    }
+    public void unfollowUser(User userToUnfollow) {
+        this.following.remove(userToUnfollow);
+        userToUnfollow.getFollowers().remove(this);
+    }
+
     public Integer getUserId() {
         return userId;
     }
@@ -66,21 +100,29 @@ public class User implements UserDetails {
     public void setGallery(Gallery gallery) {
         this.gallery = gallery;
     }
-
     public Photo getProfilePicture() {
         return profilePicture;
     }
-
     public void setProfilePicture(Photo profilePicture) {
         this.profilePicture = profilePicture;
     }
-
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
+    }
+    public Set<User> getFollowers() {
+        return followers;
+    }
+    public void setFollowers(Set<User> followers) {
+        this.followers = followers;
+    }
+    public Set<User> getFollowing() {
+        return following;
+    }
+    public void setFollowing(Set<User> following) {
+        this.following = following;
     }
 
     @Override
