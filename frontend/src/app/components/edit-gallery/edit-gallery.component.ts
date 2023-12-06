@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { Lightbox } from 'ngx-lightbox';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { AlbumsService } from 'src/app/services/albums.service';
 @Component({
   selector: 'app-edit-gallery',
   templateUrl: './edit-gallery.component.html',
@@ -20,6 +21,9 @@ export class EditGalleryComponent {
   editImageOriginalValues:any= {};
   addToAlbums:boolean=false;
   modalResponse: string = '';
+  selectedAlbum: number =0;
+
+  currentAlbums:any[]=[]
 
   classModal:string='text-center mb-4'
 
@@ -27,7 +31,9 @@ export class EditGalleryComponent {
   private imagesSubscription: Subscription = new Subscription();
 
 
-  constructor(private galleryService:GalleryService, private router:Router, private globalDataService:GlobalDataService, private _lightbox: Lightbox, private toastr: ToastrService){
+  constructor(private galleryService:GalleryService, private router:Router,
+    private globalDataService:GlobalDataService, private _lightbox: Lightbox,
+    private albumsService: AlbumsService, private toastr: ToastrService){
   }
   goGallery(){
     this.router.navigate(['/profile/']);
@@ -145,6 +151,7 @@ export class EditGalleryComponent {
 
   cancelEditMode() {
     this.isEditMode = false;
+    this.addToAlbums=false;
     this.selectedImageIds = [];
   }
 
@@ -166,10 +173,13 @@ export class EditGalleryComponent {
     this.isEditMode = false;
     this.classModal='text-center mb-4 '
     this.selectedImageIds = [];
-  }
-  toggleEditMode(id: number) {
 
-    if (this.isEditMode) {
+  }
+
+
+  toggleEditMode(id: number, mode:string) {
+
+    if (this.isEditMode|| this.addToAlbums) {
       // Si ya estamos en modo de edición, significa que se hizo clic en el checkbox
       const index = this.selectedImageIds.indexOf(id);
       if (index === -1) {
@@ -181,7 +191,31 @@ export class EditGalleryComponent {
       }
     } else {
       // Si no estamos en modo de edición, activamos el modo y añadimos la imagen actual
-      this.isEditMode = true;
+      if(mode=='edit'){
+        this.isEditMode = true
+      }else{
+        this.albumsService.getInfoAlbumsForUser(this.globalDataService.getUsername()).subscribe(
+          (response)=>{
+            console.log('Lista de albumes', response.body)
+            if (Object.keys(response.body).length === 0) {
+              console.error('El objeto jsonData está vacío.');
+          } else {
+            for (const [key, value] of Object.entries(response.body)) {
+              this.currentAlbums.push([key, value])
+          }}
+            console.log('mira esto:::', this.currentAlbums)
+            this.currentAlbums = this.currentAlbums.sort((a, b) => a[1].localeCompare(b[1]));
+            console.log('organizado:::', this.currentAlbums)
+
+            console.log('mira esto:::', this.currentAlbums[0][1])
+
+          },
+          (error)=>{
+            console.log('error en lista de albues', error)
+          }
+        )
+        this.addToAlbums=true;
+      }
       this.selectedImageIds.push(id);
     }
     // console.log('Lista de imágenes seleccionadas:', this.selectedImageIds);

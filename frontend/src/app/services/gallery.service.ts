@@ -40,6 +40,14 @@ export class GalleryService {
     });
   }
 
+  addPhotosToAlbum(albumId:number, photosIds:[]): Observable<any>{
+    const formData = {
+      "albumId":albumId,
+      "photoIds": photosIds
+    };
+    return this.http.post(this.domain + `/uploadPhotoGaleryToAlbum`, formData, { observe: 'response' });
+  }
+
   editInfoPhoto(idPhoto:number, name:string, description:string): Observable<any>{
     const formData = {
       "photoName": name,
