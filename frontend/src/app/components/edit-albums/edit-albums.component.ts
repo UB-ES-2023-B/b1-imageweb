@@ -156,7 +156,6 @@ export class EditAlbumsComponent {
   }
 
   goGallery(){
-    this.globalDataService.setActiveItem('albumes');
     this.router.navigate(['/profile/']);
   }
 

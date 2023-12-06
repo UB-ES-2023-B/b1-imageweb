@@ -155,7 +155,6 @@ export class EditProfileComponent implements OnInit {
   }
 
   volver() {
-    this.globalDataService.setActiveItem('info');
     this.router.navigate(["/profile"]);
   }
 
