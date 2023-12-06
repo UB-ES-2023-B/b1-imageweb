@@ -81,18 +81,16 @@ export class EditAlbumsComponent {
 
   deleteSelectedImages() {
      //Falta endpoint
-     this.loading=false;
-    // this.galleryService.deletePhotoGallery( this.selectedImageIds).subscribe(
-    //   (response)=>{
-    //     console.log('Se ha borrado bien', response)
-    //     this.getGallery()
-    //   },
-    //   (error)=>{
-    //     console.log('error al eliminar', error)
-    //     this.toastr.error('No se ha eliminado correctamente','Error');
-
-    //   }
-    // )
+    this.albumsService.deleteAlbums( this.selectedAlbumsIds).subscribe(
+      (response)=>{
+        console.log('Se ha borrado bien', response)
+        this.getAlbums()
+      },
+      (error)=>{
+        console.log('error al eliminar', error)
+        this.toastr.error('No se ha eliminado correctamente','Error');
+      }
+    )
 
     this.isEditMode = false;
     this.classModal='text-center mb-4 '
@@ -190,6 +188,10 @@ export class EditAlbumsComponent {
               }
               this.albumsService.setAlbums(this.albums);
               this.loading = false;
+              if(this.albums.length==0){
+                this.globalDataService.setActiveItem('albumes');
+                this.router.navigate(['/profile/']);
+              }
           },
           (error) => {
               console.log('error al obtener all gallery', error)
