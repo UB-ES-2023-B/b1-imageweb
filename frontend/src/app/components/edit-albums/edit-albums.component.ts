@@ -19,7 +19,10 @@ export class EditAlbumsComponent {
   editAlbumId:number=-1;
   editAlbumsOriginalValues:any= {};
   remainingWords: number = 25;
-
+  isEditMode = false;
+  classModal:string='text-center mb-4'
+  selectedAlbumsIds: number[] = [];
+  modalResponse: string = '';
 
   private albumsSubscription: Subscription = new Subscription();
 
@@ -42,7 +45,13 @@ export class EditAlbumsComponent {
     this.editAlbumId=id;
     this.editAlbumsOriginalValues={name:name,description:description}
   }
-
+  cancelEditMode() {
+    this.isEditMode = false;
+    this.selectedAlbumsIds = [];
+  }
+  changeIsModal(){
+    this.classModal='text-center mb-4 hideText'
+  }
   cancelEditInfo(id:number){
     let index = this.albums.findIndex(imagen => imagen.id === id);
 
@@ -56,6 +65,59 @@ export class EditAlbumsComponent {
     this.editAlbumId=-1;
   }
 
+  handleModalClosed(response: string) {
+
+
+    if(response=='Save click'){
+      this.loading=true;
+      this.deleteSelectedImages()
+    }else{
+      this.classModal='text-center mb-4'
+    }
+
+    this.modalResponse = response;
+
+  }
+
+  deleteSelectedImages() {
+     //Falta endpoint
+     this.loading=false;
+    // this.galleryService.deletePhotoGallery( this.selectedImageIds).subscribe(
+    //   (response)=>{
+    //     console.log('Se ha borrado bien', response)
+    //     this.getGallery()
+    //   },
+    //   (error)=>{
+    //     console.log('error al eliminar', error)
+    //     this.toastr.error('No se ha eliminado correctamente','Error');
+
+    //   }
+    // )
+
+    this.isEditMode = false;
+    this.classModal='text-center mb-4 '
+    this.selectedAlbumsIds = [];
+  }
+
+  toggleEditMode(id: number) {
+
+    if (this.isEditMode) {
+      // Si ya estamos en modo de edición, significa que se hizo clic en el checkbox
+      const index = this.selectedAlbumsIds.indexOf(id);
+      if (index === -1) {
+        // Si el ID no está en la lista, lo añadimos
+        this.selectedAlbumsIds.push(id);
+      } else {
+        // Si el ID ya está en la lista, lo eliminamos
+        this.selectedAlbumsIds.splice(index, 1);
+      }
+    } else {
+      // Si no estamos en modo de edición, activamos el modo y añadimos la imagen actual
+      this.isEditMode = true;
+      this.selectedAlbumsIds.push(id);
+    }
+    // console.log('Lista de imágenes seleccionadas:', this.selectedImageIds);
+  }
   countWords(description:string, index:number) {
     const words = description.split(/\s+/).filter((word) => word.length > 0);
     const remainingWords = 25 - words.length;
@@ -121,8 +183,8 @@ export class EditAlbumsComponent {
                               "description": album.description,
                               "photoLength": element.length - 1
                             });
-                          });  
-                          
+                          });
+
                       }
                   });
               }

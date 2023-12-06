@@ -1,6 +1,7 @@
 package com.example.b1esimageweb.web.controller;
 
 
+import com.example.b1esimageweb.Exceptions.UnauthorizedAlbumDeletionException;
 import com.example.b1esimageweb.Exceptions.UserNotFoundException;
 import com.example.b1esimageweb.model.Album;
 import com.example.b1esimageweb.model.Photo;
@@ -8,7 +9,9 @@ import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.AlbumService;
 import com.example.b1esimageweb.service.UserService;
 import com.example.b1esimageweb.web.dto.AlbumDto;
+import com.example.b1esimageweb.web.dto.ErrorResponsePhotoUpload;
 import com.example.b1esimageweb.web.dto.PhotoDto;
+import com.example.b1esimageweb.web.dto.PhotosDto;
 import com.example.b1esimageweb.web.responses.AlbumResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
@@ -18,6 +21,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -129,13 +134,66 @@ public class AlbumController {
 
         Iterable<Integer> photoIds = (Iterable<Integer>) requestBody.get("photoIds");
 
-        Photo photo = albumService.checkAlbumForPhotos(album, photoIds);
-        if (photo != null) {
-            return new ResponseEntity<>("This Album already contains Photo with name " + photo.getPhotoName() , HttpStatus.BAD_REQUEST);
+        List<Integer> photoIdsRepited = albumService.checkAlbumForPhotos(album, photoIds);
+        if (!photoIdsRepited.isEmpty()) {
+            ErrorResponsePhotoUpload errorResponsePhotoUpload = new ErrorResponsePhotoUpload("Photos already included", photoIdsRepited);
+            return new ResponseEntity<>(errorResponsePhotoUpload, HttpStatus.BAD_REQUEST);
         }
         album = albumService.addPhotosToAlbumFromGallery(albumId, photoIds);
         Iterable<PhotoDto> photos = albumService.getPhotosByAlbum(album);
         return new ResponseEntity<>(photos, HttpStatus.OK);
+    }
+
+    @DeleteMapping(path = "/deletephotos/{albumId}")
+    public ResponseEntity<Map<String, String>> deletePhotosFromAlbum(@PathVariable int albumId, @RequestBody PhotosDto photoDto) {
+        Map<String, String> response = new HashMap<>();
+        String msg = "";
+        try {
+            List<Integer> photoIds = photoDto.getPhotoIds();
+            if(photoIds.size() == 0){
+                response.put("message", "No photos to delete");
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
+            msg = albumService.deleteAlbumPhotos(albumId, photoIds);
+            response.put("message", msg);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch(Exception e){
+            response.put("message", "Photos not found");
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(path = "/albumInfo/{username}")
+    public ResponseEntity<?> getUserAlbumInfo(@PathVariable String username){
+        try{
+            User user = userService.getUserByUserName(username);
+            Map<Integer, String> info = albumService.getUserAlbumsNamesAndIds(user);
+            return new ResponseEntity<>(info, HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>("Error getting album info" ,HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @DeleteMapping("/album/delete")
+    public ResponseEntity<?> deleteAlbums(@RequestBody Map<String, List<Integer>> albumIdsMap) {
+        Map<String, String> response = new HashMap<>();
+        try {
+            List<Integer> albumIds = albumIdsMap.get("albumIds");
+            if (albumIds == null || albumIds.isEmpty()) {
+                response.put("message", "No album IDs provided");
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+            albumService.deleteAlbumsByIds(albumIds);
+            response.put("message", "Albums deleted successfully!");
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (UnauthorizedAlbumDeletionException e) {
+            response.put("message", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+        } catch (Exception e) {
+            response.put("message", "Error deleting albums: " + e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 }
