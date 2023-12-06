@@ -17,6 +17,8 @@ import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlob;
 import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
+import com.microsoft.azure.storage.blob.CloudBlockBlob;
+
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -211,6 +213,19 @@ public class AlbumService {
         User currentUser = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Map<Integer, List<PhotoDto>> albums = getAllAlbumsForUser(currentUser);
         return albums.containsKey(albumId);
+    }
+
+    public String deleteAlbumPhotos(int albumId, List<Integer> photosId) {
+        Album album = getAlbumById(albumId);
+
+        for (int photoId : photosId) {
+            if (photoRepository.findById(photoId).get() != null) {
+                Photo photo = photoRepository.findById(photoId).orElseThrow(() -> new PhotoNotFoundException("Photo with id " + photoId + "not found"));
+                photo.getAlbums().remove(album);
+                photoRepository.save(photo);
+            }
+        }
+        return "Photos successfully deleted from Album";
     }
 
 }
