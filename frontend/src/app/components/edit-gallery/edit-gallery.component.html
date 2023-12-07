@@ -1,4 +1,3 @@
-
 <div class="bg-light">
   <div class="container  py-5" *ngIf="!loading && images.length===0">
     <div class="d-flex justify-content-center align-items-center flex-column mt-5" (mouseover)="showUploadHint = true"
@@ -26,9 +25,9 @@
         <p *ngIf="isEditMode || addToAlbums" class="mb-3 texto"> Fotos seleccionadas: {{selectedImageIds.length }}</p>
         <div *ngIf="addToAlbums" class="row justify-content-md-center ">
           <div class="col-md-6 pb-4">
-            <select class="form-select" [(ngModel)]="selectedAlbum" style="width:90%;" >
+            <select class="form-select" [(ngModel)]="selectedAlbum" style="width:90%;">
               <option selected [value]=0>Selecciona un álbum</option>
-              <option   *ngFor="let album of currentAlbums" [value]="album[0]">
+              <option *ngFor="let album of currentAlbums" [value]="album[0]">
                 <div *ngIf="album[1].length <= 100; else truncatedContent">
                   {{ album[1] }}
                 </div>
@@ -54,10 +53,11 @@
 
           <button type="button" class="btn btn-secondary mr-2" style=" margin-right: 3%; width:10%"
             (click)="cancelEditMode()">Cancelar</button>
-          <button *ngIf="selectedAlbum!='0'&& selectedImageIds.length>0 " type="button" class="btn btn-primary mr-2" style=" margin-right: 3%; width:10%"
-            (click)="addToAlbum()">Añadir</button>
+          <button *ngIf="selectedAlbum!='0'&& selectedImageIds.length>0 " type="button" class="btn btn-primary mr-2"
+            style=" margin-right: 3%; width:10%" (click)="addToAlbum()">Añadir</button>
         </div>
-        <p *ngIf="addToAlbums && errorIds.length>0" class="textError py-2">Desmarque las fotos que están resaltadas en rojo y vuelva a intentarlo</p>
+        <p *ngIf="addToAlbums && errorIds.length>0" class="textError py-2">Desmarque las fotos que están resaltadas en
+          rojo y vuelva a intentarlo</p>
       </div>
 
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -72,8 +72,8 @@
                 <input type="checkbox" [checked]="selectedImageIds.includes(image.id)"
                   (change)="toggleEditMode(image.id, 'edit')" class="select-checkbox">
               </div>
-              <img class="bd-placeholder-img card-img-top custom-image" [src]="image.src" id="image.id" alt="image.name" (click)="open(i)"
-              [ngClass]="{'error': errorIds.includes(image.id)}">
+              <img class="bd-placeholder-img card-img-top custom-image" [src]="image.src" id="image.id" alt="image.name"
+                (click)="open(i)" [ngClass]="{'error': errorIds.includes(image.id)}">
               <div class="card-body">
                 <ng-container *ngIf="image.id != editImageId; else editFields">
                   <p>{{ image.name }} <i *ngIf="editImageId == -1" class="fas fa-pencil-alt"

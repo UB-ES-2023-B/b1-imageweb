@@ -12,57 +12,57 @@ import { AlbumsService } from 'src/app/services/albums.service';
   styleUrls: ['./edit-gallery.component.css']
 })
 export class EditGalleryComponent {
-  loading:boolean=true;
-  images:any[]=[];
+  loading: boolean = true;
+  images: any[] = [];
   showUploadHint: boolean = true;
   isEditMode = false;
   selectedImageIds: number[] = [];
-  editImageId:number=-1;
-  editImageOriginalValues:any= {};
-  addToAlbums:boolean=false;
+  editImageId: number = -1;
+  editImageOriginalValues: any = {};
+  addToAlbums: boolean = false;
   modalResponse: string = '';
-  selectedAlbum: string ='0';
-  errorIds:number[]=[];
+  selectedAlbum: string = '0';
+  errorIds: number[] = [];
 
-  currentAlbums:any[]=[]
+  currentAlbums: any[] = []
 
-  classModal:string='text-center mb-4'
+  classModal: string = 'text-center mb-4'
 
 
   private imagesSubscription: Subscription = new Subscription();
 
 
-  constructor(private galleryService:GalleryService, private router:Router,
-    private globalDataService:GlobalDataService, private _lightbox: Lightbox,
-    private albumsService: AlbumsService, private toastr: ToastrService){
+  constructor(private galleryService: GalleryService, private router: Router,
+    private globalDataService: GlobalDataService, private _lightbox: Lightbox,
+    private albumsService: AlbumsService, private toastr: ToastrService) {
   }
-  goGallery(){
+  goGallery() {
     this.router.navigate(['/profile/']);
   }
 
-  changeIsModal(){
-    this.classModal='text-center mb-4 hideText'
+  changeIsModal() {
+    this.classModal = 'text-center mb-4 hideText'
   }
 
   handleModalClosed(response: string) {
 
 
-    if(response=='Save click'){
-      this.loading=true;
+    if (response == 'Save click') {
+      this.loading = true;
       this.deleteSelectedImages()
-    }else{
-      this.classModal='text-center mb-4'
+    } else {
+      this.classModal = 'text-center mb-4'
     }
 
     this.modalResponse = response;
 
   }
 
-  startEditInfo(id:number, name:string, description:string){
-    this.editImageId=id;
-    this.editImageOriginalValues={name:name,description:description}
+  startEditInfo(id: number, name: string, description: string) {
+    this.editImageId = id;
+    this.editImageOriginalValues = { name: name, description: description }
   }
-  cancelEditInfo(id:number){
+  cancelEditInfo(id: number) {
     let index = this.images.findIndex(imagen => imagen.id === id);
 
     if (index !== -1) {
@@ -72,45 +72,45 @@ export class EditGalleryComponent {
     } else {
       console.log('Error en cancelar');
     }
-    this.editImageId=-1;
+    this.editImageId = -1;
   }
-  addToAlbum(){
-    this.loading=true;
+  addToAlbum() {
+    this.loading = true;
     this.galleryService.addPhotosToAlbum(this.selectedAlbum, this.selectedImageIds).subscribe(
-      (response)=>{
+      (response) => {
 
         this.toastr.success('Se ha añadido correctamente');
-        this.addToAlbums=false;
+        this.addToAlbums = false;
         this.selectedImageIds = [];
-        this.loading=false;
+        this.loading = false;
       },
-      (error)=>{
+      (error) => {
         console.log('error al añadir a album', error)
-        if(error.status==400){
-          this.errorIds=error.error.photoIds
-          this.toastr.error('Las fotos resaltadas ya están en el álbum','Error');
+        if (error.status == 400) {
+          this.errorIds = error.error.photoIds
+          this.toastr.error('Las fotos resaltadas ya están en el álbum', 'Error');
 
-        }else{
-          this.toastr.error('No se ha añadido correctamente','Error');
-          this.addToAlbums=false;
+        } else {
+          this.toastr.error('No se ha añadido correctamente', 'Error');
+          this.addToAlbums = false;
           this.selectedImageIds = [];
         }
 
-        this.loading=false;
+        this.loading = false;
 
       }
     )
   }
-  saveEditInfo(id:number, name:string, description:string){
-    this.galleryService.editInfoPhoto(id,name, description).subscribe(
-      (response)=>{
+  saveEditInfo(id: number, name: string, description: string) {
+    this.galleryService.editInfoPhoto(id, name, description).subscribe(
+      (response) => {
         this.toastr.success('Se ha editado correctamente');
-        this.editImageId=-1;
+        this.editImageId = -1;
 
       },
-      (error)=>{
+      (error) => {
         console.log('error editar campos de fotos', error)
-        this.toastr.error('No se ha editado correctamente','Error');
+        this.toastr.error('No se ha editado correctamente', 'Error');
         let index = this.images.findIndex(imagen => imagen.id === id);
 
         if (index !== -1) {
@@ -120,34 +120,35 @@ export class EditGalleryComponent {
         } else {
           console.log('Error en cancelar');
         }
-        this.editImageId=-1;
+        this.editImageId = -1;
 
       }
     )
     //Hacer la llamada al back
     //this.editImageId=-1;
   }
-  getGallery():void{
-    this.images=[]
+  getGallery(): void {
+    this.images = []
     this.galleryService.getGalleryUser(this.globalDataService.getUsername()).subscribe(
-      (response)=>{
+      (response) => {
         if (response.body && Array.isArray(response.body)) {
           response.body.forEach((element: any) => {
             if (element.data) {
               this.images.unshift({
-            "src":`data:image/${element.photoExtensio};base64,${element.data}`,
-             "id": element.photoId, "name":element.photoName, "description": element.photoDescription});
+                "src": `data:image/${element.photoExtensio};base64,${element.data}`,
+                "id": element.photoId, "name": element.photoName, "description": element.photoDescription
+              });
             }
           });
         }
         this.galleryService.setImages(this.images);
-        this.loading=false;
-        if(this.images.length==0){
+        this.loading = false;
+        if (this.images.length == 0) {
           this.router.navigate(['/profile/']);
         }
 
       },
-      (error)=>{
+      (error) => {
         console.log('error al obtener all gallery', error)
       }
     )
@@ -157,23 +158,19 @@ export class EditGalleryComponent {
       this.images = images;
     });
     this.albumsService.getInfoAlbumsForUser(this.globalDataService.getUsername()).subscribe(
-      (response)=>{
+      (response) => {
         console.log('Lista de albumes', response.body)
         if (Object.keys(response.body).length === 0) {
           console.error('El objeto jsonData está vacío.');
-      } else {
-        for (const [key, value] of Object.entries(response.body)) {
-          this.currentAlbums.push([key, value])
-      }}
-        console.log('mira esto:::', this.currentAlbums)
+        } else {
+          for (const [key, value] of Object.entries(response.body)) {
+            this.currentAlbums.push([key, value])
+          }
+        }
         this.currentAlbums = this.currentAlbums.sort((a, b) => a[1].localeCompare(b[1]));
-        console.log('organizado:::', this.currentAlbums)
-
-        console.log('mira esto:::', this.currentAlbums[0][1])
-
       },
-      (error)=>{
-        console.log('error en lista de albues', error)
+      (error) => {
+        console.log('error en lista de albumes', error)
       }
     )
 
@@ -199,56 +196,55 @@ export class EditGalleryComponent {
 
   cancelEditMode() {
     this.isEditMode = false;
-    this.addToAlbums=false;
+    this.addToAlbums = false;
     this.selectedImageIds = [];
-    this.errorIds=[];
+    this.errorIds = [];
   }
 
 
   deleteSelectedImages() {
 
-    this.galleryService.deletePhotoGallery( this.selectedImageIds).subscribe(
-      (response)=>{
-        console.log('Se ha borrado bien', response)
+    this.galleryService.deletePhotoGallery(this.selectedImageIds).subscribe(
+      (response) => {
         this.getGallery()
       },
-      (error)=>{
+      (error) => {
         console.log('error al eliminar', error)
-        this.toastr.error('No se ha eliminado correctamente','Error');
+        this.toastr.error('No se ha eliminado correctamente', 'Error');
 
       }
     )
 
     this.isEditMode = false;
-    this.classModal='text-center mb-4 '
+    this.classModal = 'text-center mb-4 '
     this.selectedImageIds = [];
 
   }
 
 
-  toggleEditMode(id: number, mode:string) {
+  toggleEditMode(id: number, mode: string) {
 
-    if (this.isEditMode|| this.addToAlbums) {
+    if (this.isEditMode || this.addToAlbums) {
       // Si ya estamos en modo de edición, significa que se hizo clic en el checkbox
       const index = this.selectedImageIds.indexOf(id);
-      const error= this.errorIds.indexOf(id);
+      const error = this.errorIds.indexOf(id);
       if (index === -1) {
         // Si el ID no está en la lista, lo añadimos
         this.selectedImageIds.push(id);
       } else {
         // Si el ID ya está en la lista, lo eliminamos
         this.selectedImageIds.splice(index, 1);
-        if(error!==-1){
+        if (error !== -1) {
           this.errorIds.splice(error, 1);
         }
       }
     } else {
       // Si no estamos en modo de edición, activamos el modo y añadimos la imagen actual
-      if(mode=='edit'){
+      if (mode == 'edit') {
         this.isEditMode = true
-      }else{
+      } else {
 
-        this.addToAlbums=true;
+        this.addToAlbums = true;
       }
       this.selectedImageIds.push(id);
     }
