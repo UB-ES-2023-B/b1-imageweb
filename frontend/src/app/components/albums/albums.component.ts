@@ -74,7 +74,7 @@ export class AlbumsComponent {
                                     "photoLength": element.length - 1
                                 });
                             });
-                            
+
                         }
                     });
                 }

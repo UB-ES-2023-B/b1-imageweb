@@ -108,6 +108,9 @@ export class EditGalleryComponent {
         }
         this.galleryService.setImages(this.images);
         this.loading=false;
+        if(this.images.length==0){
+          this.router.navigate(['/profile/']);
+        }
 
       },
       (error)=>{
