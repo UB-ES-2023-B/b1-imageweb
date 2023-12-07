@@ -41,6 +41,9 @@ public class AlbumController {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             AlbumDto albumDto = objectMapper.readValue(albumDtoAsString, AlbumDto.class);
+            if (coverPhoto.getSize() > 2 * 1024 * 1024) { // 2MB in bytes
+                return new ResponseEntity<>("Photo with name "+ coverPhoto.getOriginalFilename() + " exceeds the maximum size allowed (2MB)", HttpStatus.BAD_REQUEST);
+            }
             albumDto.setCoverPhoto(coverPhoto);
             Album album= albumService.createAlbum(albumDto);
             Iterable<PhotoDto> photos = albumService.getPhotosByAlbum(album);
@@ -103,6 +106,11 @@ public class AlbumController {
     public ResponseEntity<?> addPhotosToAlbum(@PathVariable int albumId, @RequestParam("photos") List<MultipartFile> photosList) {
         if(!albumService.isAlbumOwner(albumId)){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        for (MultipartFile photo : photosList) {
+            if (photo.getSize() > 2 * 1024 * 1024) { // 2MB in bytes
+                return new ResponseEntity<>("Photo with name "+ photo.getOriginalFilename() + " exceeds the maximum size allowed (2MB)", HttpStatus.BAD_REQUEST);
+            }
         }
         try {
             Album album = albumService.addPhotosToAlbum(albumId, photosList);
