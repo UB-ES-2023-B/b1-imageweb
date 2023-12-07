@@ -22,7 +22,7 @@
     <div class="container">
       <button *ngIf="!loading" type="button" class="btn btn-outline-secondary btn-sm" (click)="goGallery()"> <i
           class="fas fa-arrow-left"></i>&nbsp; Regresar a Galería</button>
-      <div [class]="classModal ">
+      <div [class]="classModal " *ngIf="!loading">
         <p *ngIf="isEditMode || addToAlbums" class="mb-3 texto"> Fotos seleccionadas: {{selectedImageIds.length }}</p>
         <div *ngIf="addToAlbums" class="row justify-content-md-center ">
           <div class="col-md-6 pb-4">
@@ -54,9 +54,10 @@
 
           <button type="button" class="btn btn-secondary mr-2" style=" margin-right: 3%; width:10%"
             (click)="cancelEditMode()">Cancelar</button>
-          <button type="button" class="btn btn-primary mr-2" style=" margin-right: 3%; width:10%"
-            (click)="cancelEditMode()">Añadir</button>
+          <button *ngIf="selectedAlbum!='0'&& selectedImageIds.length>0 " type="button" class="btn btn-primary mr-2" style=" margin-right: 3%; width:10%"
+            (click)="addToAlbum()">Añadir</button>
         </div>
+        <p *ngIf="addToAlbums && errorIds.length>0" class="textError py-2">Desmarque las fotos que están resaltadas en rojo y vuelva a intentarlo</p>
       </div>
 
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -71,7 +72,8 @@
                 <input type="checkbox" [checked]="selectedImageIds.includes(image.id)"
                   (change)="toggleEditMode(image.id, 'edit')" class="select-checkbox">
               </div>
-              <img class="bd-placeholder-img card-img-top custom-image" [src]="image.src" alt="Image" (click)="open(i)">
+              <img class="bd-placeholder-img card-img-top custom-image" [src]="image.src" id="image.id" alt="image.name" (click)="open(i)"
+              [ngClass]="{'error': errorIds.includes(image.id)}">
               <div class="card-body">
                 <ng-container *ngIf="image.id != editImageId; else editFields">
                   <p>{{ image.name }} <i *ngIf="editImageId == -1" class="fas fa-pencil-alt"
@@ -92,7 +94,7 @@
                     </div>
                   </div>
                 </ng-template>
-                <div *ngIf="!addToAlbums" class="container-plus">
+                <div *ngIf="!addToAlbums && currentAlbums.length>0" class="container-plus">
                   <img *ngIf="!isEditMode" src="../../../assets/images/square-plus-regular.svg" width="20" height="20"
                     alt="Icono" (click)=" toggleEditMode(image.id, 'addPhotos')">
                 </div>

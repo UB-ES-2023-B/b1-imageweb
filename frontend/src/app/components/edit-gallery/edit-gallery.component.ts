@@ -21,7 +21,8 @@ export class EditGalleryComponent {
   editImageOriginalValues:any= {};
   addToAlbums:boolean=false;
   modalResponse: string = '';
-  selectedAlbum: number =0;
+  selectedAlbum: string ='0';
+  errorIds:number[]=[];
 
   currentAlbums:any[]=[]
 
@@ -72,6 +73,33 @@ export class EditGalleryComponent {
       console.log('Error en cancelar');
     }
     this.editImageId=-1;
+  }
+  addToAlbum(){
+    this.loading=true;
+    this.galleryService.addPhotosToAlbum(this.selectedAlbum, this.selectedImageIds).subscribe(
+      (response)=>{
+
+        this.toastr.success('Se ha añadido correctamente');
+        this.addToAlbums=false;
+        this.selectedImageIds = [];
+        this.loading=false;
+      },
+      (error)=>{
+        console.log('error al añadir a album', error)
+        if(error.status==400){
+          this.errorIds=error.error.photoIds
+          this.toastr.error('Las fotos resaltadas ya están en el álbum','Error');
+
+        }else{
+          this.toastr.error('No se ha añadido correctamente','Error');
+          this.addToAlbums=false;
+          this.selectedImageIds = [];
+        }
+
+        this.loading=false;
+
+      }
+    )
   }
   saveEditInfo(id:number, name:string, description:string){
     this.galleryService.editInfoPhoto(id,name, description).subscribe(
@@ -128,6 +156,26 @@ export class EditGalleryComponent {
     this.imagesSubscription = this.galleryService.getImagesObservable().subscribe((images) => {
       this.images = images;
     });
+    this.albumsService.getInfoAlbumsForUser(this.globalDataService.getUsername()).subscribe(
+      (response)=>{
+        console.log('Lista de albumes', response.body)
+        if (Object.keys(response.body).length === 0) {
+          console.error('El objeto jsonData está vacío.');
+      } else {
+        for (const [key, value] of Object.entries(response.body)) {
+          this.currentAlbums.push([key, value])
+      }}
+        console.log('mira esto:::', this.currentAlbums)
+        this.currentAlbums = this.currentAlbums.sort((a, b) => a[1].localeCompare(b[1]));
+        console.log('organizado:::', this.currentAlbums)
+
+        console.log('mira esto:::', this.currentAlbums[0][1])
+
+      },
+      (error)=>{
+        console.log('error en lista de albues', error)
+      }
+    )
 
     this.getGallery();
 
@@ -153,6 +201,7 @@ export class EditGalleryComponent {
     this.isEditMode = false;
     this.addToAlbums=false;
     this.selectedImageIds = [];
+    this.errorIds=[];
   }
 
 
@@ -182,38 +231,23 @@ export class EditGalleryComponent {
     if (this.isEditMode|| this.addToAlbums) {
       // Si ya estamos en modo de edición, significa que se hizo clic en el checkbox
       const index = this.selectedImageIds.indexOf(id);
+      const error= this.errorIds.indexOf(id);
       if (index === -1) {
         // Si el ID no está en la lista, lo añadimos
         this.selectedImageIds.push(id);
       } else {
         // Si el ID ya está en la lista, lo eliminamos
         this.selectedImageIds.splice(index, 1);
+        if(error!==-1){
+          this.errorIds.splice(error, 1);
+        }
       }
     } else {
       // Si no estamos en modo de edición, activamos el modo y añadimos la imagen actual
       if(mode=='edit'){
         this.isEditMode = true
       }else{
-        this.albumsService.getInfoAlbumsForUser(this.globalDataService.getUsername()).subscribe(
-          (response)=>{
-            console.log('Lista de albumes', response.body)
-            if (Object.keys(response.body).length === 0) {
-              console.error('El objeto jsonData está vacío.');
-          } else {
-            for (const [key, value] of Object.entries(response.body)) {
-              this.currentAlbums.push([key, value])
-          }}
-            console.log('mira esto:::', this.currentAlbums)
-            this.currentAlbums = this.currentAlbums.sort((a, b) => a[1].localeCompare(b[1]));
-            console.log('organizado:::', this.currentAlbums)
 
-            console.log('mira esto:::', this.currentAlbums[0][1])
-
-          },
-          (error)=>{
-            console.log('error en lista de albues', error)
-          }
-        )
         this.addToAlbums=true;
       }
       this.selectedImageIds.push(id);
