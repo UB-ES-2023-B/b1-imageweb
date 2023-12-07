@@ -103,7 +103,17 @@ export class AlbumViewEditModeComponent {
   }
 
   deleteSelectedImages() {
-    //this.albumsService.deletePhoto
+    this.albumsService.deletePhotoAlbum( this.selectedImageIds, this.albumId).subscribe(
+      (response)=>{
+        console.log('Se ha borrado bien', response)
+        this.getAlbum();
+      },
+      (error)=>{
+        console.log('error al eliminar', error)
+        this.toastr.error('No se ha eliminado correctamente','Error');
+
+      }
+    )
     this.isEditMode = false;
     this.classModal='text-center mb-4 '
     this.selectedImageIds = [];

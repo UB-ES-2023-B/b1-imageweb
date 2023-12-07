@@ -98,4 +98,14 @@ export class AlbumsService {
     return this.imagesSubject.asObservable();
   }
 
+  deletePhotoAlbum(PhotoIds: number[], id:number): Observable<any> {
+    const formData = {
+      photoIds: PhotoIds
+    };
+    return this.http.delete(this.domain + `/deletephotos/${id}`, {
+      body: formData,
+      observe: 'response'
+    });
+  }
+
 }
