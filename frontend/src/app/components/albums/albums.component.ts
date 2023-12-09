@@ -202,4 +202,7 @@ export class AlbumsComponent {
         this.albumsSubscription.unsubscribe();
     }
 
+  onAlbumClick(albumId: number) {
+    this.router.navigate(["/profile/album", albumId]);
+  }
 }
