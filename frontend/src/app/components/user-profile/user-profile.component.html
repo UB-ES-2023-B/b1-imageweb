@@ -21,10 +21,10 @@
 
   <div class="container py-3" style="margin-bottom: 4%">
         <h4>Descripción</h4>
-        <p *ngIf="visited_user.description" >{{ visited_user.description }}</p>
+        <p *ngIf="visited_user.description" class="text-break"> {{ visited_user.description }}</p>
         <p *ngIf="!visited_user.description">Este usuario no ha añadido ninguna descripción.</p>
         <div class="separator-line"></div>
-    </div>
+  </div>
 </div>
 
 <div *ngIf="activeItem=='gallery'">
