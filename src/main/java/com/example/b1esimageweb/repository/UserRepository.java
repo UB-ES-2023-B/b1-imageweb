@@ -17,6 +17,8 @@ public interface UserRepository extends CrudRepository<User, Integer> {
     boolean existsUserByUsername(String username);
     @Query("SELECT u.gallery FROM User u WHERE u.userId = :userId")
     Gallery getGalleryByUserId(@Param("userId") Integer userId);
+    @Query("SELECT u.userId FROM User u WHERE u.gallery = :gallery")
+    Integer getUserByGallery(@Param("gallery") Gallery gallery);
     @Query("SELECT u.profilePicture FROM User u WHERE u.userId = :userId")
     Photo getPhotoProfileByUserId(@Param("userId") Integer userId);
     Iterable<User> findByUsernameContaining(String searchCriteria);

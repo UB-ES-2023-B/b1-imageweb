@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { AlbumsService } from '../../services/albums.service';
+import { UserService } from '../../services/user.service';
 import { GlobalDataService } from 'src/app/services/global-data.service';
 import { Subscription } from 'rxjs';
 import { Lightbox } from 'ngx-lightbox';
@@ -23,9 +24,12 @@ export class AlbumViewComponent {
   albumDescription: any;
   albumLenght: any;
 
+  visitor_username: string = this.globalDataService.getUsername();
+  original_username: any;
+
   private imagesSubscription: Subscription = new Subscription();
 
-  constructor(private albumsService:AlbumsService, private router: Router, private globalDataService:GlobalDataService, private _lightbox: Lightbox, private toastr: ToastrService, private route: ActivatedRoute){
+  constructor(private albumsService:AlbumsService, private userService:UserService, private router: Router, private globalDataService:GlobalDataService, private _lightbox: Lightbox, private toastr: ToastrService, private route: ActivatedRoute){
   }
 
   goGallery(){
@@ -34,6 +38,7 @@ export class AlbumViewComponent {
   }
 
   goEditMode(){
+    console.log(this.visitor_username);
     this.router.navigate(["/profile/album/" + this.albumId + "/editMode"]);
   }
 
@@ -43,11 +48,25 @@ export class AlbumViewComponent {
       (response)=>{
 
         if (response.body && Array.isArray(response.body)) {
-          let len = response.body.length;
+          this.albumName = response.body[0].albums[0].albumName;
+          this.albumDescription = response.body[0].albums[0].description;
+          this.albumLenght = response.body.length-1+ " fotos";
+          
+          if(response.body.length == 1){
+            this.loading=false;
+          }
           response.body.forEach((element: any) => {
+            
             if (element.data) {
               if(element.photoName != "defaultImage"){
                 if (response.body.indexOf(element) == 1){
+                  this.userService.getUsernameAlbumOwner(element.gallery.galleryrId).subscribe(
+                    (text) =>{
+                      this.original_username = text;
+                      this.loading=false;
+                    }
+                  )
+                  
                   this.coverImage = {
                     "src":`data:image/${element.photoExtensio};base64,${element.data}`,
                     "id": element.photoId, "name":element.photoName, "description": element.photoDescription
@@ -63,18 +82,8 @@ export class AlbumViewComponent {
           });
         }
         this.albumsService.setImagesToAlbum(this.images);
-        this.albumsService.getAlbumById(this.albumId).subscribe(
-          (response)=>{
-            if (response.body && Array.isArray(response.body)) {
-              console.log(response.body[0]);
-              this.albumName = response.body[0].albums[0].albumName;
-              this.albumDescription = response.body[0].albums[0].description;
-              this.albumLenght = response.body.length-1+ " fotos";
-            }
-            this.loading=false;
-          }
-          
-        );
+        
+        
       },(error)=>{
         console.log('error al obtener album', error)
       }

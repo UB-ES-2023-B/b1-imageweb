@@ -2,6 +2,7 @@ package com.example.b1esimageweb.web.controller;
 
 import com.example.b1esimageweb.Exceptions.UserNotFoundException;
 import com.example.b1esimageweb.model.User;
+import com.example.b1esimageweb.service.GalleryService;
 import com.example.b1esimageweb.service.UserService;
 import com.example.b1esimageweb.web.dto.PhotoDto;
 import com.example.b1esimageweb.web.dto.UserInfoDto;
@@ -27,12 +28,14 @@ import java.util.Map;
 public class UserController {
 
     private final UserService service;
+    private final GalleryService galleryService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserController(UserService service) {
+    public UserController(UserService service, GalleryService galleryService) {
         this.service = service;
+        this.galleryService = galleryService;
     }
 
     @GetMapping(value = "/getAll")
@@ -45,6 +48,13 @@ public class UserController {
     public ResponseEntity<User> getUserById(@PathVariable("id") Integer id) {
         User user = service.getUserById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getUsernameByGalleryId/{id}")
+    public ResponseEntity<String> getUserByGalleryId(@PathVariable("id") Integer id) {
+        User user = service.getUserByGallery(galleryService.getGalleryById(id));
+        String username = user.getUsername();
+        return new ResponseEntity<>(username, HttpStatus.OK);
     }
 
     @GetMapping(value = "/getByUserName/{userName}")

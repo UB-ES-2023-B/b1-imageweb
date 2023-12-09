@@ -195,6 +195,11 @@ public class UserService implements UserDetailsService {
         return userRepository.getGalleryByUserId(user.getUserId());
     }
 
+    public User getUserByGallery(Gallery gallery){
+        int userId = userRepository.getUserByGallery(gallery);
+        return getUserById(userId);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username).get();
