@@ -117,7 +117,7 @@ public class AlbumService {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 blob.download(outputStream);
                 byte[] photoContent = outputStream.toByteArray();
-                photos.add(new PhotoDto(photoContent, photo.getPhotoId(), null, photo.getPhotoName(), photo.getAlbums(), photo.getPhotoExtension(), photo.getPhotoDescription()));
+                photos.add(new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getAlbums(), photo.getPhotoExtension(), photo.getPhotoDescription()));
             } catch (URISyntaxException | StorageException e) {
                 e.printStackTrace();
                 return null;

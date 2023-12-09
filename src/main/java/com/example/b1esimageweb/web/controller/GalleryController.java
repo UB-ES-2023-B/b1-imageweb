@@ -34,7 +34,7 @@ public class GalleryController {
         if(!galleryService.isGalleryOwner(galleryId))
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         // Verificar el tamaño del archivo
-        if (photo.getSize() > 2 * 1024 * 1024) { // 3MB en bytes
+        if (photo.getSize() > 2 * 1024 * 1024) { // 2MB en bytes
             return new ResponseEntity<>("Photo size exceeds the maximum allowed size of 2MB", HttpStatus.BAD_REQUEST);
         }
         PhotoDto newPhoto = galleryService.addNewPhoto(galleryId, photo);

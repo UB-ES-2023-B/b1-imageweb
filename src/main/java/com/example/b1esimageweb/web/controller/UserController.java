@@ -2,6 +2,7 @@ package com.example.b1esimageweb.web.controller;
 
 import com.example.b1esimageweb.Exceptions.UserNotFoundException;
 import com.example.b1esimageweb.model.User;
+import com.example.b1esimageweb.service.GalleryService;
 import com.example.b1esimageweb.service.UserService;
 import com.example.b1esimageweb.web.dto.PhotoDto;
 import com.example.b1esimageweb.web.dto.UserInfoDto;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -26,12 +28,14 @@ import java.util.Map;
 public class UserController {
 
     private final UserService service;
+    private final GalleryService galleryService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserController(UserService service) {
+    public UserController(UserService service, GalleryService galleryService) {
         this.service = service;
+        this.galleryService = galleryService;
     }
 
     @GetMapping(value = "/getAll")
@@ -44,6 +48,13 @@ public class UserController {
     public ResponseEntity<User> getUserById(@PathVariable("id") Integer id) {
         User user = service.getUserById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/getUsernameByGalleryId/{id}")
+    public ResponseEntity<String> getUserByGalleryId(@PathVariable("id") Integer id) {
+        User user = service.getUserByGallery(galleryService.getGalleryById(id));
+        String username = user.getUsername();
+        return new ResponseEntity<>(username, HttpStatus.OK);
     }
 
     @GetMapping(value = "/getByUserName/{userName}")
@@ -118,6 +129,44 @@ public class UserController {
         }catch (Exception e){
             response.put("Message", "Invalid current password");
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/follow/{userToFollowUsername}")
+    public ResponseEntity<?> followUser(@PathVariable String userToFollowUsername) {
+        try {
+            Map<String ,Object> response = service.followUser(userToFollowUsername);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error following user: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/unfollow/{userToUnfollowUsername}")
+    public ResponseEntity<?> unfollowUser(@PathVariable String userToUnfollowUsername) {
+        try {
+            Map<String ,Object> response = service.unfollowUser(userToUnfollowUsername);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error unfollowing user: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping(value = "/getFollowers/{username}")
+    public ResponseEntity<?> getFollowers(@PathVariable String username) {
+        try {
+            Map<String, Object> response = service.getFollowerOrFollowed(username, true);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error retrieving followers : " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping(value = "/getFollowing/{username}")
+    public ResponseEntity<?> getFollowing(@PathVariable String username) {
+        try {
+            Map<String, Object> response = service.getFollowerOrFollowed(username,false);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error retrieving following users: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

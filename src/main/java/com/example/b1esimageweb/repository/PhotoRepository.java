@@ -13,4 +13,6 @@ public interface PhotoRepository extends CrudRepository<Photo, Integer> {
     Iterable<Photo> findByAlbumsContaining(Album album);
 
     void deleteByAlbumsContaining(Album allbum);
+
+    int countByGallery(Gallery gallery);
 }
