@@ -26,6 +26,7 @@ export class AlbumViewComponent {
 
   visitor_username: string = this.globalDataService.getUsername();
   original_username: any;
+  original_userId: any;
 
   private imagesSubscription: Subscription = new Subscription();
 
@@ -34,7 +35,12 @@ export class AlbumViewComponent {
 
   goGallery(){
     this.globalDataService.setActiveItem('albumes');
-    this.router.navigate(['/profile/']);
+    if(this.original_username == this.visitor_username){
+      this.router.navigate(['/profile/']);
+    }
+    else{
+      this.router.navigate(['/user-profile/'+ this.original_userId]);
+    }
   }
 
   goEditMode(){
@@ -60,9 +66,10 @@ export class AlbumViewComponent {
             if (element.data) {
               if(element.photoName != "defaultImage"){
                 if (response.body.indexOf(element) == 1){
-                  this.userService.getUsernameAlbumOwner(element.gallery.galleryrId).subscribe(
-                    (text) =>{
-                      this.original_username = text;
+                  this.userService.getUserAlbumOwner(element.gallery.galleryrId).subscribe(
+                    (response) =>{
+                      this.original_username = response.body.username;
+                      this.original_userId = response.body.userId;
                       this.loading=false;
                     }
                   )
@@ -101,7 +108,7 @@ export class AlbumViewComponent {
   }
 
   ngOnInit(): void {
-    // Use ActivatedRoute to get the id from the URL path
+
     this.route.params.subscribe(params => {
       this.albumId = params['id'];
     });  
