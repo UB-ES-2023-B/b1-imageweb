@@ -50,11 +50,11 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/getUsernameByGalleryId/{id}")
-    public ResponseEntity<String> getUserByGalleryId(@PathVariable("id") Integer id) {
+    @GetMapping(value = "/getUserByGalleryId/{id}")
+    public ResponseEntity<UserInfoDto> getUserByGalleryId(@PathVariable("id") Integer id) {
         User user = service.getUserByGallery(galleryService.getGalleryById(id));
-        String username = user.getUsername();
-        return new ResponseEntity<>(username, HttpStatus.OK);
+        UserInfoDto userInfoDto = new UserInfoDto(user.getUserId(), user.getUsername(), user.getUserEmail(), user.getPassword(), user.getDescription(), user.getGallery(), null, user.isAccountNonExpired(), user.isAccountNonExpired(), user.isAccountNonLocked(), user.isEnabled(), user.getAuthorities());
+        return new ResponseEntity<>(userInfoDto, HttpStatus.OK);
     }
 
     @GetMapping(value = "/getByUserName/{userName}")

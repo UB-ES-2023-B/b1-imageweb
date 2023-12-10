@@ -1,7 +1,9 @@
 package com.example.b1esimageweb.service;
 
 import java.util.ArrayList;
+import java.util.stream.StreamSupport;
 
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.example.b1esimageweb.model.User;
@@ -26,11 +28,22 @@ public class SearchService {
     }
 
     private Iterable<UserInfoDto> getUsersDTOSearchResults (Iterable<User> users){
-        ArrayList<UserInfoDto> userInfoDtos = new ArrayList<>();
+        List<UserInfoDto> userInfoDtos = new ArrayList<>();
+
+        User currentUser = service.getCurrentUserFromConext();
+        Iterable<User> followedUsers = currentUser.getFollowing();
+
         users.forEach(user -> {
             PhotoDto profilePhoto = service.getPhotoProfileByUser(user);
             UserInfoDto userInfoDto = new UserInfoDto(user.getUserId(), user.getUsername(), user.getUserEmail(), user.getPassword(), user.getDescription(), user.getGallery(), profilePhoto, user.isAccountNonExpired(), user.isAccountNonExpired(), user.isAccountNonLocked(), user.isEnabled(), user.getAuthorities());
-            userInfoDtos.add(userInfoDto);
+            
+            if (StreamSupport.stream(followedUsers.spliterator(), false).anyMatch(u -> u.getUserId().equals(user.getUserId()))){
+                System.out.println(userInfoDtos);
+                userInfoDtos.add(0, userInfoDto);
+                System.out.println(userInfoDtos);
+            }else{
+                userInfoDtos.add(userInfoDto);
+            }
         }
         );
         return userInfoDtos;
