@@ -48,4 +48,8 @@ export class UserService {
   getVisitedUserProfilePhoto(username: string): Observable<any> {
     return this.http.get(this.domain + `/user/viewPhotoProfile/${username}`, { observe: 'response' })
   }
+
+  getUsernameAlbumOwner(galleryId: number): Observable<any>{
+    return this.http.get(this.domain+ `/user/getUsernameByGalleryId/${galleryId}`, { responseType: 'text'})
+  }
 }

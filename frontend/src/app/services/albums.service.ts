@@ -10,6 +10,8 @@ export class AlbumsService {
   private domain: string |undefined
   private albums: any[] = [];
   private albumsSubject: BehaviorSubject<any[]> = new BehaviorSubject(this.albums);
+  private images: any[] = [];
+  private imagesSubject: BehaviorSubject<any[]> = new BehaviorSubject(this.images);
 
   constructor(private http: HttpClient) {
     this.domain = environment.domain;
@@ -93,7 +95,27 @@ export class AlbumsService {
     return this.albumsSubject.asObservable();
   }
 
+  getAlbumById(id:number): Observable<any> {
+    return this.http.get(this.domain + `/getAlbum/${id}`, {  observe: 'response' });
+  }
 
+  setImagesToAlbum(images: any[]): void {
+    this.images = images;
+    this.imagesSubject.next(this.images);
+  }
 
+  getImagesObservable(): Observable<any[]> {
+    return this.imagesSubject.asObservable();
+  }
+
+  deletePhotoAlbum(PhotoIds: number[], id:number): Observable<any> {
+    const formData = {
+      photoIds: PhotoIds
+    };
+    return this.http.delete(this.domain + `/deletephotos/${id}`, {
+      body: formData,
+      observe: 'response'
+    });
+  }
 
 }

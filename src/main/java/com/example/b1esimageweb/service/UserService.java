@@ -31,6 +31,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -59,14 +61,13 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    // Now we add(register) new user in the AuthService class
-    // this method is not used anymore
-    public User addNewUser(User user) {
-        Gallery gallery = new Gallery();
-        gallery.setGalleryName("My first Gallery");
-        galleryRepository.save(gallery);
-        user.setGallery(gallery);
-        return userRepository.save(user);
+    protected User getCurrentUserFromConext(){
+        Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User currentUser = null;
+        if(obj instanceof User){
+            currentUser = (User) obj;
+        }
+        return currentUser;
     }
 
     public Iterable<User> getAllUsers() {
@@ -82,11 +83,7 @@ public class UserService implements UserDetailsService {
     }
 
     public Photo addProfilePicture (MultipartFile photo){
-        Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User currentUser = null;
-        if(obj instanceof User){
-            currentUser = (User) obj;
-        }
+        User currentUser = getCurrentUserFromConext();
         if(currentUser != null) {
             Photo profilePhoto = new Photo();
 
@@ -139,11 +136,7 @@ public class UserService implements UserDetailsService {
 
 
     public void deteleUserProficePicture(){
-        Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User currentUser = null;
-        if(obj instanceof User){
-            currentUser = (User) obj;
-        }
+        User currentUser = getCurrentUserFromConext();
         if(currentUser != null) {
             Photo profilePhoto = currentUser.getProfilePicture();
             currentUser.setProfilePicture(null);
@@ -202,17 +195,18 @@ public class UserService implements UserDetailsService {
         return userRepository.getGalleryByUserId(user.getUserId());
     }
 
+    public User getUserByGallery(Gallery gallery){
+        int userId = userRepository.getUserByGallery(gallery);
+        return getUserById(userId);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username).get();
     }
 
     public String resetPassword (PasswordResetDto passwordResetDto, PasswordEncoder passwordEncoder){
-        Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User currentUser = null;
-        if(obj instanceof User){
-            currentUser = (User) obj;
-        }
+        User currentUser = getCurrentUserFromConext();
         if(currentUser != null) {
            if(passwordEncoder.matches(passwordResetDto.getCurrentPassword(), currentUser.getPassword())){
                currentUser.setUserPassword(passwordEncoder.encode(passwordResetDto.getNewPassword()));
@@ -224,5 +218,52 @@ public class UserService implements UserDetailsService {
             throw new UserNotFoundException("User does not exists");
         }
         return "Your password was changed successfully";
+    }
+
+    public Map<String, Object>  followUser(String userToFollowUsername) throws Exception {
+        User currentUser = getCurrentUserFromConext();
+        User userToFollow = userRepository.findByUsername(userToFollowUsername)
+                .orElseThrow(() -> new Exception("User not found with name: " + userToFollowUsername));
+
+        currentUser.followUser(userToFollow);
+        userRepository.save(currentUser);
+        userRepository.save(userToFollow);
+
+        return getFollowOrFollowingAndPhotos(currentUser, false);
+    }
+
+    public Map<String, Object> unfollowUser(String userToUnfollowUsername) throws Exception {
+        User currentUser = getCurrentUserFromConext();
+        User userToUnfollow = userRepository.findByUsername(userToUnfollowUsername)
+                .orElseThrow(() -> new Exception("User not found with name: " + userToUnfollowUsername));
+
+        currentUser.unfollowUser(userToUnfollow);
+        userRepository.save(currentUser);
+        userRepository.save(userToUnfollow);
+
+        return getFollowOrFollowingAndPhotos(currentUser, false);
+    }
+    public Map<String, Object> getFollowerOrFollowed(String username, boolean followersOrFollowing) throws Exception {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new Exception("User not found with username: " + username));
+        return getFollowOrFollowingAndPhotos(user, followersOrFollowing);
+    }
+
+    //followersOrFollowing = true -> returns Followers List
+    //followersOrFollowing = false -> return Following list
+    protected Map<String, Object> getFollowOrFollowingAndPhotos(User user, boolean followersOrFollowing) {
+        Set<User> follow= followersOrFollowing ? user.getFollowers() : user.getFollowing();
+        List<Map<String, Object>> listWithPhotos = follow.stream()
+                .map(follower -> {
+                    int photoCount = photoRepository.countByGallery(follower.getGallery());
+                    Map<String, Object> userMap = new HashMap<>();
+                    userMap.put("username", follower.getUsername());
+                    userMap.put("numPhotosPublicas", photoCount);
+                    return userMap;
+                })
+                .collect(Collectors.toList());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put(followersOrFollowing ? "followers" : "following", listWithPhotos);
+        return response;
     }
 }
