@@ -57,27 +57,29 @@ export class AlbumsComponent {
         this.albumsService.getAlbumsForUser(this.username).subscribe(
             (response) => {
                 if (response.body && Array.isArray(response.body.albums)) {
+                  console.log('eyyyyyyyyyyyyyyymira esto',response.body)
+
                     response.body.albums.forEach((element: any) => {
                         let src: string;
                         if (element.length > 0) {
                             if (element.length > 1) {
-                                src = `data:image/${element[1].photoExtension};base64,${element[1].data}`;
+                                src = `data:image/${element[0].photoExtension};base64,${element[0].data}`;
                             } else {
                                 src = '../../../assets/images/defaultImageAlbum.jpg';
                             }
-                            element[0].albums.forEach((album: any) => {
                                 this.albums.unshift({
                                     "src": src,
-                                    "id": album.albumId,
-                                    "name": album.albumName,
-                                    "description": album.description,
-                                    "photoLength": element.length - 1
+                                    "id": element[0].albums[0].albumId,
+                                    "name": element[0].albums[0].albumName,
+                                    "description": element[0].albums[0].description,
+                                    "photoLength": element.length-1
                                 });
-                            });
+
 
                         }
                     });
                 }
+                console.log('albums', this.albums)
                 this.albumsService.setAlbums(this.albums);
                 this.loading = false;
             },
