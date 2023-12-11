@@ -1,0 +1,233 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GalleryController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.b1esimageweb.web.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: GalleryController (com.example.b1esimageweb.web.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GalleryController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    12,5%
+  </span>
+  <span class="absValue">
+    (1/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    7,3%
+  </span>
+  <span class="absValue">
+    (3/41)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.b1esimageweb.web.controller;
+&nbsp;import com.example.b1esimageweb.model.Gallery;
+&nbsp;import com.example.b1esimageweb.model.Photo;
+&nbsp;import com.example.b1esimageweb.model.User;
+&nbsp;import com.example.b1esimageweb.service.GalleryService;
+&nbsp;import com.example.b1esimageweb.service.UserService;
+&nbsp;import com.microsoft.azure.storage.CloudStorageAccount;
+&nbsp;import com.microsoft.azure.storage.StorageException;
+&nbsp;import com.microsoft.azure.storage.blob.CloudBlob;
+&nbsp;import com.microsoft.azure.storage.blob.CloudBlobClient;
+&nbsp;import com.microsoft.azure.storage.blob.CloudBlobContainer;
+&nbsp;import com.example.b1esimageweb.web.dto.PhotoDto;
+&nbsp;import com.example.b1esimageweb.web.dto.PhotosDto;
+&nbsp;import com.example.b1esimageweb.web.dto.PhotoUpdateDto;
+&nbsp;import org.springframework.beans.factory.annotation.Value;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;import org.springframework.web.multipart.MultipartFile;
+&nbsp;
+&nbsp;import java.io.IOException;
+&nbsp;import java.net.URISyntaxException;
+&nbsp;import java.util.Base64;
+&nbsp;import java.util.HashMap;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;@RestController
+&nbsp;@RequestMapping(path=&quot;/gallery&quot;)
+&nbsp;public class GalleryController {
+&nbsp;
+&nbsp;    private final GalleryService galleryService;
+&nbsp;    private final UserService userService;
+&nbsp;
+<b class="fc">&nbsp;    public GalleryController (GalleryService galleryService, UserService userService){</b>
+<b class="fc">&nbsp;        this.galleryService = galleryService;</b>
+<b class="fc">&nbsp;        this.userService = userService;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PostMapping(path=&quot;/uploadPhotoGalery/{galleryId}&quot;)
+&nbsp;    public ResponseEntity&lt;?&gt; uploadPhotoGallery(@PathVariable(&quot;galleryId&quot;) Integer galleryId, @RequestParam(&quot;photo&quot;) MultipartFile photo) {
+&nbsp;        // Verificar el tamaño del archivo
+<b class="nc">&nbsp;        if (photo.getSize() &gt; 2 * 1024 * 1024) { // 3MB en bytes</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Photo size exceeds the maximum allowed size of 2MB&quot;, HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        PhotoDto newPhoto = galleryService.addNewPhoto(galleryId, photo);</b>
+<b class="nc">&nbsp;        if(newPhoto==null){</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;An error ocurred while uploading the Photo&quot;, HttpStatus.BAD_REQUEST);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(newPhoto, HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(path=&quot;/getAll&quot;)
+&nbsp;    public ResponseEntity&lt;Iterable&lt;?&gt;&gt; getAllPhotos(){
+<b class="nc">&nbsp;        Iterable&lt;PhotoDto&gt; photos = galleryService.getAllPhotos();</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(photos, HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;    
+&nbsp;    @GetMapping(path=&quot;/viewPhoto/{photoId}&quot;)
+&nbsp;    public ResponseEntity&lt;PhotoDto&gt; getPhotoById(@PathVariable(&quot;photoId&quot;) Integer id) {
+<b class="nc">&nbsp;        PhotoDto photo = galleryService.getPhotoById(id);</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(photo, HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(path=&quot;/viewGallery/{galleryId}&quot;)
+&nbsp;    public ResponseEntity&lt;Gallery&gt; getGalleryById(@PathVariable(&quot;galleryId&quot;) Integer galleryId) {
+<b class="nc">&nbsp;        Gallery gallery = galleryService.getGalleryById(galleryId);</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(gallery, HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(path=&quot;/viewGalleryFromUser/{userName}&quot;)
+&nbsp;    public ResponseEntity&lt;Iterable&lt;PhotoDto&gt;&gt; getPhotosByGallery(@PathVariable(&quot;userName&quot;) String userName) {
+<b class="nc">&nbsp;        User user = userService.getUserByUserName(userName);</b>
+<b class="nc">&nbsp;        Gallery gallery = userService.getGalleryByUser(user);</b>
+<b class="nc">&nbsp;        Iterable&lt;PhotoDto&gt; photos = galleryService.getPhotosByGallery(gallery);</b>
+<b class="nc">&nbsp;        return new ResponseEntity&lt;&gt;(photos, HttpStatus.OK);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @DeleteMapping(path = &quot;/deletephotos&quot;)
+&nbsp;    public ResponseEntity&lt;Map&lt;String, String&gt;&gt; deletePhotosFromGallery(@RequestBody PhotosDto photoDto) {
+<b class="nc">&nbsp;        Map&lt;String, String&gt; response = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        String msg = &quot;&quot;;</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            List&lt;Integer&gt; photoIds = photoDto.getPhotoIds();</b>
+<b class="nc">&nbsp;            if(photoIds.size() == 0){</b>
+<b class="nc">&nbsp;                response.put(&quot;message&quot;, &quot;No photos to delete&quot;);</b>
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(response, HttpStatus.OK);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            msg = galleryService.deleteGalleryPhotos(photoIds);</b>
+<b class="nc">&nbsp;            response.put(&quot;message&quot;, msg);</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(response, HttpStatus.OK);</b>
+<b class="nc">&nbsp;        } catch(Exception e){</b>
+<b class="nc">&nbsp;            response.put(&quot;message&quot;, &quot;Photos not found&quot;);</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(response, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping(path = &quot;/editInfoPhoto/{photoId}&quot;)
+&nbsp;    public ResponseEntity&lt;Map&lt;String, String&gt;&gt; updatePhotoById(@PathVariable(&quot;photoId&quot;) int photoId, @RequestBody PhotoUpdateDto photoUpdateDto) {
+<b class="nc">&nbsp;        Map&lt;String, String&gt; response = new HashMap&lt;&gt;();</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            Photo photo = galleryService.updateInfoPhotoById(photoId, photoUpdateDto.getPhotoName(), photoUpdateDto.getPhotoDescription());</b>
+<b class="nc">&nbsp;            if (photo != null) {</b>
+<b class="nc">&nbsp;                response.put(&quot;message&quot;, &quot;successful&quot;);</b>
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(response, HttpStatus.OK);</b>
+&nbsp;            } else {
+<b class="nc">&nbsp;                response.put(&quot;message&quot;, &quot;Photo not found.&quot;);</b>
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(response, HttpStatus.NOT_FOUND);</b>
+&nbsp;            }
+<b class="nc">&nbsp;        } catch(Exception e) {</b>
+<b class="nc">&nbsp;            response.put(&quot;message&quot;, e.getMessage());</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(response, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-08 23:12</div>
+</div>
+</body>
+</html>
