@@ -2,25 +2,40 @@ package com.example.b1esimageweb.web.responses;
 
 import com.example.b1esimageweb.web.dto.PhotoDto;
 
-import java.util.Collection;
-import java.util.List;
 
 public class AlbumResponse {
-    private Collection<List<PhotoDto>> albums;
+
+    private PhotoDto coverPhoto;
+    private String name;
+    private String description;
     private int lenAlbums;
-    public void setAlbums(Collection<List<PhotoDto>> albums) {
-        this.albums = albums;
+    private int albumId;
+
+    public AlbumResponse(PhotoDto coverPhoto, String name, String description, int albumId, int lenAlbums) {
+        this.coverPhoto = coverPhoto;
+        this.name = name;
+        this.lenAlbums = lenAlbums;
+        this.description = description;
+        this.albumId = albumId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getAlbumId() {
+        return albumId;
     }
 
     public int getLength() {
         return lenAlbums;
     }
 
-    public void setLength(int lenAlbums) {
-        this.lenAlbums = lenAlbums;
-    }
-
-    public Collection<List<PhotoDto>> getAlbums() {
-        return albums;
+    public PhotoDto getcoverPhoto() {
+        return coverPhoto;
     }
 }
