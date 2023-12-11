@@ -9,6 +9,10 @@ import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Builder;
 
 import java.util.*;
@@ -48,8 +52,10 @@ public class User implements UserDetails {
         joinColumns = @JoinColumn(name = "followed_id"),
         inverseJoinColumns = @JoinColumn(name = "follower_id")
     )
+    @JsonBackReference
     private Set<User> followers = new HashSet<>();
     @ManyToMany(mappedBy = "followers", fetch = FetchType.EAGER)
+    @JsonManagedReference
     private Set<User> following = new HashSet<>();
 
     @Override
