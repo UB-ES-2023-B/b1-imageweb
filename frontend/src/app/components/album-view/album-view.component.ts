@@ -57,12 +57,12 @@ export class AlbumViewComponent {
           this.albumName = response.body[0].albums[0].albumName;
           this.albumDescription = response.body[0].albums[0].description;
           this.albumLenght = response.body.length-1+ " fotos";
-          
+
           if(response.body.length == 1){
             this.loading=false;
           }
           response.body.forEach((element: any) => {
-            
+
             if (element.data) {
               if(element.photoName != "defaultImage"){
                 if (response.body.indexOf(element) == 1){
@@ -83,20 +83,20 @@ export class AlbumViewComponent {
                   "src":`data:image/${element.photoExtensio};base64,${element.data}`,
                   "id": element.photoId, "name":element.photoName, "description": element.photoDescription
                 });
-                      
+
               }
             }
           });
         }
         this.albumsService.setImagesToAlbum(this.images);
-        
-        
+        this.loading=false;
+
       },(error)=>{
         console.log('error al obtener album', error)
       }
-      
+
     );
-   
+
   }
 
   open(index: number): void {
@@ -111,7 +111,7 @@ export class AlbumViewComponent {
 
     this.route.params.subscribe(params => {
       this.albumId = params['id'];
-    });  
+    });
 
     this.imagesSubscription = this.albumsService.getImagesObservable().subscribe((images) => {
       this.images = images;
