@@ -39,11 +39,11 @@
 
 <app-secondary-navbar [activeItem]="activeItem" (itemClicked)="handleItemClicked($event)"></app-secondary-navbar>
 
-<div *ngIf="activeItem=='info'" class="bg-light">
+<div *ngIf="activeItem=='info'" class="bg-light" style="margin-bottom: 50px">
   <div class="container py-3" style="margin-bottom: 4%">
     <h4>Descripción</h4>
 
-    <p *ngIf="user.description" class="text-break" >{{ user.description }}</p>
+    <p *ngIf="user.description" style="white-space: pre-wrap; overflow-wrap: break-word;" >{{ user.description }}</p>
     <p *ngIf="!user.description">Dirígete al apartado "Editar Perfil" para editar tu descripción.</p>
     <div class="separator-line"></div>
   </div>

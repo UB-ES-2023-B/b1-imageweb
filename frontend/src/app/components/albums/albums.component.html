@@ -8,6 +8,17 @@
     </button>
 </div>
 
+<div *ngIf="!loading && albums.length===0 && username === original_username"
+     class="d-flex justify-content-center align-items-center flex-column mt-5" style="padding-bottom: 50px">
+  <h4>Aún no has creado ningún álbum.</h4>
+</div>
+
+
+<div *ngIf="!loading && albums.length===0 && username != original_username"
+     class="d-flex justify-content-center align-items-center flex-column mt-5">
+  <h4>Este usuario aún no ha creado ningún álbum.</h4>
+</div>
+
 <div class="container py-2 d-md-flex justify-content-md-end">
 
   <!--MODAL-->
