@@ -68,7 +68,7 @@ public class UserControllerIntegrationTest {
     public void testLoginUser() throws Exception {
 
 
-        String jsonRegister = "{ \"username\": \"testUser5\", \"password\": \"testPassword\", \"email\": \"teest25@example.com\" }";
+        String jsonRegister = "{ \"username\": \"testUser8\", \"password\": \"testPassword\", \"email\": \"teest25@exxxample.com\" }";
 
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                         .contentType("application/json")
@@ -76,10 +76,10 @@ public class UserControllerIntegrationTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
-        User user=userRepository.findByUsername("testUser5").orElseThrow();
+        User user=userRepository.findByUsername("testUser8").orElseThrow();
         userToken = tokenProvider.createToken(user);
 
-        MvcResult result = mockMvc.perform(get("/user/getByUserName/{userName}", "testUser5"))  // Replace "username" with an actual username
+        MvcResult result = mockMvc.perform(get("/user/getByUserName/{userName}", "testUser8"))  // Replace "username" with an actual username
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -90,6 +90,15 @@ public class UserControllerIntegrationTest {
         JsonNode jsonNode = objectMapper.readTree(jsonUser);
         int id = jsonNode.get("userId").asInt();
         System.out.println(id);
+
+        String requestBody = "{\"username\":\"testUser8\",\"email\":\"newEmaiwww23l22@example.com\"}";
+
+        mockMvc.perform(put("/user/update/{username}", "testUser8")  // Replace "existingUsername" with an actual username
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody)
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + userToken))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
         String imagePath = "images/sample.jpg";
 
@@ -103,15 +112,17 @@ public class UserControllerIntegrationTest {
 
         mockMvc.perform(multipart("/user/uploadPhotoProfile")
                         .file(file)
-
                         .contentType(MediaType.MULTIPART_FORM_DATA)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + userToken))
                 .andExpect(status().isOk());
-        mockMvc.perform(MockMvcRequestBuilders.post("/user/follow/{userToFollowUsername}", "testing23Marc"))
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/follow/{userToFollowUsername}", "testing23Marc")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + userToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/user/unfollow/{userToUnfollowUsername}", "testing23Marc"))
+        mockMvc.perform(MockMvcRequestBuilders.post("/user/unfollow/{userToUnfollowUsername}", "testing23Marc")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + userToken))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
@@ -120,15 +131,4 @@ public class UserControllerIntegrationTest {
                 .andExpect(status().isOk());
 
     }
-/*
-    @Test
-    @Order(1)
-    @WithMockUser (username = "adminUser", password = "admin", roles = "ADMIN")
-    public void testGetAllUsers() throws Exception {
-        mockMvc.perform(get("/user/getAll")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + userToken))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-    }
-*/
 }
