@@ -5,7 +5,6 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.example.b1esimageweb.model.Gallery;
-import com.example.b1esimageweb.model.Role;
 
 
 public class UserInfoDto {

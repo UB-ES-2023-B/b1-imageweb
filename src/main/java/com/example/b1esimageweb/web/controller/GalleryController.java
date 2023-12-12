@@ -4,23 +4,14 @@ import com.example.b1esimageweb.model.Photo;
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.GalleryService;
 import com.example.b1esimageweb.service.UserService;
-import com.microsoft.azure.storage.CloudStorageAccount;
-import com.microsoft.azure.storage.StorageException;
-import com.microsoft.azure.storage.blob.CloudBlob;
-import com.microsoft.azure.storage.blob.CloudBlobClient;
-import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.example.b1esimageweb.web.dto.PhotoDto;
 import com.example.b1esimageweb.web.dto.PhotosDto;
 import com.example.b1esimageweb.web.dto.PhotoUpdateDto;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,8 +30,10 @@ public class GalleryController {
 
     @PostMapping(path="/uploadPhotoGalery/{galleryId}")
     public ResponseEntity<?> uploadPhotoGallery(@PathVariable("galleryId") Integer galleryId, @RequestParam("photo") MultipartFile photo) {
+        if(!galleryService.isGalleryOwner(galleryId))
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         // Verificar el tamaño del archivo
-        if (photo.getSize() > 2 * 1024 * 1024) { // 3MB en bytes
+        if (photo.getSize() > 2 * 1024 * 1024) { // 2MB en bytes
             return new ResponseEntity<>("Photo size exceeds the maximum allowed size of 2MB", HttpStatus.BAD_REQUEST);
         }
         PhotoDto newPhoto = galleryService.addNewPhoto(galleryId, photo);
@@ -97,6 +90,8 @@ public class GalleryController {
 
     @PutMapping(path = "/editInfoPhoto/{photoId}")
     public ResponseEntity<Map<String, String>> updatePhotoById(@PathVariable("photoId") int photoId, @RequestBody PhotoUpdateDto photoUpdateDto) {
+        if(!galleryService.isPhotoOwner(photoId))
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         Map<String, String> response = new HashMap<>();
         try {
             Photo photo = galleryService.updateInfoPhotoById(photoId, photoUpdateDto.getPhotoName(), photoUpdateDto.getPhotoDescription());

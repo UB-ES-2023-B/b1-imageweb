@@ -1,59 +1,107 @@
-
-<div class="container  py-5" >
-  <div *ngIf="loading" class="d-flex justify-content-center align-items-center flex-column mt-5">
-    <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;animation-duration: 3s" role="status"></div>
-    <h4 style="margin-top: 20px;">Cargando...</h4>
-  </div>
-  <div *ngIf="!loading && images.length===0"class="d-flex justify-content-center align-items-center flex-column mt-5"
-  (mouseover)="showUploadHint = true" (mouseout)="showUploadHint = false">
-    <h4>Aún no has subido ninguna imagen</h4>
-    <app-upload-photo></app-upload-photo>
-    <div class="upload-hint" *ngIf="showUploadHint">
-      Subir imagen
+<div class="bg-light">
+  <div class="container  py-5" *ngIf="!loading && images.length===0">
+    <div class="d-flex justify-content-center align-items-center flex-column mt-5" (mouseover)="showUploadHint = true"
+      (mouseout)="showUploadHint = false">
+      <h4>Aún no has subido ninguna imagen</h4>
+      <app-upload-photo></app-upload-photo>
+      <div class="upload-hint" *ngIf="showUploadHint">
+        Subir imagen
+      </div>
     </div>
   </div>
-</div >
+  <div class="container  py-5" *ngIf="loading">
+    <div class="d-flex justify-content-center align-items-center flex-column mt-5">
+      <div class="spinner-border text-primary" style="width: 6rem; height: 6rem;animation-duration: 3s" role="status">
+      </div>
+      <h4 style="margin-top: 20px;">Cargando...</h4>
+    </div>
+  </div>
 
-  <div class="album py-2 bg-light" >
-    <div class="container" >
-      <button *ngIf="!loading" type="button" class="btn btn-outline-secondary btn-sm" (click)="goGallery()"> <i class="fas fa-arrow-left"></i>&nbsp; Regresar a Galería</button>
-      <div   [class]="classModal "  >
-        <p *ngIf="isEditMode" class="mb-3 texto"> Fotos seleccionadas:  {{selectedImageIds.length }}</p>
-        <div *ngIf="isEditMode" class="d-inline">
-          <button type="button" class="btn btn-secondary mr-2" style=" margin-right: 3%;" (click)="cancelEditMode()">Cancelar</button>
-          <!-- <button type="button" class="btn btn-danger" (click)="deleteSelectedImages()">Eliminar</button> -->
-          <span *ngIf="selectedImageIds.length>0" (click)="changeIsModal()"><app-modal   [buttonColor]="'btn-danger'" [modalTitle]="'¿Deseas borrar ' + selectedImageIds.length + ' foto(s)?'" [ButtonText]="'Eliminar'" [saveButtonText]="'Eliminar'" [body] ="'No puedes deshacer esta acción. ¿Estás seguro de que quieres eliminar esta(s) foto(s) definitivamente?'"  (modalClosed)="handleModalClosed($event)">
-
-          </app-modal></span>
+  <div class="album py-2 bg-light" style="margin-bottom: 6%">
+    <div class="container">
+      <button *ngIf="!loading" type="button" class="btn btn-outline-secondary btn-sm" (click)="goGallery()"> <i
+          class="fas fa-arrow-left"></i>&nbsp; Regresar a Galería</button>
+      <div [class]="classModal " *ngIf="!loading">
+        <p *ngIf="isEditMode || addToAlbums" class="mb-3 texto"> Fotos seleccionadas: {{selectedImageIds.length }}</p>
+        <div *ngIf="addToAlbums" class="row justify-content-md-center ">
+          <div class="col-md-6 pb-4">
+            <select class="form-select" [(ngModel)]="selectedAlbum" (ngModelChange)="onAlbumChange()" style="width:90%;">
+              <option selected [value]=0>Selecciona un álbum</option>
+              <option *ngFor="let album of currentAlbums" [value]="album[0]">
+                <div *ngIf="album[1].length <= 100; else truncatedContent">
+                  {{ album[1] }}
+                </div>
+                <ng-template #truncatedContent>
+                  {{ album[1].substring(0, 100) }}...
+                </ng-template>
+              </option>
+            </select>
+          </div>
         </div>
+        <div *ngIf="isEditMode" class="d-inline">
+          <button type="button" class="btn btn-secondary mr-2" style=" margin-right: 3%;"
+            (click)="cancelEditMode()">Cancelar</button>
+          <!-- <button type="button" class="btn btn-danger" (click)="deleteSelectedImages()">Eliminar</button> -->
+          <span *ngIf="selectedImageIds.length>0" (click)="changeIsModal()"><app-modal [buttonColor]="'btn-danger'"
+              [modalTitle]="'¿Deseas borrar ' + selectedImageIds.length + ' foto(s)?'" [ButtonText]="'Eliminar'"
+              [saveButtonText]="'Eliminar'"
+              [body]="'No puedes deshacer esta acción. ¿Estás seguro de que quieres eliminar esta(s) foto(s) definitivamente?'"
+              (modalClosed)="handleModalClosed($event)">
+            </app-modal></span>
+        </div>
+        <div *ngIf="addToAlbums" class="d-inline">
+
+          <button type="button" class="btn btn-secondary mr-2" style=" margin-right: 3%; width:10%"
+            (click)="cancelEditMode()">Cancelar</button>
+          <button *ngIf="selectedAlbum!='0'&& selectedImageIds.length>0 " type="button" class="btn btn-primary mr-2"
+            style=" margin-right: 3%; width:10%" (click)="addToAlbum()">Añadir</button>
+        </div>
+        <p *ngIf="addToAlbums && errorIds.length>0" class="textError py-2">Desmarque las fotos que están resaltadas en
+          rojo y vuelva a intentarlo</p>
       </div>
 
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" >
-        <div class="col" *ngFor="let image of images; let i = index"  >
-          <div class="image-button" style="cursor:pointer" >
-            <div class="card shadow-sm photo" >
-              <div class="icon-container" *ngIf="!isEditMode" >
-                <i class="fas fa-trash-alt trash-icon" (click)=" toggleEditMode(image.id)"></i>
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        <div class="col" *ngFor="let image of images; let i = index">
+          <div class="image-button" style="cursor:pointer">
+            <div class="card shadow-sm photo">
+              <div class="icon-container" *ngIf="!isEditMode">
+                <i *ngIf="!addToAlbums" class="fas fa-trash-alt trash-icon"
+                  (click)=" toggleEditMode(image.id, 'edit')"></i>
               </div>
-              <div *ngIf="isEditMode"  class="icon-container">
-                <input type="checkbox" [checked]="selectedImageIds.includes(image.id)" (change)="toggleEditMode(image.id)" class="select-checkbox">
+              <div *ngIf="isEditMode && !addToAlbums" class="icon-container">
+                <input type="checkbox" [checked]="selectedImageIds.includes(image.id)"
+                  (change)="toggleEditMode(image.id, 'edit')" class="select-checkbox">
               </div>
-              <img class="bd-placeholder-img card-img-top custom-image" [src]="image.src" alt="Image"  (click)="open(i)">
+              <img class="bd-placeholder-img card-img-top custom-image" [src]="image.src" id="image.id" alt="image.name"
+                (click)="open(i)" [ngClass]="{'error': errorIds.includes(image.id)}">
               <div class="card-body">
                 <ng-container *ngIf="image.id != editImageId; else editFields">
-                  <p>{{ image.name }} <i *ngIf="editImageId == -1" class="fas fa-pencil-alt" (click)="startEditInfo(image.id, image.name, image.description)"></i></p>
-                  <p>{{ image.description }} <i class="fas fa-pencil-alt" (click)="startEditInfo(image.id, image.name, image.description)"></i></p>
+                  <p>{{ image.name }} <i *ngIf="editImageId == -1" class="fas fa-pencil-alt"
+                      (click)="startEditInfo(image.id, image.name, image.description)"></i></p>
+                  <p>{{ image.description }} <i *ngIf="editImageId == -1" class="fas fa-pencil-alt"
+                      (click)="startEditInfo(image.id, image.name, image.description)"></i></p>
                 </ng-container>
                 <ng-template #editFields>
                   <div *ngIf="image.id === editImageId">
-                  <input type="text" [(ngModel)]="image.name" class="form-control" placeholder="Nombre">
-                  <input type="text" [(ngModel)]="image.description" class="form-control" placeholder="Descripción">
-                  <div class="d-inline d-flex justify-content-center">
-                    <button type="button" class="btn btn-outline-secondary" (click)="cancelEditInfo(image.id)" style="margin:5%"><i class="fas fa-times-circle" style="color: red;"></i> Cancelar</button>
-                    <button type="button" class="btn btn-outline-success"(click)="saveEditInfo(image.id, image.name, image.description)"  style="margin:5%"><i class="fas fa-check-circle" style="color: green;"></i> Guardar</button>
+                    <input type="text" [(ngModel)]="image.name" class="form-control" placeholder="Nombre">
+                    <input type="text" [(ngModel)]="image.description" class="form-control" placeholder="Descripción">
+                    <div class="d-inline d-flex justify-content-center">
+                      <button type="button" class="btn btn-outline-secondary" (click)="cancelEditInfo(image.id)"
+                        style="margin:5%"><i class="fas fa-times-circle" style="color: red;"></i> Cancelar</button>
+                      <button type="button" class="btn btn-outline-success"
+                        (click)="saveEditInfo(image.id, image.name, image.description)" style="margin:5%"><i
+                          class="fas fa-check-circle" style="color: green;"></i> Guardar</button>
+                    </div>
                   </div>
-                </div>
                 </ng-template>
+                <div *ngIf="!addToAlbums && currentAlbums.length>0" class="container-plus">
+                  <img *ngIf="!isEditMode" src="../../../assets/images/square-plus-regular.svg" width="20" height="20"
+                    alt="Icono" (click)=" toggleEditMode(image.id, 'addPhotos')">
+                </div>
+                <div *ngIf="addToAlbums" class="container-plus">
+                  <input type="checkbox" [checked]="selectedImageIds.includes(image.id)"
+                    (change)="toggleEditMode(image.id,'addPhotos')" class="select-checkbox">
+                </div>
               </div>
             </div>
           </div>
@@ -61,6 +109,4 @@
       </div>
     </div>
   </div>
-
-
-
+</div>

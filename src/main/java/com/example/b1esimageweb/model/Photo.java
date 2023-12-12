@@ -1,4 +1,7 @@
 package com.example.b1esimageweb.model;
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
@@ -12,10 +15,24 @@ public class Photo {
     @JoinColumn(name = "gallery_id")
     private Gallery gallery;
 
-    @ManyToOne
-    @JoinColumn(name = "album_id")
-    private Album album;
+    @ManyToMany
+    @JoinTable(
+        name = "photo_album",
+        joinColumns = @JoinColumn(name = "photo_id"),
+        inverseJoinColumns = @JoinColumn(name = "album_id")
+    )
+    private Set<Album> albums = new HashSet<>();
+    
     private String photoName;
+
+    public Set<Album> getAlbums() {
+        return albums;
+    }
+
+    public void addAlbum(Album album) {
+        this.albums.add(album);
+    }
+
     private String photoExtension;
     @Size(max = 25, message = "Description must not exceed 25 words")
     private String photoDescription;

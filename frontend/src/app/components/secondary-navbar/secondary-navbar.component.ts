@@ -1,5 +1,5 @@
 import { Component , Input, Output, EventEmitter  } from '@angular/core';
-
+import { GlobalDataService } from 'src/app/services/global-data.service';
 @Component({
   selector: 'app-secondary-navbar',
   templateUrl: './secondary-navbar.component.html',
@@ -13,9 +13,10 @@ export class SecondaryNavbarComponent {
   navItems = [
     { label: 'Información', id: 'info' },
     { label: 'Galería', id: 'gallery' },
+    { label: 'Álbumes', id: 'albumes' },
    ]
 
-  constructor() { }
+  constructor(private globalDataService:GlobalDataService) { }
 
 
   isActive(item: string): boolean {
@@ -24,6 +25,7 @@ export class SecondaryNavbarComponent {
 
   setActive(item: string): void {
     this.activeItem = item;
+    this.globalDataService.setActiveItem(item);
     this.itemClicked.emit(item);
   }
 
