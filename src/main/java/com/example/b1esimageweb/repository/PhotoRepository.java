@@ -10,6 +10,9 @@ import com.example.b1esimageweb.model.Gallery;
 public interface PhotoRepository extends CrudRepository<Photo, Integer> {
 
     Iterable<Photo> findByGallery(Gallery gallery);
-    Iterable<Photo> findByAlbum(Album album);
-    
+    Iterable<Photo> findByAlbumsContaining(Album album);
+
+    void deleteByAlbumsContaining(Album allbum);
+
+    int countByGallery(Gallery gallery);
 }

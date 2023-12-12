@@ -31,7 +31,6 @@
 
     <app-change-password
       *ngIf="changePwdModal"
-      (passwordChanged)="handleChangePassword($event)"
       (modalClosed)="changePwdModal = false"
     ></app-change-password>
 
@@ -40,19 +39,20 @@
 
 <app-secondary-navbar [activeItem]="activeItem" (itemClicked)="handleItemClicked($event)"></app-secondary-navbar>
 
-<div *ngIf="activeItem=='info'">
-  <div class="user-description" >
+<div *ngIf="activeItem=='info'" class="bg-light">
+  <div class="container py-3" style="margin-bottom: 4%">
     <h4>Descripción</h4>
-    <p *ngIf="user.description" style="white-space: pre;">{{ user.description }}</p>
-    <p *ngIf="!user.description">Nada por aqui... Ves al apartado "Editar Perfil" para editar tu descripcion.</p>
+
+    <p *ngIf="user.description" class="text-break" >{{ user.description }}</p>
+    <p *ngIf="!user.description">Dirígete al apartado "Editar Perfil" para editar tu descripción.</p>
     <div class="separator-line"></div>
   </div>
 </div>
 
-<div *ngIf="activeItem=='gallery'">
+<div *ngIf="activeItem=='gallery'" class="bg-light">
   <app-gallery [username]="user.name"></app-gallery>
 </div>
 
-<div *ngIf="activeItem=='albumes'">
-  <app-albums></app-albums>
+<div *ngIf="activeItem=='albumes'" class="bg-light">
+  <app-albums [username]="user.name"></app-albums>
 </div>

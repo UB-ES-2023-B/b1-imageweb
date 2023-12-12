@@ -18,12 +18,13 @@
 <app-secondary-navbar [activeItem]="activeItem" (itemClicked)="handleItemClicked($event)"></app-secondary-navbar>
 
 <div *ngIf="activeItem=='info'">
-    <div class="user-description" >
+
+  <div class="container py-3" style="margin-bottom: 4%">
         <h4>Descripción</h4>
-        <p *ngIf="visited_user.description" style="white-space: pre;">{{ visited_user.description }}</p>
+        <p *ngIf="visited_user.description" class="text-break"> {{ visited_user.description }}</p>
         <p *ngIf="!visited_user.description">Este usuario no ha añadido ninguna descripción.</p>
         <div class="separator-line"></div>
-    </div>
+  </div>
 </div>
 
 <div *ngIf="activeItem=='gallery'">
@@ -31,5 +32,5 @@
 </div>
 
 <div *ngIf="activeItem=='albumes'">
-    <app-albums></app-albums>
+    <app-albums [username]="visited_user.name"></app-albums>
 </div>

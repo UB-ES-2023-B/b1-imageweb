@@ -1,14 +1,41 @@
-
-.error{
-  box-shadow: 0 0 10px red;
-}
 .custom-image {
   width: 100%;
   max-height: 250px;
   object-fit: contain;
-  /*max-width: 100%;
-  max-height: 250px; */
   margin-top: 5%;
+}
+
+.cover-image{
+  width: 100%;
+  max-height: 250px;
+  object-fit: contain;
+  object-fit: cover;
+}
+
+.text-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  background: rgba(0, 0, 0, 0.5); 
+  padding: 20px; 
+  color: white; 
+  border-radius: 10px; 
+}
+
+.text-overlay-name p{
+  font-size: xx-large; 
+  font-family: system-ui;;
+}
+
+.text-overlay-description p{
+  font-size: larger;
+  font-style: italic;
+}
+
+.text-overlay-length p{
+  font-size: small;
 }
 
 .button-color{
@@ -63,18 +90,9 @@
   outline: 3px solid #16273c4d;
 }
 p{
-  margin:0
+  margin:0px
 }
 
-.container-plus{
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-}
-.textError{
-  color:red;
-  font-size: 14px;
-}
 .texto {
   font-family: 'Roboto', sans-serif;
   font-size: 18px;

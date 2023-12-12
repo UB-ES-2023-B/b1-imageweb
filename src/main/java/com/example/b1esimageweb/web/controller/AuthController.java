@@ -1,7 +1,5 @@
 package com.example.b1esimageweb.web.controller;
 
-
-import com.example.b1esimageweb.Exceptions.UserNotFoundException;
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.AuthService;
 import com.example.b1esimageweb.service.UserService;
@@ -16,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 
