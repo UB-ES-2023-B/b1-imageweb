@@ -57,9 +57,9 @@
             <div class="card-body">
               <p class="custom-paragraph"><b>{{ album.name }}</b></p>
               <p class="custom-paragraph">&nbsp;{{ album.description }}</p>
-              <div *ngIf="username === original_username" class="d-flex align-items-center justify-content-between">
+              <div  class="d-flex align-items-center justify-content-between">
                 <p class="custom-paragraph">&nbsp;Fotos: {{ album.photoLength }}</p>
-                <app-upload-photos  [idAlbum]=album.id></app-upload-photos>
+                <app-upload-photos *ngIf="username === original_username" [idAlbum]=album.id></app-upload-photos>
               </div>
             </div>
           </div>

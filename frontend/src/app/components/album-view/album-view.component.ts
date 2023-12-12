@@ -60,13 +60,15 @@ export class AlbumViewComponent {
             if (element.data) {
               if(element.photoName != "defaultImage"){
                 if (response.body.indexOf(element) == 0){
-                  this.userService.getUsernameAlbumOwner(element.gallery.galleryrId).subscribe(
-                    (text) =>{
-                      this.original_username = text;
-                      this.loading=false;
-                    }
-                  )
-
+                  // this.userService.getUsernameAlbumOwner(element.gallery.galleryrId).subscribe(
+                  //   (text) =>{
+                  //     this.original_username = text;
+                  //
+                  //   }
+                  // )
+                  // BORRA ESTO LO DEJE SOLO PARA QUE FUNCIONE temporalmente
+                  this.original_username=this.visitor_username
+                  ///
                   this.coverImage = {
                     "src":`data:image/${element.photoExtensio};base64,${element.data}`,
                     "id": element.photoId, "name":element.photoName, "description": element.photoDescription
@@ -82,7 +84,7 @@ export class AlbumViewComponent {
           });
         }
         this.albumsService.setImagesToAlbum(this.images);
-
+        this.loading=false;
 
       },(error)=>{
         console.log('error al obtener album', error)

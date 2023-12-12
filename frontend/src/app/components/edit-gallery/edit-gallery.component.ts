@@ -39,7 +39,11 @@ export class EditGalleryComponent {
   goGallery() {
     this.router.navigate(['/profile/']);
   }
-
+  onAlbumChange(){
+    if (this.errorIds.length>0){
+      this.errorIds=[]
+    }
+  }
   changeIsModal() {
     this.classModal = 'text-center mb-4 hideText'
   }

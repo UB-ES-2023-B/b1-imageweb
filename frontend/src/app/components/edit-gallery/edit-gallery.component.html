@@ -25,7 +25,7 @@
         <p *ngIf="isEditMode || addToAlbums" class="mb-3 texto"> Fotos seleccionadas: {{selectedImageIds.length }}</p>
         <div *ngIf="addToAlbums" class="row justify-content-md-center ">
           <div class="col-md-6 pb-4">
-            <select class="form-select" [(ngModel)]="selectedAlbum" style="width:90%;">
+            <select class="form-select" [(ngModel)]="selectedAlbum" (ngModelChange)="onAlbumChange()" style="width:90%;">
               <option selected [value]=0>Selecciona un álbum</option>
               <option *ngFor="let album of currentAlbums" [value]="album[0]">
                 <div *ngIf="album[1].length <= 100; else truncatedContent">
