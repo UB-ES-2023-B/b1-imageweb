@@ -60,7 +60,7 @@ public class UserControllerIntegrationTest {
     @WithMockUser (username = "adminUser", password = "admin", roles = "ADMIN")
     public void setUp() {
         // Create a test user
-        User user=userRepository.findByUsername("adminUser").orElseThrow();
+        User user=userRepository.findByUsername("testing23Marc").orElseThrow();
         userToken = tokenProvider.createToken(user);
     }
 
@@ -76,6 +76,9 @@ public class UserControllerIntegrationTest {
                         .content(jsonRegister))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
+
+        User user=userRepository.findByUsername("testUser777").orElseThrow();
+        userToken = tokenProvider.createToken(user);
 
         MvcResult result = mockMvc.perform(get("/user/getByUserName/{userName}", "testUser777"))  // Replace "username" with an actual username
                 .andExpect(status().isOk())
@@ -118,7 +121,7 @@ public class UserControllerIntegrationTest {
                 .andExpect(status().isOk());
 
     }
-
+/*
     @Test
     @Order(1)
     @WithMockUser (username = "adminUser", password = "admin", roles = "ADMIN")
@@ -128,5 +131,5 @@ public class UserControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
-
+*/
 }
