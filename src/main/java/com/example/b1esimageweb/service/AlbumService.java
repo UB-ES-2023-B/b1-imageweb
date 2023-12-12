@@ -14,7 +14,6 @@ import com.microsoft.azure.storage.StorageException;
 import com.microsoft.azure.storage.blob.CloudBlob;
 import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
-import com.microsoft.azure.storage.blob.CloudBlockBlob;
 
 import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Value;
@@ -77,31 +76,43 @@ public class AlbumService {
         return albumRepository.save(album);
     }
 
-    public Map<Integer, List<PhotoDto>> getAllAlbumsForUser(User user){
-        Map<Integer, List<PhotoDto>> albumPhotos = new HashMap<>();
+    public Map<Album, PhotoDto> getAllAlbumsForUser(User user){
+        Map<Album, PhotoDto> albumPhotos = new HashMap<>();
         Iterable<Album> allAlbums = albumRepository.findAllByUser(user);
+
         for (Album album : allAlbums){
-            List<PhotoDto> photos = new ArrayList<>();
-            Iterable<Photo> allPhotos = photoRepository.findByAlbumsContaining(album);
-            for(Photo photo : allPhotos){
-                CloudBlob blob;
-                try {
-                    blob = container.getBlockBlobReference(photo.getPhotoId().toString());
-                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                    blob.download(outputStream);
-                    byte[] photoContent = outputStream.toByteArray();
-                    PhotoDto photoDto = new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getAlbums(), photo.getPhotoExtension(), photo.getPhotoDescription());
-                    photos.add(photoDto);
-                } catch (URISyntaxException | StorageException e) {
-                    e.printStackTrace();
-                    return null;
-                }
+          
+            List<Photo> allPhotos = (List<Photo>)photoRepository.findByAlbumsContaining(album);
+            Photo photoCover;
+            if (allPhotos.size()>1) {
+                photoCover = allPhotos.get(1);
+            }else{
+                photoCover = allPhotos.get(0);
             }
-            albumPhotos.put(album.getAlbumId(), photos);
+            
+            CloudBlob blob;
+            try {
+                blob = container.getBlockBlobReference(photoCover.getPhotoId().toString());
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                blob.download(outputStream);
+                byte[] photoContent = outputStream.toByteArray();
+                PhotoDto photoDto = new PhotoDto(photoContent, photoCover.getPhotoId(), photoCover.getGallery(), photoCover.getPhotoName(), photoCover.getAlbums(), photoCover.getPhotoExtension(), photoCover.getPhotoDescription());
+                albumPhotos.put(album, photoDto);
+            } catch (URISyntaxException | StorageException e) {
+                e.printStackTrace();
+                return null;
+            }
+           
+            
+            
         }
         return albumPhotos;
     }
 
+    public int getAlbumSize(Album album){
+        List<Photo> photos = (List<Photo>) photoRepository.findByAlbumsContaining(album);
+        return photos.size();
+    }
 
     public Album getAlbumById(int albumId){
         return albumRepository.findById(albumId).orElseThrow(() -> new UserNotFoundException("Album with id " + albumId + " not found"));
@@ -240,8 +251,14 @@ public class AlbumService {
 
     public boolean isAlbumOwner(int albumId) {
         User currentUser = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Map<Integer, List<PhotoDto>> albums = getAllAlbumsForUser(currentUser);
-        return albums.containsKey(albumId);
+        Map<Album, PhotoDto> albums = getAllAlbumsForUser(currentUser);
+        for (Map.Entry<Album, PhotoDto> entry : albums.entrySet()) {
+            Album album = entry.getKey();
+            if(album.getAlbumId() == albumId){
+                return true;
+            }
+        }
+        return false;
     }
 
     public String deleteAlbumPhotos(int albumId, List<Integer> photosId) {

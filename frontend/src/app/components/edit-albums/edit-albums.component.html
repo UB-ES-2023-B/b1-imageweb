@@ -42,7 +42,7 @@
                   <ng-container *ngIf="album.id != editAlbumId; else editFields">
                     <p>{{ album.name }} <i *ngIf="editAlbumId == -1" class="fas fa-pencil-alt"
                         (click)="startEditInfo(album.id, album.name, album.description)"></i></p>
-                    <p>{{ album.description }} <i class="fas fa-pencil-alt"
+                    <p>{{ album.description }} <i *ngIf="editAlbumId == -1" class="fas fa-pencil-alt"
                         (click)="startEditInfo(album.id, album.name, album.description)"></i></p>
                   </ng-container>
                   <ng-template #editFields>

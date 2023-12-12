@@ -2,7 +2,7 @@
     <button type="button" class="btn btn-outline-secondary btn-sm" (click)="goGallery()"> <i class="fas fa-arrow-left"></i>&nbsp; Regresar a Álbumes</button>
     <button type="button" class="btn btn-outline-secondary btn-sm" (click)="goEditMode()" *ngIf="images.length !== 0 && visitor_username === original_username">
       <i class="fas fa-pencil-alt"></i>&nbsp; Editar
-    </button>    
+    </button>
 </div>
 
 <div class="container  py-5"  *ngIf="!loading && images.length===0">
@@ -17,7 +17,6 @@
     <h4 style="margin-top: 20px;">Cargando...</h4>
   </div>
 </div>
-
 <div class="album py-2 bg-light"  *ngIf="!loading">
   <div class="container">
       <div class="row g-3" style="margin-bottom: 5%;">
@@ -26,10 +25,10 @@
                 <img class="card-img-top cover-image cover-image" [src]="coverImage.src" alt="Cover Image" style="object-fit: cover;">
                 <div class="text-overlay">
                   <div class="text-overlay-name">
-                    <p>{{ albumName }}</p>
+                    <p >{{ albumName }}</p>
                   </div>
                   <div class="text-overlay-description">
-                    <p>{{ albumDescription }}</p>
+                    <p  >{{ albumDescription }}</p>
                   </div>
                   <div class="text-overlay-length">
                     <p>{{ albumLenght }}</p>
@@ -43,9 +42,10 @@
                   <div class="card shadow-sm photo">
                       <img class="bd-placeholder-img card-img-top custom-image" [src]="image.src" alt="Image" (click)="open(i)">
                       <div class="card-body">
+
                           <ng-container *ngIf="image.id">
-                              <p>{{ image.name }}</p>
-                              <p>{{ image.description }}</p>
+                              <p >{{ image.name }}</p>
+                              <p >{{ image.description }}</p>
                           </ng-container>
                       </div>
                   </div>

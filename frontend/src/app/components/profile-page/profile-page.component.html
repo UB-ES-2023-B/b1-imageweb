@@ -42,7 +42,8 @@
 <div *ngIf="activeItem=='info'" class="bg-light">
   <div class="container py-3" style="margin-bottom: 4%">
     <h4>Descripción</h4>
-    <p *ngIf="user.description">{{ user.description }}</p>
+
+    <p *ngIf="user.description" class="text-break" >{{ user.description }}</p>
     <p *ngIf="!user.description">Dirígete al apartado "Editar Perfil" para editar tu descripción.</p>
     <div class="separator-line"></div>
   </div>

@@ -45,6 +45,11 @@ export class AlbumsService {
   getAlbumsForUser(username: string): Observable<any> {
     return this.http.get(this.domain + `/getAlbums/${username}`, {  observe: 'response' });
   }
+  getInfoAlbumsForUser(username: string): Observable<any> {
+    return this.http.get(this.domain + `/albumInfo/${username}`, {  observe: 'response' });
+  }
+
+
 
   addPhotosToAlbum(idAlbum:number, photos:File[]){
 
@@ -117,5 +122,6 @@ export class AlbumsService {
       observe: 'response'
     });
   }
+
 
 }
