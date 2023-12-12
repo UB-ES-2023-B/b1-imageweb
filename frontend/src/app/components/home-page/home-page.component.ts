@@ -43,7 +43,6 @@ export class HomePageComponent {
     this.username = this.globalDataService.getUsername();
     this.getUserData();
     this.getFollowingUsers();
-    console.log('USERS GOT', this.followingUsers);
   }
 
   private getUserData(): void {
@@ -67,9 +66,7 @@ export class HomePageComponent {
   }
 
   private getFollowingUsers(): void {
-
       this.loading = true;
-      console.log("GFU inici", this.loading);
       this.muroService.getMuro().subscribe(
           (response) => {
               console.log("MURO", response.body)
@@ -90,7 +87,6 @@ export class HomePageComponent {
                   }
               }
               this.stopLoadSpinner();
-              console.log("GFU desactiva spin", this.loading);
           },
           (error) => {
               console.log("Error getting the muro", error);
@@ -117,7 +113,6 @@ export class HomePageComponent {
       //         }
       //     );
       // }
-      console.log("GFU final", this.loading);
   }
 
   private treatPhoto(photo: any): photoShown {
@@ -136,38 +131,38 @@ export class HomePageComponent {
       }
   }
 
-  private getUserPhotos(username: string): any[] {
-      let photos: any[] = [];
-      this.galleryService.getGalleryUser(username).subscribe(
-          (response)=> {
-              if (response.status === 200 && response.body && Array.isArray(response.body)) {
-                  response.body.forEach((element: any) => {
-                      if (element.data) {
-                          photos.unshift({
-                              "src": `data:image/${element.photoExtensio};base64,${element.data}`,
-                              "id": element.photoId,
-                              "name": element.photoName,
-                              "description": element.photoDescription
-                          });
-                      }
-                  });
-              }
-          },
-          (error) => {
-              console.error(`Error al obtener galeria del usuario ${username}`, error)
-          }
-      );
-      return photos;
-  }
+  // private getUserPhotos(username: string): any[] {
+  //     let photos: any[] = [];
+  //     this.galleryService.getGalleryUser(username).subscribe(
+  //         (response)=> {
+  //             if (response.status === 200 && response.body && Array.isArray(response.body)) {
+  //                 response.body.forEach((element: any) => {
+  //                     if (element.data) {
+  //                         photos.unshift({
+  //                             "src": `data:image/${element.photoExtensio};base64,${element.data}`,
+  //                             "id": element.photoId,
+  //                             "name": element.photoName,
+  //                             "description": element.photoDescription
+  //                         });
+  //                     }
+  //                 });
+  //             }
+  //         },
+  //         (error) => {
+  //             console.error(`Error al obtener galeria del usuario ${username}`, error)
+  //         }
+  //     );
+  //     return photos;
+  // }
 
-  openPic(user: any, photoId: number) {
-      let user_found = this.followingUsers.find((element) => element.username === user.username)
-      if (user_found) {
-          let user_pics = user_found.photos
-          let photo_index = user_pics.indexOf(user_pics.find((pic: { id: number; }) => pic.id === photoId))
-          this.lightbox.open(user_pics, photo_index)
-      }
-
+  openPic(photos: any, photo_index: number) {
+      // let user_found = this.followingUsers.find((element) => element.username === user.username)
+      // if (user_found) {
+      //     let user_pics = user_found.photos
+      //     let photo_index = user_pics.indexOf(user_pics.find((pic: { id: number; }) => pic.id === photoId))
+      //     this.lightbox.open(user_pics, photo_index)
+      // }
+      this.lightbox.open(photos, photo_index)
   }
 
   goToUserProfile(id: number) {

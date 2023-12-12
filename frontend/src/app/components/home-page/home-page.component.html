@@ -1,5 +1,5 @@
 <div class="container margin justify-content-center">
-    <p>aca van las fotos de los seguidores mios pero ni el mismisimo diablo sabe como e que funciona esta vaina loco</p>
+    <h4>¡Bienvenido a ImageWeb, {{username}}!</h4>
     <hr>
     <!-- Mostrar tarjetas de resultados cuando hay resultados -->
 
@@ -11,10 +11,10 @@
                     <span>{{ followed_user.username }}</span>
                 </div>
                 <div class="photo-slider">
-                    <div *ngFor="let photo of followed_user.photos; let i = index" class="photo-item">
+                    <div *ngFor="let photo of followed_user.photos; let idx = index" class="photo-item">
                         <div class="image-button" style="cursor:pointer">
                             <div class="card shadow-sm photo">
-                                <img class="bd-placeholder-img card-img-top slider-photo" [src]="photo.src" alt="Image" (click)="openPic(followed_user, photo.id)">
+                                <img class="bd-placeholder-img card-img-top slider-photo" [src]="photo.src" alt="Image" (click)="openPic(followed_user.photos, idx)">
                             </div>
                         </div>
                     </div>
@@ -28,6 +28,5 @@
         <div class="spinner-border text-primary" style="width: 3rem; height: 3rem; animation-duration: 2s" role="status"></div>
         <h4 style="margin-top: 10px;">Cargando contenido...</h4>
     </div>
-
 </div>
 
