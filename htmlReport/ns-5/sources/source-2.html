@@ -1,0 +1,196 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > JwtTokenProvider</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.b1esimageweb.web.Jwt</a>
+</div>
+
+<h1>Coverage Summary for Class: JwtTokenProvider (com.example.b1esimageweb.web.Jwt)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">JwtTokenProvider</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71,9%
+  </span>
+  <span class="absValue">
+    (23/32)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.b1esimageweb.web.Jwt;
+&nbsp;
+&nbsp;import com.nimbusds.jose.JWSAlgorithm;
+&nbsp;import com.nimbusds.jose.JWSHeader;
+&nbsp;import com.nimbusds.jose.JWSSigner;
+&nbsp;import com.nimbusds.jose.JWSVerifier;
+&nbsp;import com.nimbusds.jose.crypto.MACSigner;
+&nbsp;import com.nimbusds.jose.crypto.MACVerifier;
+&nbsp;import com.nimbusds.jwt.JWTClaimsSet;
+&nbsp;import com.nimbusds.jwt.SignedJWT;
+&nbsp;import org.springframework.beans.factory.annotation.Value;
+&nbsp;import org.springframework.security.core.userdetails.UserDetails;
+&nbsp;import org.springframework.stereotype.Component;
+&nbsp;import com.example.b1esimageweb.model.User;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import java.util.Date;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;public class JwtTokenProvider {</b>
+&nbsp;
+&nbsp;    @Value(&quot;${jwt.expiration}&quot;)
+&nbsp;    private long validityInMilliseconds;
+&nbsp;
+&nbsp;    public String createToken(User user) {
+&nbsp;        try {
+<b class="fc">&nbsp;            String key = SecretKeyGenerator.getSecretKey();</b>
+<b class="fc">&nbsp;            JWSSigner signer = new MACSigner(key);</b>
+&nbsp;
+<b class="fc">&nbsp;            Date now = new Date();</b>
+<b class="fc">&nbsp;            Date validity = new Date(now.getTime() + validityInMilliseconds);</b>
+&nbsp;
+<b class="fc">&nbsp;            JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()</b>
+<b class="fc">&nbsp;                    .subject(user.getUserId().toString())</b>
+<b class="fc">&nbsp;                    .issueTime(now)</b>
+<b class="fc">&nbsp;                    .expirationTime(validity)</b>
+<b class="fc">&nbsp;                    .claim(&quot;customKey&quot;, &quot;customValue&quot;)</b>
+<b class="fc">&nbsp;                    .build();</b>
+&nbsp;
+<b class="fc">&nbsp;            SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claimsSet);</b>
+&nbsp;
+<b class="fc">&nbsp;            signedJWT.sign(signer);</b>
+&nbsp;
+<b class="fc">&nbsp;            return signedJWT.serialize();</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean validateToken(String token) {
+&nbsp;        try {
+<b class="fc">&nbsp;            JWSVerifier verifier = new MACVerifier(SecretKeyGenerator.getSecretKey());</b>
+<b class="fc">&nbsp;            SignedJWT signedJWT = SignedJWT.parse(token);</b>
+<b class="fc">&nbsp;            boolean isValid = signedJWT.verify(verifier);</b>
+<b class="pc">&nbsp;            if (isValid) {</b>
+&nbsp;                // Log successful token validation
+<b class="fc">&nbsp;                System.out.println(&quot;Token is valid.&quot;);</b>
+&nbsp;            } else {
+&nbsp;                // Log failed token validation
+<b class="nc">&nbsp;                System.out.println(&quot;Token is NOT valid.&quot;);</b>
+&nbsp;            }
+&nbsp;            
+<b class="fc">&nbsp;            return isValid;</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            return false;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getUserIdFromToken(String token) {
+&nbsp;        try {
+<b class="fc">&nbsp;            SignedJWT signedJWT = SignedJWT.parse(token);</b>
+<b class="fc">&nbsp;            JWTClaimsSet claims = signedJWT.getJWTClaimsSet();</b>
+<b class="fc">&nbsp;            return claims.getSubject();</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            e.printStackTrace();</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-08 23:12</div>
+</div>
+</body>
+</html>

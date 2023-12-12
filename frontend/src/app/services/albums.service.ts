@@ -123,5 +123,8 @@ export class AlbumsService {
     });
   }
 
+  getUserAlbumOwner(albumId: number): Observable<any>{
+    return this.http.get(this.domain+ `/getUserByAlbum/${albumId}`, { observe: 'response'})
+  }
 
 }

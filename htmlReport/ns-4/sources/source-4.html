@@ -1,0 +1,142 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > SearchService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.b1esimageweb.service</a>
+</div>
+
+<h1>Coverage Summary for Class: SearchService (com.example.b1esimageweb.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">SearchService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    25%
+  </span>
+  <span class="absValue">
+    (1/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    27,3%
+  </span>
+  <span class="absValue">
+    (3/11)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.b1esimageweb.service;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;import com.example.b1esimageweb.model.User;
+&nbsp;import com.example.b1esimageweb.repository.UserRepository;
+&nbsp;import com.example.b1esimageweb.web.dto.PhotoDto;
+&nbsp;import com.example.b1esimageweb.web.dto.UserInfoDto;
+&nbsp;
+&nbsp;@Service
+&nbsp;public class SearchService {
+&nbsp;
+&nbsp;    private final UserRepository userRepository;
+&nbsp;    private final UserService service;
+&nbsp;
+<b class="fc">&nbsp;    public SearchService(UserRepository userRepository, UserService service) {</b>
+<b class="fc">&nbsp;        this.userRepository = userRepository;</b>
+<b class="fc">&nbsp;        this.service = service;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Iterable&lt;UserInfoDto&gt; getUsersSearchResults(String searchCriteria){
+<b class="nc">&nbsp;        Iterable&lt;User&gt; users = userRepository.findByUsernameContaining(searchCriteria);</b>
+<b class="nc">&nbsp;        return getUsersDTOSearchResults(users);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private Iterable&lt;UserInfoDto&gt; getUsersDTOSearchResults (Iterable&lt;User&gt; users){
+<b class="nc">&nbsp;        ArrayList&lt;UserInfoDto&gt; userInfoDtos = new ArrayList&lt;&gt;();</b>
+<b class="nc">&nbsp;        users.forEach(user -&gt; {</b>
+<b class="nc">&nbsp;            PhotoDto profilePhoto = service.getPhotoProfileByUser(user);</b>
+<b class="nc">&nbsp;            UserInfoDto userInfoDto = new UserInfoDto(user.getUserId(), user.getUsername(), user.getUserEmail(), user.getPassword(), user.getDescription(), user.getGallery(), profilePhoto, user.isAccountNonExpired(), user.isAccountNonExpired(), user.isAccountNonLocked(), user.isEnabled(), user.getAuthorities());</b>
+<b class="nc">&nbsp;            userInfoDtos.add(userInfoDto);</b>
+&nbsp;        }
+&nbsp;        );
+<b class="nc">&nbsp;        return userInfoDtos;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-08 23:12</div>
+</div>
+</body>
+</html>
