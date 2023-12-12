@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 import {GlobalDataService} from '../../services/global-data.service'
-import {Subscription} from 'rxjs';
 import {UserService} from 'src/app/services/user.service';
 import {GalleryService} from "../../services/gallery.service";
+import {MuroService} from "../../services/muro.service";
 import {Router} from '@angular/router';
 import {Lightbox} from "ngx-lightbox";
 
@@ -13,25 +13,33 @@ interface UserShown {
     photos: any[];
 }
 
+interface photoShown {
+    src: string,
+    id: number,
+    name: string,
+    description: string
+}
+
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css']
 })
+
 export class HomePageComponent {
   username: string = this.globalDataService.getUsername();
-  followingUsers: any[] = [];
+  followingUsers: UserShown[] = [];
   loading: boolean = true;
 
   constructor(private globalDataService: GlobalDataService,
               private userService: UserService,
               private router: Router,
               private galleryService: GalleryService,
+              private muroService: MuroService,
               private lightbox: Lightbox) {
   }
 
   ngOnInit(): void {
-    this.loading = true;
     this.username = this.globalDataService.getUsername();
     this.getUserData();
     this.getFollowingUsers();
@@ -59,33 +67,72 @@ export class HomePageComponent {
   }
 
   private getFollowingUsers(): void {
-      // GET FOLLOWING USERS DUMMY (FOTO DE PERFIL AMB DATA PLS)
-      let ids = [6,7,8,9,10,11,18,19,21,22];
-      for (let id of ids) {
-          this.userService.getVisitedUser(id).subscribe(
-              (response) => {
-                  if (response.status === 200) {
-                      const followingUser: UserShown = {
-                          ID: response.body.userId,
-                          username: response.body.username,
-                          avatar: this.getUserAvatar(response.body.profilePicture),
-                          photos: this.getUserPhotos(response.body.username)
+
+      this.loading = true;
+      console.log("GFU inici", this.loading);
+      this.muroService.getMuro().subscribe(
+          (response) => {
+              console.log("MURO", response.body)
+              if (response.status === 200) {
+                  for (const object of response.body) {
+                      const existingUser = this.followingUsers.find((u) => u.username === object.userInfoDto.username);
+                      if (existingUser) existingUser.photos.unshift(this.treatPhoto(object.photoDto));
+                      else {
+                          const newUser: UserShown = {
+                              username: object.userInfoDto.username,
+                              avatar: this.getUserAvatar(object.userInfoDto.profilePicture),
+                              ID: object.userInfoDto.userId,
+                              photos: [this.treatPhoto(object.photoDto)]
+                          };
+
+                          this.followingUsers.push(newUser);
                       }
-                      if (this.globalDataService.getUsername() !== followingUser.username) this.followingUsers.push(followingUser);
                   }
-              },
-              (error) => {
-                  console.error(`Error al obtener el user con id ${id}`, error);
               }
-          );
-      }
-      this.stopLoadSpinner()
+              this.stopLoadSpinner();
+              console.log("GFU desactiva spin", this.loading);
+          },
+          (error) => {
+              console.log("Error getting the muro", error);
+              this.stopLoadSpinner();
+          }
+      );
+
+      // let ids = [6,7,8,9,10,11,18,19,21,22];
+      // for (let id of ids) {
+      //     this.userService.getVisitedUser(id).subscribe(
+      //         (response) => {
+      //             if (response.status === 200) {
+      //                 const followingUser: UserShown = {
+      //                     ID: response.body.userId,
+      //                     username: response.body.username,
+      //                     avatar: this.getUserAvatar(response.body.profilePicture),
+      //                     photos: this.getUserPhotos(response.body.username)
+      //                 }
+      //                 if (this.globalDataService.getUsername() !== followingUser.username) this.followingUsers.push(followingUser);
+      //             }
+      //         },
+      //         (error) => {
+      //             console.error(`Error al obtener el user con id ${id}`, error);
+      //         }
+      //     );
+      // }
+      console.log("GFU final", this.loading);
+  }
+
+  private treatPhoto(photo: any): photoShown {
+      return {
+          src: `data:image/${photo.photoExtensio};base64,${photo.data}`,
+          id: photo.photoId,
+          name: photo.photoName,
+          description: photo.photoDescription
+      };
   }
 
   private getUserAvatar(profilePic: any): string {
       if (profilePic === null) return '../../assets/images/perfil.jpg'
       else {
-          return '../../assets/images/logo2.png';
+          return `data:image/${profilePic.photoExtensio};base64,${profilePic.data}`;
       }
   }
 
@@ -114,10 +161,13 @@ export class HomePageComponent {
   }
 
   openPic(user: any, photoId: number) {
-      let user_pics = this.followingUsers.find((element) => element.username === user.username).photos
-      let photo_found = user_pics.find((pic: { id: number; }) => pic.id === photoId)
-      let photo_index = user_pics.indexOf(photo_found)
-      this.lightbox.open(user_pics, photo_index)
+      let user_found = this.followingUsers.find((element) => element.username === user.username)
+      if (user_found) {
+          let user_pics = user_found.photos
+          let photo_index = user_pics.indexOf(user_pics.find((pic: { id: number; }) => pic.id === photoId))
+          this.lightbox.open(user_pics, photo_index)
+      }
+
   }
 
   goToUserProfile(id: number) {

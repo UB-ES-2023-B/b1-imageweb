@@ -4,11 +4,7 @@
     <!-- Mostrar tarjetas de resultados cuando hay resultados -->
 
     <div *ngIf="followingUsers.length > 0" class="slider-container">
-        <div *ngIf="loading" class="d-flex justify-content-center align-items-center flex-column">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem; animation-duration: 2s" role="status"></div>
-            <h4 style="margin-top: 10px;">Cargando contenido...</h4>
-        </div>
-        <div *ngFor="let followed_user of followingUsers; let idx = index">
+        <div *ngFor="let followed_user of followingUsers">
             <div *ngIf="followed_user.photos.length > 0" class="user-column">
                 <div class="user-info" style="cursor: pointer" (click)="goToUserProfile(followed_user.ID)">
                     <img [src]="followed_user.avatar" alt="Foto del usuario" class="resize-imagen">
@@ -28,6 +24,10 @@
         </div>
     </div>
 
-    <hr>
+    <div *ngIf="loading" class="d-flex justify-content-center align-items-center flex-column">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem; animation-duration: 2s" role="status"></div>
+        <h4 style="margin-top: 10px;">Cargando contenido...</h4>
+    </div>
+
 </div>
 
