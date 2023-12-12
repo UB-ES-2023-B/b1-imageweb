@@ -10,7 +10,7 @@
         <img src="../assets/images/perfil.jpg" alt="Imagen Predeterminada">
       </ng-container>
       <i class="fas fa-pencil-alt editar-icono" (click)="abrirInputFile()"></i>
-      <input type="file" id="fileInput" (change)="cambiarFotoPerfil($event)">
+      <input type="file" accept="image/*" id="fileInput" (change)="cambiarFotoPerfil($event)">
     </div>
 
     <div class="user-titles">
