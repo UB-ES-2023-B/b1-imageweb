@@ -38,9 +38,7 @@ public class SearchService {
             UserInfoDto userInfoDto = new UserInfoDto(user.getUserId(), user.getUsername(), user.getUserEmail(), user.getPassword(), user.getDescription(), user.getGallery(), profilePhoto, user.isAccountNonExpired(), user.isAccountNonExpired(), user.isAccountNonLocked(), user.isEnabled(), user.getAuthorities());
             
             if (StreamSupport.stream(followedUsers.spliterator(), false).anyMatch(u -> u.getUserId().equals(user.getUserId()))){
-                System.out.println(userInfoDtos);
                 userInfoDtos.add(0, userInfoDto);
-                System.out.println(userInfoDtos);
             }else{
                 userInfoDtos.add(userInfoDto);
             }
