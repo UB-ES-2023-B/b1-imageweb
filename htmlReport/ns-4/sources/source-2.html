@@ -1,0 +1,161 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AuthService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.b1esimageweb.service</a>
+</div>
+
+<h1>Coverage Summary for Class: AuthService (com.example.b1esimageweb.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AuthService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66,7%
+  </span>
+  <span class="absValue">
+    (2/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71,4%
+  </span>
+  <span class="absValue">
+    (15/21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.b1esimageweb.service;
+&nbsp;
+&nbsp;import com.example.b1esimageweb.model.Gallery;
+&nbsp;import com.example.b1esimageweb.model.Role;
+&nbsp;import com.example.b1esimageweb.model.User;
+&nbsp;import com.example.b1esimageweb.repository.GalleryRepository;
+&nbsp;import com.example.b1esimageweb.repository.UserRepository;
+&nbsp;import com.example.b1esimageweb.web.Jwt.JwtTokenProvider;
+&nbsp;import com.example.b1esimageweb.web.responses.AuthResponse;
+&nbsp;import com.example.b1esimageweb.web.dto.UserLoginDto;
+&nbsp;import com.example.b1esimageweb.web.dto.UserRegistrationDto;
+&nbsp;import lombok.RequiredArgsConstructor;
+&nbsp;import org.springframework.security.authentication.AuthenticationManager;
+&nbsp;import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+&nbsp;import org.springframework.security.crypto.password.PasswordEncoder;
+&nbsp;import org.springframework.stereotype.Service;
+&nbsp;
+&nbsp;
+&nbsp;@Service
+<b class="fc">&nbsp;@RequiredArgsConstructor</b>
+&nbsp;public class AuthService {
+&nbsp;
+&nbsp;    private final UserRepository userRepository;
+&nbsp;    private final GalleryRepository galleryRepository;
+&nbsp;    private final JwtTokenProvider jwtService;
+&nbsp;    private final PasswordEncoder passwordEncoder;
+&nbsp;    private final AuthenticationManager authenticationManager;
+&nbsp;
+&nbsp;    public AuthResponse login(UserLoginDto userDto) {
+<b class="nc">&nbsp;        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userDto.getUsername(), userDto.getPassword()));</b>
+<b class="nc">&nbsp;        User user=userRepository.findByUsername(userDto.getUsername()).orElseThrow();</b>
+<b class="nc">&nbsp;        String token=jwtService.createToken(user);</b>
+<b class="nc">&nbsp;        return AuthResponse.builder()</b>
+<b class="nc">&nbsp;                .token(token)</b>
+<b class="nc">&nbsp;                .build();</b>
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    public AuthResponse register(UserRegistrationDto userDto) {
+<b class="fc">&nbsp;        Gallery gallery = new Gallery();</b>
+<b class="fc">&nbsp;        gallery.setGalleryName(&quot;My first Gallery&quot;);</b>
+<b class="fc">&nbsp;        galleryRepository.save(gallery);</b>
+<b class="fc">&nbsp;        User user = User.builder()</b>
+<b class="fc">&nbsp;                .username(userDto.getUsername())</b>
+<b class="fc">&nbsp;                .email(userDto.getEmail())</b>
+<b class="fc">&nbsp;                .password(passwordEncoder.encode(userDto.getPassword()))</b>
+<b class="fc">&nbsp;                .role(Role.USER)</b>
+<b class="fc">&nbsp;                .build();</b>
+<b class="fc">&nbsp;        user.setGallery(gallery);</b>
+<b class="fc">&nbsp;        userRepository.save(user);</b>
+&nbsp;
+<b class="fc">&nbsp;        return AuthResponse.builder()</b>
+<b class="fc">&nbsp;                .token(jwtService.createToken(user))</b>
+<b class="fc">&nbsp;                .build();</b>
+&nbsp;
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-08 23:12</div>
+</div>
+</body>
+</html>
