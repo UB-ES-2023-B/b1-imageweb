@@ -48,18 +48,15 @@ export class HomePageComponent {
   private getUserData(): void {
     this.userService.getUser(this.username).subscribe(
       (response) => {
-        console.log('GET DATA HOME ', response.body);
         this.globalDataService.setEmail(response.body.email);
         this.globalDataService.setDescription(response.body.description);
         this.globalDataService.setGalleryId(response.body.gallery.galleryrId);
-        console.log('Este es el id de la galeria: (back) ',response.body.gallery.galleryrId)
         let url: string;
         if (response.body.profilePicture) url = `data:image/${response.body.profilePicture.photoName};base64,${response.body.profilePicture.data}`;
         else url = "../assets/images/perfil.jpg";
         this.globalDataService.setProfilePicture(response.body.profilePicture, url);
       },
       (error) => {
-        // Maneja el error aquí
         console.error('Error al obtener los datos del usuario DESDE HOME', error);
       }
     );
@@ -69,20 +66,20 @@ export class HomePageComponent {
       this.loading = true;
       this.muroService.getMuro().subscribe(
           (response) => {
-              console.log("MURO", response.body)
               if (response.status === 200) {
                   for (const object of response.body) {
                       const existingUser = this.followingUsers.find((u) => u.username === object.userInfoDto.username);
                       if (existingUser) existingUser.photos.unshift(this.treatPhoto(object.photoDto));
                       else {
-                          const newUser: UserShown = {
-                              username: object.userInfoDto.username,
-                              avatar: this.getUserAvatar(object.userInfoDto.profilePicture),
-                              ID: object.userInfoDto.userId,
-                              photos: [this.treatPhoto(object.photoDto)]
-                          };
-
-                          this.followingUsers.push(newUser);
+                          if (this.globalDataService.getUsername() !== object.userInfoDto.username) {
+                              const newUser: UserShown = {
+                                  username: object.userInfoDto.username,
+                                  avatar: this.getUserAvatar(object.userInfoDto.profilePicture),
+                                  ID: object.userInfoDto.userId,
+                                  photos: [this.treatPhoto(object.photoDto)]
+                              };
+                              this.followingUsers.push(newUser);
+                          }
                       }
                   }
               }
