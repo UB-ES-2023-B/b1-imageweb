@@ -102,7 +102,7 @@
             },
             "preproduction": {
               "browserTarget": "frontend:build:preproduction"
-            },,
+            },
             "development": {
               "browserTarget": "frontend:build:development"
             }

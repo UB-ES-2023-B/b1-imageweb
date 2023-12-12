@@ -51,22 +51,24 @@ export class AlbumViewComponent {
           this.albumName = response.body[0].albums[0].albumName;
           this.albumDescription = response.body[0].albums[0].description;
           this.albumLenght = response.body.length-1+ " fotos";
-          
+
           if(response.body.length == 1){
             this.loading=false;
           }
           response.body.forEach((element: any) => {
-            
+
             if (element.data) {
               if(element.photoName != "defaultImage"){
-                if (response.body.indexOf(element) == 1){
-                  this.userService.getUsernameAlbumOwner(element.gallery.galleryrId).subscribe(
-                    (text) =>{
-                      this.original_username = text;
-                      this.loading=false;
-                    }
-                  )
-                  
+                if (response.body.indexOf(element) == 0){
+                  // this.userService.getUsernameAlbumOwner(element.gallery.galleryrId).subscribe(
+                  //   (text) =>{
+                  //     this.original_username = text;
+                  //
+                  //   }
+                  // )
+                  // BORRA ESTO LO DEJE SOLO PARA QUE FUNCIONE temporalmente
+                  this.original_username=this.visitor_username
+                  ///
                   this.coverImage = {
                     "src":`data:image/${element.photoExtensio};base64,${element.data}`,
                     "id": element.photoId, "name":element.photoName, "description": element.photoDescription
@@ -76,20 +78,20 @@ export class AlbumViewComponent {
                   "src":`data:image/${element.photoExtensio};base64,${element.data}`,
                   "id": element.photoId, "name":element.photoName, "description": element.photoDescription
                 });
-                      
+
               }
             }
           });
         }
         this.albumsService.setImagesToAlbum(this.images);
-        
-        
+        this.loading=false;
+
       },(error)=>{
         console.log('error al obtener album', error)
       }
-      
+
     );
-   
+
   }
 
   open(index: number): void {
@@ -104,7 +106,7 @@ export class AlbumViewComponent {
     // Use ActivatedRoute to get the id from the URL path
     this.route.params.subscribe(params => {
       this.albumId = params['id'];
-    });  
+    });
 
     this.imagesSubscription = this.albumsService.getImagesObservable().subscribe((images) => {
       this.images = images;
