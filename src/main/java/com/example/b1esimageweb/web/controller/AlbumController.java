@@ -4,7 +4,6 @@ package com.example.b1esimageweb.web.controller;
 import com.example.b1esimageweb.Exceptions.UnauthorizedAlbumDeletionException;
 import com.example.b1esimageweb.Exceptions.UserNotFoundException;
 import com.example.b1esimageweb.model.Album;
-import com.example.b1esimageweb.model.Photo;
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.AlbumService;
 import com.example.b1esimageweb.service.UserService;
@@ -16,12 +15,11 @@ import com.example.b1esimageweb.web.responses.AlbumResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +34,7 @@ public class AlbumController {
         this.albumService = albumService;
         this.userService = userService;
     }
+
     @PostMapping("/newAlbum")
     public ResponseEntity<Object> createAlbum(@RequestParam("album") String albumDtoAsString, @RequestParam("coverPhoto") MultipartFile coverPhoto) {
         try {
@@ -62,14 +61,20 @@ public class AlbumController {
                 currentUser = (User) obj;
             }
             if(currentUser != null) {
-                Map<Integer, List<PhotoDto>> map = albumService.getAllAlbumsForUser(currentUser);
+                Map<Album, PhotoDto> map = albumService.getAllAlbumsForUser(currentUser);
                 if (map.isEmpty()) {
                     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
                 }
-                AlbumResponse response = new AlbumResponse();
-                response.setAlbums(map.values());
-                response.setLength(map.keySet().size());
+                List<AlbumResponse> response = new ArrayList<>();
+                for (Map.Entry<Album, PhotoDto> entry : map.entrySet()) {
+                    Album album = entry.getKey();
+                    PhotoDto photoDto = entry.getValue();
+                    
+                    AlbumResponse albumResponse = new AlbumResponse(photoDto, album.getAlbumName(), album.getDescription(), album.getAlbumId(), albumService.getAlbumSize(album));
+                    response.add(albumResponse);
+                }
                 return new ResponseEntity<>(response, HttpStatus.OK);
+
             }else{
                 throw new UserNotFoundException("User was not found");
             }
@@ -82,13 +87,18 @@ public class AlbumController {
     public ResponseEntity<Object> getAlbumsForAUser(@PathVariable String username) {
         try {
             User user = userService.getUserByUserName(username);
-            Map<Integer, List<PhotoDto>> map = albumService.getAllAlbumsForUser(user);
+            Map<Album, PhotoDto> map = albumService.getAllAlbumsForUser(user);
             if (map.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
-            AlbumResponse response = new AlbumResponse();
-            response.setAlbums(map.values());
-            response.setLength(map.keySet().size());
+            List<AlbumResponse> response = new ArrayList<>();
+            for (Map.Entry<Album, PhotoDto> entry : map.entrySet()) {
+                Album album = entry.getKey();
+                PhotoDto photoDto = entry.getValue();
+                
+                AlbumResponse albumResponse = new AlbumResponse(photoDto, album.getAlbumName(), album.getDescription(), album.getAlbumId(), albumService.getAlbumSize(album));
+                response.add(albumResponse);
+            }
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
