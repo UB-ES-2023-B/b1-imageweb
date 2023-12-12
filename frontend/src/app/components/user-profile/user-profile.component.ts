@@ -4,7 +4,7 @@ import { GlobalDataService } from '../../services/global-data.service';
 import { UserService } from '../../services/user.service';
 import { GalleryService } from "../../services/gallery.service";
 import { ToastrService } from 'ngx-toastr';
-
+import {FollowersService} from "../../services/followers.service";
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
@@ -25,12 +25,15 @@ export class UserProfileComponent implements OnInit {
     following: []
   }
 
+  loading=false
+
   constructor(private globalDataService: GlobalDataService,
               private router: Router,
               private userService: UserService,
               private galleryService: GalleryService,
               private toastr: ToastrService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private followersService: FollowersService) {
   }
 
   ngOnInit(): void {
@@ -39,7 +42,9 @@ export class UserProfileComponent implements OnInit {
       this.visited_user.id = params['id'];
       this.activeItem = 'info';
       this.getVisitedUserData();
+
     });
+
 
   }
 

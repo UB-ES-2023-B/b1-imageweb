@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { GlobalDataService } from '../../services/global-data.service';
 import { UserService } from '../../services/user.service';
 import { ToastrService } from 'ngx-toastr';
+import {FollowersService} from "../../services/followers.service";
 
 @Component({
   selector: 'app-profile-page',
@@ -30,7 +31,8 @@ export class ProfilePageComponent implements OnInit {
   constructor(private globalDataService: GlobalDataService,
               private router: Router,
               private userService: UserService,
-              private toastr: ToastrService) {
+              private toastr: ToastrService,
+              private followersService: FollowersService) {
   }
 
   editProfile(): void {
@@ -48,6 +50,16 @@ export class ProfilePageComponent implements OnInit {
       this.activeItem = newItem;
     });
     this.getUserData();
+    this.followersService.getFollowers(this.user.name).subscribe(
+      (response) => {
+        if (response.body) {
+          console.log('HOLA DANIELA, MIRA ESTAS PERSONAS SIGUEN AL USUARIO EN CUESTION',response.body.followers)
+          console.log('en total tiene: ', response.body.followers.length, 'seguidores')
+        }
+      }, (error) => {
+        console.log('HAY UN ERROR EN SEGUIDORES', error)
+      }
+    )
   }
 
   handleItemClicked(item: string): void {
