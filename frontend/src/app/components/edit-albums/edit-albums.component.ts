@@ -163,33 +163,21 @@ export class EditAlbumsComponent {
       this.albums = []
       this.albumsService.getAlbumsForUser(this.globalDataService.getUsername()).subscribe(
           (response) => {
-              if (response.body && Array.isArray(response.body.albums)) {
-                  response.body.albums.forEach((element: any) => {
-                      let src: string;
-                      if (element.length > 0) {
-                          if (element.length > 1) {
-                              src = `data:image/${element[0].photoExtension};base64,${element[0].data}`;
-                          } else {
-                              src = '../../../assets/images/defaultImageAlbum.jpg';
-                          }
-                          this.albums.unshift({
-                            "src": src,
-                            "id": element[0].albums[0].albumId,
-                            "name": element[0].albums[0].albumName,
-                            "description": element[0].albums[0].description,
-                            "photoLength": element.length-1
-                        });
+            if (response.body) {
+              response.body.forEach((element: any) => {
+                let src = `data:image/${element.coverPhoto.photoExtension};base64,${ element.coverPhoto.data}`;
+                this.albums.unshift({
+                  "src": src,
+                  "id": element.albumId,
+                  "name": element.name,
+                  "description": element.description,
+                  "photoLength": element.length-1
+                });
+              });
+            }
+            this.albumsService.setAlbums(this.albums);
+            this.loading = false;
 
-
-                      }
-                  });
-              }
-              this.albumsService.setAlbums(this.albums);
-              this.loading = false;
-              if(this.albums.length==0){
-                this.globalDataService.setActiveItem('albumes');
-                this.router.navigate(['/profile/']);
-              }
           },
           (error) => {
               console.log('error al obtener all gallery', error)
