@@ -16,7 +16,7 @@
     <div class="user-titles">
       <h1>{{ user.name }}</h1>
       <h5 style="padding-bottom: 5px">{{ user.email }}</h5>
-      <h6>{{ user.followers.length }} seguidores · {{ user.following.length }} siguiendo</h6>
+      <h6 *ngIf="this.loadingFollowers">{{ user.followers.length }} seguidores · {{ user.following.length }} siguidos</h6>
     </div>
     <div class="dropdown">
       <button class="btn btn btn-outline-light" type="button" id="dropdownMenuButton"

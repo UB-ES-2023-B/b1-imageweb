@@ -10,9 +10,24 @@
 
         <div class="user-titles">
             <h1>{{ visited_user.name }}</h1>
-            <h6>{{ visited_user.followers.length }} seguidores · {{ visited_user.following.length }} siguiendo</h6>
+            <h6 *ngIf="loadingFollowers" >{{ visited_user.followers.length }} seguidores · {{ visited_user.following.length }} siguiendo</h6>
+        </div>
+
+        <div class="dropdown">
+          <button *ngIf="!follow && loadingFollowers && !charging" class="btn btn btn-outline-light" type="button" (click)="followUser(visited_user.name)"
+                  >
+                  Seguir
+          </button>
+          <button *ngIf=" !charging && follow && loadingFollowers" class="btn btn btn-outline-light" type="button"
+                  (click)="unfollow(visited_user.name)"  >
+                  Dejar de seguir
+          </button>
+          <button *ngIf="charging" class="btn  btn-secondary" type="button" disabled>
+            Cargando...
+          </button>
         </div>
     </div>
+
 </div>
 
 <app-secondary-navbar [activeItem]="activeItem" (itemClicked)="handleItemClicked($event)"></app-secondary-navbar>

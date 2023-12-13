@@ -15,7 +15,7 @@ export class ProfilePageComponent implements OnInit {
   activeItem: string = 'info';
   changePwdModal: boolean = false;
   mostrarIconoLapiz: boolean = false;
-  loadingFollowers =true; //
+  loadingFollowers =false; //
 
 
   user: any = {
@@ -65,6 +65,8 @@ export class ProfilePageComponent implements OnInit {
                 response.body.followers.forEach((usuario:any) => {
                   this.user.followers.push(usuario);
                 });
+                this.loadingFollowers=true;
+                console.log('USER info::', this.user)
               }
             },
             (followingError) => {
