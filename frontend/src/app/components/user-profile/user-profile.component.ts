@@ -48,7 +48,7 @@ export class UserProfileComponent implements OnInit {
     this.globalDataService.activeItem$.subscribe(newItem => { this.activeItem = newItem; });
     this.route.params.subscribe(params => {
       this.visited_user.id = params['id'];
-      this.activeItem = 'info';
+      //this.activeItem = 'info';
       this.getVisitedUserData();
 
     });

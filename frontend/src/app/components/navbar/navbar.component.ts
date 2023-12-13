@@ -90,7 +90,7 @@ export class NavbarComponent {
           if (response.status === 200) {
             this.resultsAvailable = true;
             this.searchResults = response.body;
-            this.deleteOwnUser(); // Borra al propio user
+            this.deleteOwnUser(); // Borra al propio user de los resultados
             console.log('Resultados de búsqueda:', response.body);
           }
           else this.toastr.error("Error en la búsqueda, inténtelo de nuevo más tarde.");
@@ -107,17 +107,17 @@ export class NavbarComponent {
   }
 
   // Método para construir la URL de la foto de perfil del usuario
-  getProfilePicUrl(user: any): string {
-    if (user && user.profilePicture) {
-      const photoName = user.profilePicture.photoName;
-      const photoExtension = user.profilePicture.photoExtension;
-      return `path/al/directorio/de/tu/api/${photoName}.${photoExtension}`;
-      // Asegúrate de proporcionar la ruta correcta de tu API
-    } else {
-      // Devolver una URL predeterminada o una URL de imagen de marcador de posición
-      return 'path/de/imagen/por/defecto.jpg';
-    }
-  }
+  // getProfilePicUrl(user: any): string {
+  //   if (user && user.profilePicture) {
+  //     const photoName = user.profilePicture.photoName;
+  //     const photoExtension = user.profilePicture.photoExtension;
+  //     return `path/al/directorio/de/tu/api/${photoName}.${photoExtension}`;
+  //     // Asegúrate de proporcionar la ruta correcta de tu API
+  //   } else {
+  //     // Devolver una URL predeterminada o una URL de imagen de marcador de posición
+  //     return 'path/de/imagen/por/defecto.jpg';
+  //   }
+  // }
 
   goToUserProfile(id: number) {
     console.log("ID USER", id);

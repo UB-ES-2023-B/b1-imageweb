@@ -52,7 +52,8 @@ public class UserController {
     @GetMapping(value = "/getUserByGalleryId/{id}")
     public ResponseEntity<UserInfoDto> getUserByGalleryId(@PathVariable("id") Integer id) {
         User user = service.getUserByGallery(galleryService.getGalleryById(id));
-        UserInfoDto userInfoDto = new UserInfoDto(user.getUserId(), user.getUsername(), user.getUserEmail(), user.getPassword(), user.getDescription(), user.getGallery(), null, user.isAccountNonExpired(), user.isAccountNonExpired(), user.isAccountNonLocked(), user.isEnabled(), user.getAuthorities());
+        PhotoDto profilePhoto = service.getPhotoProfileByUser(user);
+        UserInfoDto userInfoDto = new UserInfoDto(user.getUserId(), user.getUsername(), user.getUserEmail(), user.getPassword(), user.getDescription(), user.getGallery(), profilePhoto, user.isAccountNonExpired(), user.isAccountNonExpired(), user.isAccountNonLocked(), user.isEnabled(), user.getAuthorities());
         return new ResponseEntity<>(userInfoDto, HttpStatus.OK);
     }
 
