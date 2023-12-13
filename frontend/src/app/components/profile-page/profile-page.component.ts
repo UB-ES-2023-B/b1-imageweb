@@ -15,6 +15,8 @@ export class ProfilePageComponent implements OnInit {
   activeItem: string = 'info';
   changePwdModal: boolean = false;
   mostrarIconoLapiz: boolean = false;
+  loadingFollowers =true; //
+
 
   user: any = {
     id: 0,
@@ -53,8 +55,23 @@ export class ProfilePageComponent implements OnInit {
     this.followersService.getFollowers(this.user.name).subscribe(
       (response) => {
         if (response.body) {
-          console.log('HOLA DANIELA, MIRA ESTAS PERSONAS SIGUEN AL USUARIO EN CUESTION',response.body.followers)
-          console.log('en total tiene: ', response.body.followers.length, 'seguidores')
+          this.followersService.getFollowing(this.user.name).subscribe(
+            (followingResponse) => {
+              if (followingResponse.body) {
+                const following = followingResponse.body.following;
+                following.forEach((usuario:any) => {
+                  this.user.following.push(usuario);
+                });
+                response.body.followers.forEach((usuario:any) => {
+                  this.user.followers.push(usuario);
+                });
+              }
+            },
+            (followingError) => {
+              console.log('HAY UN ERROR EN LOS SEGUIDOS', followingError);
+            }
+          );
+
         }
       }, (error) => {
         console.log('HAY UN ERROR EN SEGUIDORES', error)
