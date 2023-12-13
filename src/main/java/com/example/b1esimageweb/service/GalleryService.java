@@ -99,6 +99,30 @@ public class GalleryService {
         return photos;
     }
 
+     public Iterable<PhotoDto> getRandomNumberOfPhotos(int number) {
+        List<PhotoDto> photos = new ArrayList<>();
+        for (Photo photo : photoRepository.findAll()) {
+            if(photos.size()==number){
+                break;
+            }
+            if(photo.getGallery()!=null){
+                CloudBlob blob;
+                try {
+                    blob = container.getBlockBlobReference(photo.getPhotoId().toString());
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    blob.download(outputStream);
+                    byte[] photoContent = outputStream.toByteArray();
+                    photos.add(new PhotoDto(photoContent, photo.getPhotoId(), photo.getGallery(), photo.getPhotoName(), photo.getAlbums(), photo.getPhotoExtension(), photo.getPhotoDescription()));
+                } catch (URISyntaxException | StorageException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+            
+        }
+        return photos;
+    }
+
     public PhotoDto getPhotoById(int photoId) {
         Photo photo = photoRepository.findById(photoId).orElseThrow(() -> new PhotoNotFoundException("Photo with id " + photoId + "not found"));
         CloudBlob blob;
