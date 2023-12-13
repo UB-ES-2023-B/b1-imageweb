@@ -20,14 +20,14 @@ public class MuroService {
         this.galleryService = galleryService;
     }
     
-    public Iterable<MuroDto> getMuro(User user) {
+    public Iterable<MuroDto> getMuro(User user, int muroSize) {
         
         List<MuroDto> muroDto = new ArrayList<>();
 
         Iterable<User> followedUsers = user.getFollowing();
         
         for(User followedUser: followedUsers){
-            if(muroDto.size()==50){
+            if(muroDto.size()==muroSize){
                 break;
             }
             Gallery gallery = userService.getGalleryByUser(followedUser);
@@ -35,7 +35,7 @@ public class MuroService {
             Iterable<PhotoDto> photos = galleryService.getPhotosByGallery(gallery);
             UserInfoDto userInfoDto = new UserInfoDto(followedUser.getUserId(), followedUser.getUsername(), followedUser.getUserEmail(), null, followedUser.getDescription(), gallery, profilePhoto, followedUser.isAccountNonExpired(), followedUser.isAccountNonLocked(), followedUser.isCredentialsNonExpired(), followedUser.isEnabled(), followedUser.getAuthorities());
             for (PhotoDto photo : photos) {
-                if(muroDto.size()==50){
+                if(muroDto.size()==muroSize){
                     break;
                 }
                 MuroDto muroDtoElement = new MuroDto(userInfoDto, photo); 
@@ -43,8 +43,8 @@ public class MuroService {
             }
         }
 
-        if (muroDto.size()!=50){
-            int numberOfPhotosLeft = 50 - muroDto.size();
+        if (muroDto.size()!=muroSize){
+            int numberOfPhotosLeft = muroSize - muroDto.size();
             Iterable<PhotoDto> randomPhotos = galleryService.getRandomNumberOfPhotos(numberOfPhotosLeft);
            
             for (PhotoDto photo : randomPhotos) {

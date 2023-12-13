@@ -31,7 +31,7 @@ public class MuroController {
                 currentUser = (User) obj;
             }
             if(currentUser != null) {
-                Iterable<MuroDto> muroDto =  muroService.getMuro(currentUser);
+                Iterable<MuroDto> muroDto =  muroService.getMuro(currentUser, 25);
                 return new ResponseEntity<>(muroDto, HttpStatus.OK);
             }else{
                 throw new UserNotFoundException("User was not found");
