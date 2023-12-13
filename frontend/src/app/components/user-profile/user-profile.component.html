@@ -10,29 +10,12 @@
 
         <div class="user-titles">
             <h1>{{ visited_user.name }}</h1>
-            <h6 *ngIf="loadingFollowers" ><a (click)="openModal(modalContent, 'followers')">{{ visited_user.followers.length }} seguidores</a> ·
-              <a (click)="openModal(modalContent, 'following')">{{ visited_user.following.length }} siguiendo</a></h6>
-        </div>
-
-        <div class="dropdown">
-          <button *ngIf="!follow && loadingFollowers && !charging" class="btn btn btn-outline-light" type="button" (click)="followUser(visited_user.name)"
-                  >
-                  Seguir
-          </button>
-          <button *ngIf=" !charging && follow && loadingFollowers" class="btn btn btn-outline-light" type="button"
-                  (click)="unfollow(visited_user.name)"  >
-                  Dejar de seguir
-          </button>
-          <button *ngIf="charging" class="btn  btn-secondary" type="button" disabled>
-            Cargando...
-          </button>
+            <h6>{{ visited_user.followers.length }} seguidores · {{ visited_user.following.length }} siguiendo</h6>
         </div>
     </div>
-
 </div>
 
 <app-secondary-navbar [activeItem]="activeItem" (itemClicked)="handleItemClicked($event)"></app-secondary-navbar>
-
 
 <div *ngIf="activeItem=='info'">
 
@@ -51,39 +34,3 @@
 <div *ngIf="activeItem=='albumes'">
     <app-albums [username]="visited_user.name"></app-albums>
 </div>
-
-<!--MODAL-->
-<ng-template #modalContent let-modal>
-  <!-- Contenido del modal -->
-  <div class="modal-header">
-    <h5 class="modal-title" id="modal-basic-title">{{modalTitle}}</h5>
-    <button type="button" class="btn-close"  (click)="modal.dismiss('Cross click')">
-    </button>
-  </div>
-  <div class="modal-body">
-    <p  *ngIf="this.infoModal[0]==undefined">{{message}}</p>
-    <table  *ngIf="this.infoModal[0]!=undefined" class="table">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Username</th>
-          <th scope="col"># Fotos</th>
-          <!-- <th scope="col">Acciones</th> -->
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let user of infoModal; let i = index">
-          <th scope="row">{{ i + 1 }}</th>
-          <td>{{ user.username }}</td>
-          <td>{{ user.numPhotosPublicas }}</td>
-          <!-- <td>
-            <button >Dejar de seguir</button>
-          </td> -->
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Cerrar</button>
-  </div>
-</ng-template>

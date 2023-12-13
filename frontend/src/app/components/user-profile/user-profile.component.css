@@ -1,185 +1,141 @@
 body {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  min-height: 100vh;
-}
-a:hover {
-  cursor: pointer;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    min-height: 100vh;
 }
 
 .header-wrapper {
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding-bottom: 50px;
 }
 
 .header-wrapper header {
-  width: 100%;
-  height: auto;
-  max-width: 1200px;
+    width: 100%;
+    height: auto;
+    max-width: 1200px;
 }
 
 .header-wrapper .column {
-  padding: 25px 20px;
-  text-align: center;
-  max-width: 350px;
-  position: relative;
-  margin: 0 auto;
+    padding: 25px 20px;
+    text-align: center;
+    max-width: 350px;
+    position: relative;
+    margin: 0 auto;
 }
 
 .header-wrapper .column .profile-picture {
-  position: relative;
-  width: 150px;
-  height: 150px;
-  border: 4px solid #fff;
-  border-radius: 50%;
-  margin-top: 25px;
-  top: 60px;
-  left: 50%;
-  transform: translatex(-50%);
-  overflow: hidden;
-  cursor: pointer;
+    position: relative;
+    width: 150px;
+    height: 150px;
+    border: 4px solid #fff;
+    border-radius: 50%;
+    margin-top: 25px;
+    top: 60px;
+    left: 50%;
+    transform: translatex(-50%);
+    overflow: hidden;
+    cursor: pointer;
 }
 
 .header-wrapper .column .profile-picture img {
-  width: 142px;
-  height: 142px;
-  object-fit: cover;
-  border-radius: 50%;
-  display: block;
-  box-shadow: 1px 3px 12px rgba(0, 0, 0, 0.18);
-  transition: transform 0.2s, box-shadow 0.2s;
+    width: 142px;
+    height: 142px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    box-shadow: 1px 3px 12px rgba(0, 0, 0, 0.18);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .header-wrapper .column .profile-picture span {
-  position: absolute;
-  background: #2afa6a;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  bottom: 3px;
-  right: 11px;
-  border: 2px solid #fff;
-}
-
-.editar-icono {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 2rem;
-  display: none;
-  cursor: pointer;
-}
-
-.profile-picture:hover img {
-  transform: scale(1.05);
-  box-shadow: 3px 6px 20px rgba(0, 0, 0, 0.3);
-}
-
-.profile-picture:hover .editar-icono {
-  display: block;
+    position: absolute;
+    background: #2afa6a;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    bottom: 3px;
+    right: 11px;
+    border: 2px solid #fff;
 }
 
 .header-wrapper .column .user-titles {
-  margin-top: 60px;
-  color: #ffff;
+    margin-top: 60px;
+    color: #ffff;
 }
 
 .header-wrapper .column .user-titles h1 {
-  margin-top: 60px;
-  font-weight: 600;
-  margin-bottom: 5px;
+    margin-top: 60px;
+    font-weight: 600;
+    margin-bottom: 5px;
 }
 
-.header-wrapper .column .user-titles h5, h6 {
-  margin: 0;
-}
-
-.header-wrapper .column .dropdown {
-  margin-top: 10px;
-}
-
-.header-wrapper .column  {
-  width: 70px;
+.header-wrapper .column .user-titles h6 {
+    margin: 0;
 }
 
 @media (min-width: 868px) {
-  .header-wrapper {
-    max-height: 300px;
-  }
-  .header-wrapper .column {
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 90%;
-    justify-content: space-between;
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 50px;
-  }
-  .header-wrapper .column .user-titles {
-    transform: translatex(-50%);
-    margin-left: 120px;
-    text-align: left;
-    display: inline-block;
+    .header-wrapper .column {
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 90%;
+        justify-content: space-between;
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 50px;
+    }
+    .header-wrapper .column .user-titles {
+        transform: translatex(-50%);
+        margin-left: 120px;
+        text-align: left;
+        display: inline-block;
 
-  }
-  .header-wrapper .column .dropdown {
-    position: relative;
-    transform: translate(275px, -100px);
-    margin-left: auto;
-    z-index: 2;
-  }
-  .dropdown-menu {
-    z-index: 3;
-  }
+    }
 }
 
 @media (min-width: 1017px) {
-  .header-wrapper .column {
-    margin: 0;
-    margin-right: auto;
-    max-height: 300px;
-  }
+    .header-wrapper .column {
+        margin: 0;
+        margin-right: auto;
+    }
 }
 
 @media (min-width: 1109px) {
-  .header-wrapper .column .user-titles {
-    margin-left: 140px;
-  }
+    .header-wrapper .column .user-titles {
+        margin-left: 140px;
+    }
 }
 
 @media (min-width: 1300px) {
-  .header-wrapper .column .user-titles {
-    margin-left: 160px;
-  }
+    .header-wrapper .column .user-titles {
+        margin-left: 160px;
+    }
 }
-
-
 
 
 .user-description h4 {
-  color: #333; /* Puedes cambiar el color del título según tu preferencia */
-  font-weight: bold
+    color: #333; /* Puedes cambiar el color del título según tu preferencia */
+    font-weight: bold
 }
 
 .user-description p {
-  margin-left: 10px;
+    margin-left: 10px;
 }
 
 .separator-line {
-  border-top: 1px solid #ddd; /* Color de la línea de separación */
-  margin-top: 10px; /* Ajusta el espacio según tus preferencias */
+    border-top: 1px solid #ddd; /* Color de la línea de separación */
+    margin-top: 10px; /* Ajusta el espacio según tus preferencias */
 }
 
 /* Estilos para el apartado de Información del Usuario */
 .card-title {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 /* Estilos para la sección de Fotos del Usuario */
 .card-img-top {
-  max-height: 200px;
+    max-height: 200px;
 }

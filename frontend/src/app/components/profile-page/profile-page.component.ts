@@ -3,8 +3,6 @@ import { Router } from '@angular/router';
 import { GlobalDataService } from '../../services/global-data.service';
 import { UserService } from '../../services/user.service';
 import { ToastrService } from 'ngx-toastr';
-import {FollowersService} from "../../services/followers.service";
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-profile-page',
@@ -16,10 +14,6 @@ export class ProfilePageComponent implements OnInit {
   activeItem: string = 'info';
   changePwdModal: boolean = false;
   mostrarIconoLapiz: boolean = false;
-  loadingFollowers =false; //
-  message: string = '';
-  modalTitle: string = '';
-  infoModal: any = [];
 
   user: any = {
     id: 0,
@@ -36,9 +30,7 @@ export class ProfilePageComponent implements OnInit {
   constructor(private globalDataService: GlobalDataService,
               private router: Router,
               private userService: UserService,
-              private toastr: ToastrService,
-              private followersService: FollowersService,
-              private modalService: NgbModal) {
+              private toastr: ToastrService) {
   }
 
   editProfile(): void {
@@ -58,63 +50,6 @@ export class ProfilePageComponent implements OnInit {
     this.getUserData();
   }
 
-  getFollowings(username: string) {
-    this.user.following = [];
-    this.followersService.getFollowing(username).subscribe(
-      (followingResponse) => {
-        if (followingResponse.body) {
-          const following = followingResponse.body.following;
-          following.forEach((usuario: any) => {
-            this.user.following.push(usuario);
-          });
-          this.loadingFollowers = true;
-        }
-      },
-      (followingError) => {
-        console.log('HAY UN ERROR EN LOS SEGUIDOS', followingError);
-      }
-    );
-  }
-
-  openModal(content: any, type: string) {
-    if (type == 'followers') {
-      this.modalTitle = 'Lista de seguidores'
-      this.infoModal = this.user.followers
-      this.message = 'Este usuario no tiene seguidores'
-
-    } else {
-      this.modalTitle = 'Lista de usuarios seguidos'
-      this.infoModal = this.user.following
-      this.message = 'Este usuario no sigue a nadie'
-    }
-
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then((result) => {
-      console.log(result)
-
-    }, (reason) => {
-      console.log(reason)
-    });
-  }
-
-  getFollowers(username: string) {
-    this.user.followers = [];
-    this.followersService.getFollowers(username).subscribe(
-      (response) => {
-        if (response.body) {
-          response.body.followers.forEach((usuario: any) => {
-
-            this.user.followers.push(usuario);
-          });
-
-            this.getFollowings(username);
-
-        }
-      }, (error) => {
-        console.log('HAY UN ERROR EN SEGUIDORES', error)
-      }
-    )
-  }
-
   handleItemClicked(item: string): void {
     this.activeItem = item;
   }
@@ -130,7 +65,6 @@ export class ProfilePageComponent implements OnInit {
           this.user.profilePictureUrl = `data:image/${response.body.profilePicture.photoName};base64,${response.body.profilePicture.data}`;
         }
         console.log('GET DATA VER PERFIL', response.body);
-        this.getFollowers(this.user.name)
       },
       (error) => {
         console.error('Error al obtener los datos del usuario', error);
