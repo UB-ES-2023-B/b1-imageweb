@@ -19,7 +19,7 @@
   <div class="container">
     <div class="row g-3" style="margin-bottom: 5%;">
 
-      <div class="col-12" *ngIf="coverImage!==null">
+      <div class="col-12" *ngIf="coverImage!==null && images.length!=0">
         <div class="card shadow-sm photo">
           <img class="card-img-top cover-image cover-image" [src]="coverImage.src" alt="Cover Image" style="object-fit: cover;">
           <div class="text-overlay">
