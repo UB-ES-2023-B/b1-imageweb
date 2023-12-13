@@ -68,7 +68,7 @@ public class UserControllerIntegrationTest {
     public void testLoginUser() throws Exception {
 
 
-        String jsonRegister = "{ \"username\": \"testUser8\", \"password\": \"testPassword\", \"email\": \"teest25@exxxample.com\" }";
+        String jsonRegister = "{ \"username\": \"testUser10\", \"password\": \"testPassword\", \"email\": \"teeeest2995@exxxample.com\" }";
 
         mockMvc.perform(MockMvcRequestBuilders.post("/auth/register")
                         .contentType("application/json")
@@ -76,10 +76,10 @@ public class UserControllerIntegrationTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
-        User user=userRepository.findByUsername("testUser8").orElseThrow();
+        User user=userRepository.findByUsername("testUser10").orElseThrow();
         userToken = tokenProvider.createToken(user);
 
-        MvcResult result = mockMvc.perform(get("/user/getByUserName/{userName}", "testUser8"))  // Replace "username" with an actual username
+        MvcResult result = mockMvc.perform(get("/user/getByUserName/{userName}", "testUser10"))  // Replace "username" with an actual username
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -91,9 +91,9 @@ public class UserControllerIntegrationTest {
         int id = jsonNode.get("userId").asInt();
         System.out.println(id);
 
-        String requestBody = "{\"username\":\"testUser8\",\"email\":\"newEmaiwww23l22@example.com\"}";
+        String requestBody = "{\"username\":\"testUser10\",\"email\":\"newEmaiwww2hdfahfhafa3l22@example.com\"}";
 
-        mockMvc.perform(put("/user/update/{username}", "testUser8")  // Replace "existingUsername" with an actual username
+        mockMvc.perform(put("/user/update/{username}", "testUser10")  // Replace "existingUsername" with an actual username
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestBody)
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + userToken))
