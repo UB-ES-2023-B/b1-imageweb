@@ -64,6 +64,9 @@
           <div class="alert alert-danger" role="alert" *ngIf="emailExisting">
             Ya hay una cuenta registrada con esta dirección de correo, <a routerLink="/login">Inicia sesión</a>.
           </div>
+          <div class="alert alert-danger" role="alert" *ngIf="loginError">
+            Usuario y/o direccion de correo ya existen. Por favor, vuelva a intentarlo.
+          </div>
           <div class="form-group text-center">
             <p class="signin-text">¿Ya tienes una cuenta? <a routerLink="/login">Inicia sesión</a></p>
             <button class="btn btn-primary" (click)="onSubmit()">Register</button>

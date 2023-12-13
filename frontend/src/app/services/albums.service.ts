@@ -10,6 +10,8 @@ export class AlbumsService {
   private domain: string |undefined
   private albums: any[] = [];
   private albumsSubject: BehaviorSubject<any[]> = new BehaviorSubject(this.albums);
+  private images: any[] = [];
+  private imagesSubject: BehaviorSubject<any[]> = new BehaviorSubject(this.images);
 
   constructor(private http: HttpClient) {
     this.domain = environment.domain;
@@ -24,10 +26,30 @@ export class AlbumsService {
     return this.http.post(this.domain + `/newAlbum`, formData, { observe: 'response' });
   }
 
-  //Aún no esta terminado
-  getAlbumsForUser(): Observable<any> {
-    return this.http.get(this.domain + `/getAlbums`, {  observe: 'response' });
+  updateInfoAlbum(id:number, name:string, description:string): Observable<any> {
+    const data = { name: name, description: description };
+    return this.http.put(this.domain + `/album/updateInfo/${id}`, data, { observe: 'response', responseType: 'text' });
   }
+
+  deleteAlbums(ids:number[]): Observable<any> {
+    const formData = {
+      albumIds: ids
+    };
+    return this.http.delete(this.domain + '/album/delete', {
+      body: formData,
+      observe: 'response'
+    });
+  }
+
+  //Aún no esta terminado
+  getAlbumsForUser(username: string): Observable<any> {
+    return this.http.get(this.domain + `/getAlbums/${username}`, {  observe: 'response' });
+  }
+  getInfoAlbumsForUser(username: string): Observable<any> {
+    return this.http.get(this.domain + `/albumInfo/${username}`, {  observe: 'response' });
+  }
+
+
 
   addPhotosToAlbum(idAlbum:number, photos:File[]){
 
@@ -78,7 +100,31 @@ export class AlbumsService {
     return this.albumsSubject.asObservable();
   }
 
+  getAlbumById(id:number): Observable<any> {
+    return this.http.get(this.domain + `/getAlbum/${id}`, {  observe: 'response' });
+  }
 
+  setImagesToAlbum(images: any[]): void {
+    this.images = images;
+    this.imagesSubject.next(this.images);
+  }
 
+  getImagesObservable(): Observable<any[]> {
+    return this.imagesSubject.asObservable();
+  }
+
+  deletePhotoAlbum(PhotoIds: number[], id:number): Observable<any> {
+    const formData = {
+      photoIds: PhotoIds
+    };
+    return this.http.delete(this.domain + `/deletephotos/${id}`, {
+      body: formData,
+      observe: 'response'
+    });
+  }
+
+  getUserAlbumOwner(albumId: number): Observable<any>{
+    return this.http.get(this.domain+ `/getUserByAlbum/${albumId}`, { observe: 'response'})
+  }
 
 }

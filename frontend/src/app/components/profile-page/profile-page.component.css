@@ -104,6 +104,9 @@ body {
 }
 
 @media (min-width: 868px) {
+  .header-wrapper {
+    max-height: 300px;
+  }
   .header-wrapper .column {
     max-width: 1200px;
     margin: 0 auto;
@@ -124,6 +127,10 @@ body {
     position: relative;
     transform: translate(275px, -100px);
     margin-left: auto;
+    z-index: 2;
+  }
+  .dropdown-menu {
+    z-index: 3;
   }
 }
 
@@ -131,6 +138,7 @@ body {
   .header-wrapper .column {
     margin: 0;
     margin-right: auto;
+    max-height: 300px;
   }
 }
 
@@ -147,9 +155,7 @@ body {
 }
 
 
-.user-description {
-  margin: 2rem
-}
+
 
 .user-description h4 {
   color: #333; /* Puedes cambiar el color del título según tu preferencia */

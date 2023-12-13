@@ -1,0 +1,201 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > AlbumController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.example.b1esimageweb.web.controller</a>
+</div>
+
+<h1>Coverage Summary for Class: AlbumController (com.example.b1esimageweb.web.controller)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">AlbumController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    16,7%
+  </span>
+  <span class="absValue">
+    (1/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    6,5%
+  </span>
+  <span class="absValue">
+    (2/31)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.example.b1esimageweb.web.controller;
+&nbsp;
+&nbsp;
+&nbsp;import com.example.b1esimageweb.model.Album;
+&nbsp;import com.example.b1esimageweb.service.AlbumService;
+&nbsp;import com.example.b1esimageweb.web.dto.AlbumDto;
+&nbsp;import com.example.b1esimageweb.web.dto.PhotoDto;
+&nbsp;import com.example.b1esimageweb.web.responses.AlbumResponse;
+&nbsp;import com.fasterxml.jackson.databind.ObjectMapper;
+&nbsp;import org.apache.commons.collections4.IterableUtils;
+&nbsp;import org.springframework.http.HttpStatus;
+&nbsp;import org.springframework.http.ResponseEntity;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;import org.springframework.web.multipart.MultipartFile;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Map;
+&nbsp;
+&nbsp;@RestController
+&nbsp;public class AlbumController {
+&nbsp;
+&nbsp;    private AlbumService albumService;
+&nbsp;
+<b class="fc">&nbsp;    public AlbumController(AlbumService albumService) {</b>
+<b class="fc">&nbsp;        this.albumService = albumService;</b>
+&nbsp;    }
+&nbsp;    @PostMapping(&quot;/newAlbum&quot;)
+&nbsp;    public ResponseEntity&lt;Object&gt; createAlbum(@RequestParam(&quot;album&quot;) String albumDtoAsString, @RequestParam(&quot;coverPhoto&quot;) MultipartFile coverPhoto) {
+&nbsp;        try {
+<b class="nc">&nbsp;            ObjectMapper objectMapper = new ObjectMapper();</b>
+<b class="nc">&nbsp;            AlbumDto albumDto = objectMapper.readValue(albumDtoAsString, AlbumDto.class);</b>
+<b class="nc">&nbsp;            albumDto.setCoverPhoto(coverPhoto);</b>
+<b class="nc">&nbsp;            Album album= albumService.createAlbum(albumDto);</b>
+<b class="nc">&nbsp;            Iterable&lt;PhotoDto&gt; photos = albumService.getPhotosByAlbum(album);</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(photos, HttpStatus.CREATED);</b>
+<b class="nc">&nbsp;        }catch(Exception e){</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;No se ha podido crear un album&quot;,HttpStatus.INTERNAL_SERVER_ERROR);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;/getAlbums&quot;)
+&nbsp;    public ResponseEntity&lt;Object&gt; getUserAlbums() {
+&nbsp;        try {
+<b class="nc">&nbsp;            Map&lt;Integer, List&lt;PhotoDto&gt;&gt; map = albumService.getAllAlbumsForUser();</b>
+<b class="nc">&nbsp;            if (map.isEmpty()) {</b>
+<b class="nc">&nbsp;                return new ResponseEntity&lt;&gt;(HttpStatus.NO_CONTENT);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            AlbumResponse response = new AlbumResponse();</b>
+<b class="nc">&nbsp;            response.setAlbums(map.values());</b>
+<b class="nc">&nbsp;            response.setLength(map.keySet().size());</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(response, HttpStatus.OK);</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(null, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(&quot;/getAlbum/{albumId}&quot;)
+&nbsp;    public Iterable&lt;PhotoDto&gt; getAlbumById(@PathVariable int albumId) {
+<b class="nc">&nbsp;        Album album = albumService.getAlbumById(albumId);</b>
+<b class="nc">&nbsp;        Iterable&lt;PhotoDto&gt; photos = albumService.getPhotosByAlbum(album);</b>
+<b class="nc">&nbsp;        return photos;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PostMapping(&quot;/addPhotosAlbum/{albumId}&quot;)
+&nbsp;    public ResponseEntity&lt;?&gt; addPhotosToAlbum(@PathVariable int albumId, @RequestParam(&quot;photos&quot;) List&lt;MultipartFile&gt; photosList) {
+&nbsp;        try {
+<b class="nc">&nbsp;            Album album = albumService.addPhotosToAlbum(albumId, photosList);</b>
+<b class="nc">&nbsp;            Iterable&lt;PhotoDto&gt; photos = albumService.getPhotosByAlbum(album);</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(photos, HttpStatus.OK);</b>
+&nbsp;
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Could not add photos to album&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping(value = &quot;/album/updateInfo/{albumId}&quot;)
+&nbsp;    public ResponseEntity&lt;?&gt; updateAlbum(@PathVariable int albumId, @RequestBody AlbumDto dto){
+&nbsp;        try {
+<b class="nc">&nbsp;            albumService.updateAlbum(albumId,dto);</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Album successfully updated&quot;, HttpStatus.OK);</b>
+<b class="nc">&nbsp;        } catch (Exception e) {</b>
+<b class="nc">&nbsp;            return new ResponseEntity&lt;&gt;(&quot;Album could not be updated&quot;, HttpStatus.INTERNAL_SERVER_ERROR);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-08 23:12</div>
+</div>
+</body>
+</html>

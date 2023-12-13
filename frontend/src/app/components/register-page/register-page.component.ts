@@ -24,6 +24,7 @@ export class RegisterFormComponent implements OnInit {
   emailExisting: boolean = false;
   showPassword: boolean = false;
   showConPassword: boolean = false;
+  loginError: boolean = false;
   registrationForm: FormGroup;
 
 
@@ -97,6 +98,7 @@ export class RegisterFormComponent implements OnInit {
 
     this.usernameError= false;
     this.emailExisting= false;
+    this.loginError= false;
 
     if(this.password == this.conPassword && this.password.length >= 6 && !this.showEmailError && !this.showUserError && !this.showPasswordError){
       console.log('Submitted!', this.email, this.password);
@@ -114,11 +116,14 @@ export class RegisterFormComponent implements OnInit {
           (error) => {
 
             console.error('Error during registration:', error);
+            this.loginError = true;
+            console.log(this.loginError);
             if (error.error.message.includes('Username')){
               this.usernameError = true;
             } else if (error.error.message.includes('Email')){
               this.emailExisting = true;
             }
+
           }
         );
     }

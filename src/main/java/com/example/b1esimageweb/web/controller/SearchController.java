@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.service.SearchService;
+import com.example.b1esimageweb.web.dto.UserInfoDto;
 
 @RestController
 @RequestMapping(path="/search")
@@ -21,8 +21,8 @@ public class SearchController {
     }
     
     @GetMapping(path="/getSearchResults/{searchCriteria}")
-    public ResponseEntity<Iterable<User>> getUsersSearchResults(@PathVariable("searchCriteria") String searchCriteria){
-        Iterable<User> users = searchService.getUsersSearchResults(searchCriteria);
+    public ResponseEntity<Iterable<UserInfoDto>> getUsersSearchResults(@PathVariable("searchCriteria") String searchCriteria){
+        Iterable<UserInfoDto> users = searchService.getUsersSearchResults(searchCriteria);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 }

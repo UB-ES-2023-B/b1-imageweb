@@ -1,13 +1,8 @@
 package com.example.b1esimageweb;
 
-import com.example.b1esimageweb.model.Gallery;
 import com.example.b1esimageweb.model.User;
 import com.example.b1esimageweb.repository.UserRepository;
-import com.example.b1esimageweb.service.GalleryService;
-import com.example.b1esimageweb.service.UserService;
 import com.example.b1esimageweb.web.Jwt.JwtTokenProvider;
-import com.example.b1esimageweb.web.dto.PhotoDto;
-import com.example.b1esimageweb.web.dto.UserRegistrationDto;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
@@ -16,18 +11,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.util.ResourceUtils;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -61,10 +49,9 @@ public class GalleryControllerIntegrationTest {
 
 
     @BeforeAll
-    @WithMockUser (username = "adminUser", password = "admin", roles = "ADMIN")
     public void setUp() {
         // Create a test user
-        User user=userRepository.findByUsername("adminUser").orElseThrow();
+        User user=userRepository.findByUsername("testing23Marc").orElseThrow();
         userToken = tokenProvider.createToken(user);
     }
 
@@ -81,7 +68,7 @@ public class GalleryControllerIntegrationTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
         */
-        MvcResult result = mockMvc.perform(get("/user/getByUserName/{userName}", "adminUser"))  // Replace "username" with an actual username
+        MvcResult result = mockMvc.perform(get("/user/getByUserName/{userName}", "testing23Marc"))  // Replace "username" with an actual username
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
@@ -116,7 +103,7 @@ public class GalleryControllerIntegrationTest {
                 .andExpect(status().isOk());
 
 
-        MvcResult jsonPhotos = mockMvc.perform(get("/gallery/viewGalleryFromUser/{userName}", "adminUser")
+        MvcResult jsonPhotos = mockMvc.perform(get("/gallery/viewGalleryFromUser/{userName}", "testing23Marc")
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + userToken))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))

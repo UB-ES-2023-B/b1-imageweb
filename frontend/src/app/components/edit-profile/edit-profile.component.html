@@ -1,4 +1,4 @@
-<div class="container space-2">
+<div class="container py-3">
   <!-- Update Avatar Form -->
   <div class="media align-items-center mb-7">
     <div class="u-lg-avatar mr-3">
@@ -14,7 +14,7 @@
       <div class="d-flex align-items-center"> <!-- Agregamos un contenedor flex -->
         <label for="profileImage" class="btn btn-sm btn-primary transition-3d-hover file-attachment-btn mb-1 mb-sm-0 mr-1">
           Editar foto de perfil
-          <input id="profileImage" type="file" (change)="actualizarFotoPerfil($event)" style="display: none">
+          <input id="profileImage" type="file" accept="image/*" (change)="actualizarFotoPerfil($event)" style="display: none">
         </label>
 
 

@@ -32,6 +32,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { EditGalleryComponent } from './components/edit-gallery/edit-gallery.component';
 import { AlbumsComponent } from './components/albums/albums.component';
 import { UploadPhotosComponent } from './components/upload-photos/upload-photos.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { EditAlbumsComponent } from './components/edit-albums/edit-albums.component';
+import { AlbumViewComponent } from './components/album-view/album-view.component';
+import {AlbumViewEditModeComponent} from "./components/album-view-edit-mode/album-view-edit-mode.component";
 
 @NgModule({
   declarations: [
@@ -52,7 +56,12 @@ import { UploadPhotosComponent } from './components/upload-photos/upload-photos.
     ModalComponent,
     EditGalleryComponent,
     AlbumsComponent,
-    UploadPhotosComponent
+    UploadPhotosComponent,
+    UserProfileComponent,
+    EditAlbumsComponent,
+    UploadPhotosComponent,
+    AlbumViewComponent,
+    AlbumViewEditModeComponent
   ],
   imports: [
     BrowserModule,

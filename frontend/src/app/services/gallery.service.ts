@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable, Input} from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import {environment} from "../../environments/environment";
@@ -40,6 +40,25 @@ export class GalleryService {
     });
   }
 
+  addPhotosToAlbum(albumId: string, photosIds: number[]): Observable<any> {
+    const numero: number = parseInt(albumId, 10);
+
+    console.log('este es numero::', numero+2)
+    const formData = {
+      albumId: numero,
+      photoIds: photosIds
+    };
+    console.log('este es form data::::', formData);
+
+    return this.http.post(this.domain + '/uploadPhotoGaleryToAlbum', formData,{
+
+      observe: 'response'
+    });
+
+
+
+  }
+
   editInfoPhoto(idPhoto:number, name:string, description:string): Observable<any>{
     const formData = {
       "photoName": name,
@@ -67,7 +86,4 @@ export class GalleryService {
   getImagesObservable(): Observable<any[]> {
     return this.imagesSubject.asObservable();
   }
-
-
-
 }
