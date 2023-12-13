@@ -83,13 +83,18 @@ public class AlbumService {
         for (Album album : allAlbums){
           
             List<Photo> allPhotos = (List<Photo>)photoRepository.findByAlbumsContaining(album);
-            Photo photoCover;
+            Photo photoCover = null;
             if (allPhotos.size()>1) {
-                photoCover = allPhotos.get(1);
+                for(Photo photo: allPhotos){
+                    if(!photo.getPhotoName().equals("defaultImage")){
+                        photoCover = photo;
+                        break;
+                    }
+                }
             }else{
                 photoCover = allPhotos.get(0);
             }
-            
+
             CloudBlob blob;
             try {
                 blob = container.getBlockBlobReference(photoCover.getPhotoId().toString());

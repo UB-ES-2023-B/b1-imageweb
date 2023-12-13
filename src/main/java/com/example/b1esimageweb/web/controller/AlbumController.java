@@ -11,6 +11,7 @@ import com.example.b1esimageweb.web.dto.AlbumDto;
 import com.example.b1esimageweb.web.dto.ErrorResponsePhotoUpload;
 import com.example.b1esimageweb.web.dto.PhotoDto;
 import com.example.b1esimageweb.web.dto.PhotosDto;
+import com.example.b1esimageweb.web.dto.UserInfoDto;
 import com.example.b1esimageweb.web.responses.AlbumResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
@@ -50,6 +51,14 @@ public class AlbumController {
         }catch(Exception e){
             return new ResponseEntity<>("No se ha podido crear un album",HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping(value = "/getUserByAlbum/{id}")
+    public ResponseEntity<UserInfoDto> getUserByAlbum(@PathVariable("id") Integer id) {
+        Album album = albumService.getAlbumById(id);
+        User user = album.getUser();
+        UserInfoDto userInfoDto = new UserInfoDto(user.getUserId(), user.getUsername(), user.getUserEmail(), user.getPassword(), user.getDescription(), user.getGallery(), null, user.isAccountNonExpired(), user.isAccountNonExpired(), user.isAccountNonLocked(), user.isEnabled(), user.getAuthorities());
+        return new ResponseEntity<>(userInfoDto, HttpStatus.OK);
     }
 
     @GetMapping("/getAlbums")
