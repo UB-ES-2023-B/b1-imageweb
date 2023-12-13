@@ -99,11 +99,15 @@ public class GalleryService {
         return photos;
     }
 
-     public Iterable<PhotoDto> getRandomNumberOfPhotos(int number) {
+     public Iterable<PhotoDto> getRandomNumberOfPhotos(int number, User user) {
         List<PhotoDto> photos = new ArrayList<>();
         for (Photo photo : photoRepository.findAll()) {
             if(photos.size()==number){
                 break;
+            }
+            if(photo.getGallery() != null)
+                if(photo.getGallery().getGalleryrId() == user.getGallery().getGalleryrId()){
+                continue;
             }
             if(photo.getGallery()!=null){
                 CloudBlob blob;

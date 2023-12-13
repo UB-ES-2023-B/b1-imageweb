@@ -61,7 +61,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    protected User getCurrentUserFromConext(){
+    public User getCurrentUserFromConext(){
         Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User currentUser = null;
         if(obj instanceof User){
@@ -266,4 +266,7 @@ public class UserService implements UserDetailsService {
         response.put(followersOrFollowing ? "followers" : "following", listWithPhotos);
         return response;
     }
+
+
+
 }

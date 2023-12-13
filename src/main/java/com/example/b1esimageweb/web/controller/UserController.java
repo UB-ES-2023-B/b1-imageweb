@@ -15,11 +15,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -47,6 +49,17 @@ public class UserController {
     public ResponseEntity<User> getUserById(@PathVariable("id") Integer id) {
         User user = service.getUserById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    // Solo admin  puede accedera esta función
+    @PostMapping(value = "/addAdminPhotos")
+    public ResponseEntity<?> upload50PhotosAdmin(@RequestParam("adminPhotos") List<MultipartFile> photosList){
+        User admin = service.getCurrentUserFromConext();
+        for (MultipartFile mp : photosList){
+            galleryService.addNewPhoto(admin.getGallery().getGalleryrId(),mp);
+        }
+        //Iterable<PhotoDto> photos = galleryService.getPhotosByGallery(admin.getGallery());
+        return new ResponseEntity<>("Photos uploaded to admin's gallery", HttpStatus.OK);
     }
 
     @GetMapping(value = "/getUsernameByGalleryId/{id}")

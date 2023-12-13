@@ -45,7 +45,7 @@ public class WebSecurityConfig{
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth-> {
                     auth.requestMatchers("/auth/**").permitAll();
-                    auth.requestMatchers("/user/getAll").hasAuthority("ADMIN");
+                    auth.requestMatchers("/user/getAll","user/addAdminPhotos").hasAuthority("ADMIN");
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(sessionManager->
