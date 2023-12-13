@@ -25,12 +25,12 @@
 }
 
 .text-overlay-name p{
-  font-size: xx-large; 
+  font-size: x-large; 
   font-family: system-ui;;
 }
 
 .text-overlay-description p{
-  font-size: larger;
+  font-size: medium;
   font-style: italic;
 }
 

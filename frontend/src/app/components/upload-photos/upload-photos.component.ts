@@ -92,9 +92,14 @@ export class UploadPhotosComponent {
                     console.log(response.body[0]);
                     this.albumsService.modifylen(this.idAlbum, response.body.length-1);
                     if(response.body.length>1){
-                      var src= `data:image/${response.body[1].photoExtension};base64,${response.body[1].data}`
-                      this.albumsService.modifyCoverPhoto(this.idAlbum, src)
-
+                      for (const element of response.body) {
+                        if(element.photoName!="defaultImage"){
+                          var src= `data:image/${element.photoExtension};base64,${element.data}`
+                          this.albumsService.modifyCoverPhoto(this.idAlbum, src)
+                          break;
+                        }
+                      }
+                      
                     }
                   }
 
