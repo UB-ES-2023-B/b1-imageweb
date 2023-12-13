@@ -5,6 +5,9 @@ body {
   box-sizing: border-box;
   min-height: 100vh;
 }
+a:hover {
+  cursor: pointer;
+}
 
 .header-wrapper {
   background-size: cover;
