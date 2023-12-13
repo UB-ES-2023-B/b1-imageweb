@@ -5,6 +5,9 @@ body {
   box-sizing: border-box;
   min-height: 100vh;
 }
+a:hover {
+  cursor: pointer;
+}
 
 .header-wrapper {
   background-size: cover;
@@ -94,14 +97,12 @@ body {
 .header-wrapper .column .user-titles h5, h6 {
   margin: 0;
 }
-a:hover {
-  cursor: pointer;
-}
+
 .header-wrapper .column .dropdown {
   margin-top: 10px;
 }
 
-.header-wrapper .column   {
+.header-wrapper .column  {
   width: 70px;
 }
 
