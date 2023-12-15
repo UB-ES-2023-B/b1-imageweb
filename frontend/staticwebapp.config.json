@@ -1,8 +1,0 @@
-{
-  "routes": [
-    {
-      "route": "/api/*", 
-      "redirect": "b1imageweb-backend.azurewebsites.net/*" 
-    }
-  ]
-}
